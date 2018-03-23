@@ -1,33 +1,35 @@
 <html>
-    
+
 <head>
     <title>INFO 4310 Final Project</title>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <link rel = "stylesheet" type="text/css" href = "style.css">        
+    <link rel = "stylesheet" type="text/css" href = "style.css">
 </head>
 
-    
-    
+
+
 <body>
-      
+
 <div class = "tempContainer"> </div>
-    
-    
+
+<script src="plots.js"></script>
+<script src="helpers.js">
+
 <script>
-    
+
     var centerPoint = 300;
     var spaceSVG = d3.select(".tempContainer")
                         .append("svg")
                         .attr("width", 600)
                         .attr("height", 600)
                         .style("background-color", "black")
-    
+
     var randomCountries = spaceSVG.append("circle")
                             .attr("cx", centerPoint)
                             .attr("cy", centerPoint)
                             .attr("r", 50)
-                            .attr("fill", "grey")
-    
+                            .attr("fill", "grey");
+
     var orbit1 = spaceSVG.append("circle")
                 .attr("class", "LEO")
                 .attr("cx", centerPoint)
@@ -35,7 +37,7 @@
                 .attr("r", 100)
                 .attr("fill", "none")
                 .attr("stroke", "grey")
-    
+
     var orbit2 = spaceSVG.append("circle")
                 .attr("class", "MEO")
                 .attr("cx", centerPoint)
@@ -43,7 +45,7 @@
                 .attr("r", 150)
                 .attr("fill", "none")
                 .attr("stroke", "grey")
-    
+
     var orbit3 = spaceSVG.append("circle")
                 .attr("class", "GEO")
                 .attr("cx", centerPoint)
@@ -51,19 +53,33 @@
                 .attr("r", 250)
                 .attr("fill", "none")
                 .attr("stroke", "grey")
-    
+
 </script>
-    
-    
-    
+
+
+
 <script>
     // Load data
      function parseLine(line) {
-        // Return only the columns we are interested in 
-        // Subject to revision! 
+        // Return only the columns we are interested in
+        // Subject to revision!
+
+        // Create new Date object so dates are not distorted
+        let split_date = line["Date of Launch"].split("/");
+        let year;
+        if (split_date[2] < 20) {
+          year = '20' + split_date[2];
+        } else {
+          year = '19' + split_date[2];
+        }
+        let temp_date = new Date(year, split_date[0], split_date[1]);
+
         return {
             satName: line["Name of Satellite, Alternate Names"],
-            launchDate: Date(line["Date of Launch"]),
+            launchDate: temp_date,
+            year: Number(year),
+            month: Number(split_date[0]),
+            day: Number(split_date[1]),
             country: line["Country of Operator/Owner"],
             users: line["Users"],
             purpose: line["Purpose"],
@@ -73,22 +89,22 @@
             expectedLifetime: line["Expected Lifetime"]
         }
     }
-    
+
     var satData;
 
-    
-    
+
+
     d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
         satData = data;
-        
-        
-        
-        
+
+
+
+
         satData.forEach(function(d){
-            
-            
-            // Randomly scatter the satellities into different orbit classes 
-            
+
+
+            // Randomly scatter the satellities into different orbit classes
+
             // Elliptical: 39
             // GEO: 531
             // MEO: 97
@@ -98,18 +114,18 @@
                 color =  "yellow"}
             if (d.users.indexOf("Military") > -1) {
                 color =  "red"}
-            
+
              if (d.users.indexOf("Commercial") > -1) {
                  color =  "blue"}
-            
+
             if (d.users.indexOf("Government") > -1) {
                 color =  "white"}
-            
-            
+
+
             if (d.orbitClass == "LEO"){
                 radius = 100 + (Math.random() * 20)
                 angle = Math.random()  * (2*Math.PI)
-                
+
                 spaceSVG.append("circle")
                     .attr("cx", radius * Math.cos(angle) + centerPoint)
                     .attr("cy", radius * Math.sin(angle) + centerPoint)
@@ -119,7 +135,7 @@
             else if (d.orbitClass == "MEO"){
                 radius = 150 + (Math.random() * 20)
                 angle = Math.random()  * (2*Math.PI)
-                
+
                 spaceSVG.append("circle")
                     .attr("cx", radius * Math.cos(angle) + centerPoint)
                     .attr("cy", radius * Math.sin(angle) + centerPoint)
@@ -129,7 +145,7 @@
              else if (d.orbitClass == "GEO"){
                 radius = 250 + (Math.random() * 20)
                 angle = Math.random()  * (2*Math.PI)
-                
+
                 spaceSVG.append("circle")
                     .attr("cx", radius * Math.cos(angle) + centerPoint)
                     .attr("cy", radius * Math.sin(angle) + centerPoint)
@@ -137,23 +153,23 @@
                     .attr("fill", color)
             }
         })
-        
+
     });
-    
+
     // End of d3.csv
-    
-    
+
+
 </script>
-    
-        
-        
-        
-        
+
+
+
+
+
 </body>
-    
-    
-<!-- References --> 
-    
+
+
+<!-- References -->
+
 <!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
-    
+
 </html>
