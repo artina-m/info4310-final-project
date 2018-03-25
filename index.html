@@ -2,44 +2,34 @@
 
 <head>
     <title>INFO 4310 Final Project</title>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-<<<<<<< Updated upstream
     <link rel = "stylesheet" type="text/css" href = "style.css">
-=======
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="scripts.js"></script>
 
-    <link rel = "stylesheet" type="text/css" href = "style.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     
->>>>>>> Stashed changes
+    <script src="plots.js"></script>
+    <script src="helpers.js"></script>
+
 </head>
 
 
 
 <body>
-<<<<<<< Updated upstream
 
 <div class = "tempContainer"> </div>
-
-<script src="plots.js"></script>
-<script src="helpers.js"></script>
-
-<script>
-=======
-      
         
 <div class = "spaceView1"> 
     
     <div class = "sideBar">
-        <p class = "sectionTitle">
-            STUFF IN SPACE
-        </p>
+        
+        <p class = "sectionTitle"> STUFF IN SPACE </p>
         
         <p class = "sectionDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
         </p>
         
         <!-- Add buttons --> 
         <br>
+        
         <p> [ yearFilter ] </p>
         <p> [ countryFilter ] </p>
         <p> [ useFilter ] </p>
@@ -48,7 +38,7 @@
         
     </div>
     
-    <div class = "visualization">        
+    <div class = "visualization">  
     </div>
     
 </div>
@@ -56,52 +46,18 @@
     
 <script>
     var colorTheme = "#010305"
-    
->>>>>>> Stashed changes
     var centerPoint = 300;
-    var spaceSVG = d3.select(".visualization")
-                        .append("svg")
-                        .attr("class", "spaceSVG")
-                        .attr("width", 600)
-<<<<<<< Updated upstream
-                        .attr("height", 600)
-                        .style("background-color", "black")
-
-=======
-                        .attr("height", "100%")
-                        .style("background-color", colorTheme)
-
     
->>>>>>> Stashed changes
-    var randomCountries = spaceSVG.append("circle")
-                            .attr("cx", centerPoint)
-                            .attr("cy", centerPoint)
-                            .attr("r", 50)
-                            .attr("fill", "grey");
-
-    var orbit1 = spaceSVG.append("circle")
-                .attr("class", "LEO")
-                .attr("cx", centerPoint)
-                .attr("cy", centerPoint)
-                .attr("r", 100)
-                .attr("fill", "none")
-                .attr("stroke", "grey")
-
-    var orbit2 = spaceSVG.append("circle")
-                .attr("class", "MEO")
-                .attr("cx", centerPoint)
-                .attr("cy", centerPoint)
-                .attr("r", 150)
-                .attr("fill", "none")
-                .attr("stroke", "grey")
-
-    var orbit3 = spaceSVG.append("circle")
-                .attr("class", "GEO")
-                .attr("cx", centerPoint)
-                .attr("cy", centerPoint)
-                .attr("r", 250)
-                .attr("fill", "none")
-                .attr("stroke", "grey")
+    var spaceSVG = d3.select(".visualization")
+                .append("svg")
+                .attr("class", "spaceSVG")
+                .attr("width", 600)
+                .attr("height", 600)
+                .style("background-color", "black")
+                .attr("height", "100%")
+                .style("background-color", colorTheme)
+    
+    plot_orbits();
 
 </script>
 
@@ -139,122 +95,24 @@
         }
     }
 
+    
     var satData;
-
-
 
     d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
         satData = data;
 
-
-
-
         satData.forEach(function(d){
-<<<<<<< Updated upstream
-
-
-            // Randomly scatter the satellities into different orbit classes
-
-=======
-            
-            // Randomly scatter the satellities into different orbit classes 
-            
->>>>>>> Stashed changes
-            // Elliptical: 39
-            // GEO: 531
-            // MEO: 97
-            // LEO: 1,071
-<<<<<<< Updated upstream
-            color = "white"
-            if (d.users.indexOf("Civil") > -1) {
-                color =  "yellow"}
-            if (d.users.indexOf("Military") > -1) {
-                color =  "red"}
-
-             if (d.users.indexOf("Commercial") > -1) {
-                 color =  "blue"}
-
-            if (d.users.indexOf("Government") > -1) {
-                color =  "white"}
-
-
-            if (d.orbitClass == "LEO"){
-                radius = 100 + (Math.random() * 20)
-                angle = Math.random()  * (2*Math.PI)
-
-=======
-            
-            // Color by type
-            color = "grey"
-            
-            
-            
-            // USA first quad 0 and pi / 2
-            if (d.country == "USA") {
-                angle = Math.random()  * (Math.PI)
-                color = "white"
-            }
-            
-            else {
-                angle = Math.random() * (2*Math.PI - Math.PI) + Math.PI
-            }
-            
-            
-            
-            // Radial position by Orbit type
-            if (d.orbitClass == "LEO"){
-                radius = 100 + (Math.random() * 20)
-                
->>>>>>> Stashed changes
-                spaceSVG.append("circle")
-                    .attr("cx", radius * Math.cos(angle) + centerPoint)
-                    .attr("cy", radius * Math.sin(angle) + centerPoint)
-                    .attr("r", 1)
-                    .attr("fill", color)
-            }
-            else if (d.orbitClass == "MEO"){
-                radius = 150 + (Math.random() * 20)
-<<<<<<< Updated upstream
-                angle = Math.random()  * (2*Math.PI)
-
-=======
-                
->>>>>>> Stashed changes
-                spaceSVG.append("circle")
-                    .attr("cx", radius * Math.cos(angle) + centerPoint)
-                    .attr("cy", radius * Math.sin(angle) + centerPoint)
-                    .attr("r", 1)
-                    .attr("fill", color)
-            }
-             else if (d.orbitClass == "GEO"){
-                radius = 250 + (Math.random() * 20)
-<<<<<<< Updated upstream
-                angle = Math.random()  * (2*Math.PI)
-
-=======
-                
->>>>>>> Stashed changes
-                spaceSVG.append("circle")
-                    .attr("cx", radius * Math.cos(angle) + centerPoint)
-                    .attr("cy", radius * Math.sin(angle) + centerPoint)
-                    .attr("r", 1)
-                    .attr("fill", color)
-            }
+            // Randomly scatter the satellities 
+            // into different orbit classes
+            plot_satellites(d);
         })
 
     });
 
-    // End of d3.csv
-
-
 </script>
 
 
-
-
-
 </body>
-
 
 <!-- References -->
 
