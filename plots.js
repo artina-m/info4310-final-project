@@ -1,12 +1,20 @@
-let plot_orbits = function() {
+let plot_orbits = function(className) {
+    spaceSVG = d3.select("."+String(className))
+      .append("svg")
+      .attr("class", "spaceSVG")
+      .attr("width", 600)
+      .attr("height", 600)
+      .style("background-color", "black")
+      .attr("height", "100%")
+      .style("background-color", colorTheme);
 
-    var randomCountries = spaceSVG.append("circle")
+    let randomCountries = spaceSVG.append("circle")
                 .attr("cx", centerPoint)
                 .attr("cy", centerPoint)
                 .attr("r", 50)
                 .attr("fill", "grey");
 
-    var orbit1 = spaceSVG.append("circle")
+    let orbit1 = spaceSVG.append("circle")
                 .attr("class", "LEO")
                 .attr("cx", centerPoint)
                 .attr("cy", centerPoint)
@@ -14,7 +22,7 @@ let plot_orbits = function() {
                 .attr("fill", "none")
                 .attr("stroke", "grey")
 
-    var orbit2 = spaceSVG.append("circle")
+    let orbit2 = spaceSVG.append("circle")
                 .attr("class", "MEO")
                 .attr("cx", centerPoint)
                 .attr("cy", centerPoint)
@@ -22,7 +30,7 @@ let plot_orbits = function() {
                 .attr("fill", "none")
                 .attr("stroke", "grey")
 
-    var orbit3 = spaceSVG.append("circle")
+    let orbit3 = spaceSVG.append("circle")
                 .attr("class", "GEO")
                 .attr("cx", centerPoint)
                 .attr("cy", centerPoint)
@@ -36,7 +44,7 @@ let plot_orbits = function() {
 let plot_satellites = function(d) {
     // Randomly scatter the satellities into different orbit classes
 
-    color = "white"
+    let color = "white" // initialize category color to be white
 
     if (d.users.indexOf("Civil") > -1) { color =  "yellow"}
     else if (d.users.indexOf("Military") > -1) { color =  "red"}
