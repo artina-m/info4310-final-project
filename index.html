@@ -2,17 +2,62 @@
 
 <head>
     <title>INFO 4310 Final Project</title>
+    <link rel = "stylesheet" type="text/css" href = "style.css">
+
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
     <script src="plots.js"></script>
     <script src="helpers.js"></script>
-    <link rel = "stylesheet" type="text/css" href = "style.css">
+
 </head>
 
 <body>
 
-  <div class = "tempContainer"> </div>
+<div class = "tempContainer"> </div>
 
-</body>
+<div class = "spaceView1">
+
+    <div class = "sideBar">
+
+        <p class = "sectionTitle"> STUFF IN SPACE </p>
+
+        <p class = "sectionDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        </p>
+
+        <!-- Add buttons -->
+        <br>
+
+        <p> [ yearFilter ] </p>
+        <p> [ countryFilter ] </p>
+        <p> [ useFilter ] </p>
+        <br>
+        <p> [ Quick Stats ]</p>
+
+    </div>
+
+    <div class = "visualization">
+    </div>
+
+</div>
+
+
+<script>
+    var colorTheme = "#010305"
+    var centerPoint = 300;
+
+    var spaceSVG = d3.select(".visualization")
+                .append("svg")
+                .attr("class", "spaceSVG")
+                .attr("width", 600)
+                .attr("height", 600)
+                .style("background-color", "black")
+                .attr("height", "100%")
+                .style("background-color", colorTheme)
+
+    plot_orbits();
+
+</script>
 
 
 <!-- References -->
@@ -118,9 +163,13 @@
 
   });
 
-    // End of d3.csv
-
-
 </script>
+
+
+</body>
+
+<!-- References -->
+
+<!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
 
 </html>

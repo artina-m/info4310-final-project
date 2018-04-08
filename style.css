@@ -1,0 +1,68 @@
+/* Design Guideline 
+    
+Titles: Oswald, 36px
+Text Elements: Roboto, XXpx, #424949
+
+Dark Theme Background: #010305
+
+*/
+
+
+@import url('https://fonts.googleapis.com/css?family=Oswald|Roboto');
+
+p {
+    font-family: Roboto;
+    color: #424949 ;
+}
+
+body{
+    padding: 0px;
+    margin: auto;
+}
+
+div {
+    overflow: hidden;
+}
+
+
+/* Divs*/
+
+.spaceView1{
+    background-color: #010305;
+    height: 100%;
+    width: 100%;
+    display: inline-block
+}
+
+.sideBar{
+    display: inline-block;
+    height:100%;
+    width: 400;
+    border-right: solid 1px grey;
+    background-color: white;
+   
+}
+
+.sideBar p {
+    margin-left: 50px;
+}
+.visualization{
+    display: inline-block;
+}
+
+
+/* Text Elements */
+
+.sectionTitle{
+    font-family: 'Oswald', sans-serif;
+    font-size: 36px;
+    color: #5D6D7E;
+    margin-top: 150px;
+}
+
+.sectionDesc{
+    font-size: 10px;
+    line-height: 18px;
+    margin-top: 50px;
+    margin-right:50px;
+}
