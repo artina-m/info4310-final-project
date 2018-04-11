@@ -1,9 +1,6 @@
 <html>
 
 <head>
-  <!-- References -->
-
-  <!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
     <title>INFO 4310 Final Project</title>
     <link rel = "stylesheet" type="text/css" href = "style.css">
 
@@ -16,17 +13,16 @@
 
 <body>
   <div class = "spaceView1">
+      
       <div class = "sideBar">
-
+          
         <p class = "sectionTitle"> STUFF IN SPACE </p>
-
         <p class = "sectionDesc">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
         </p>
-
+          
         <!-- Add buttons -->
         <br>
-
         <p> [ yearFilter ] </p>
         <p> [ countryFilter ] </p>
         <p> [ useFilter ] </p>
@@ -79,17 +75,24 @@
     }
     
     
-// let temp_date = new Date(year, split_date[0], split_date[1]);
 
-d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
+    d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
       satData = data;
+        
       satData.forEach(function(d){
-        plot_satellites(d);
-      })
+          
+          plot_satellites(d)
+
+      });
+    
+      
 
 
-  });
+    });
 
 </script>
+    
+<!-- References -->
+<!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
 
 </html>

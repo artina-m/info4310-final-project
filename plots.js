@@ -59,25 +59,40 @@ let plot_satellites = function(d) {
 
     // Radial position by Orbit type + noise for scatter
     if (d.orbitClass == "LEO"){
-        radius = 100 + (Math.random() * 80)
-        spaceSVG.append("circle")
+        radius = 100 + (Math.random() * 80);
+        var dot = spaceSVG.append("circle")
+            .attr("id", d.satName)
+            .attr("cx", 0 + centerPoint)
+            .attr("cy", 0+ centerPoint)
+            .attr("r", r)
+            .attr("fill", color);
+        
+        dot.transition()
+            .style("transition", 10)
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .attr("r", r)
-            .attr("fill", color)
+            
+
+
+        
     }
 
     else if (d.orbitClass == "MEO"){
-        radius = 200 + (Math.random() * 20)
+        //radius = 200 + (Math.random() * 20)
+        radius = 0;
         spaceSVG.append("circle")
+            .attr("id", d.satName)
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
             .attr("r", r)
             .attr("fill", color)
+        
     }
      else if (d.orbitClass == "GEO"){
-        radius = 250 + (Math.random() * 30)
+        //radius = 250 + (Math.random() * 30)
+        radius = 0;
         spaceSVG.append("circle")
+            .attr("id", d.satName)
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
             .attr("r", r)
