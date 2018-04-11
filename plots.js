@@ -7,6 +7,8 @@ let plot_orbits = function(className) {
       .style("background-color", "black")
       .attr("height", "100%")
       .style("background-color", colorTheme);
+    
+    let ringcolor = "lightgrey";
 
     let randomCountries = spaceSVG.append("circle")
                 .attr("cx", centerPoint)
@@ -20,15 +22,15 @@ let plot_orbits = function(className) {
                 .attr("cy", centerPoint)
                 .attr("r", 100)
                 .attr("fill", "none")
-                .attr("stroke", "grey")
+                .attr("stroke", ringcolor)
 
     let orbit2 = spaceSVG.append("circle")
                 .attr("class", "MEO")
                 .attr("cx", centerPoint)
                 .attr("cy", centerPoint)
-                .attr("r", 150)
+                .attr("r", 200)
                 .attr("fill", "none")
-                .attr("stroke", "grey")
+                .attr("stroke", ringcolor)
 
     let orbit3 = spaceSVG.append("circle")
                 .attr("class", "GEO")
@@ -36,62 +38,49 @@ let plot_orbits = function(className) {
                 .attr("cy", centerPoint)
                 .attr("r", 250)
                 .attr("fill", "none")
-                .attr("stroke", "grey")
-
+                .attr("stroke", ringcolor)
 }
 
 
 let plot_satellites = function(d) {
-    // Randomly scatter the satellities into different orbit classes
-
+    let r = 1.2;
     let color = "white" // initialize category color to be white
-
+    
+    // Color == Satellite Type
     if (d.users.indexOf("Civil") > -1) { color =  "yellow"}
     else if (d.users.indexOf("Military") > -1) { color =  "red"}
     else if (d.users.indexOf("Commercial") > -1) { color =  "blue"}
     else if (d.users.indexOf("Government") > -1) { color =  "white"}
 
 
-    // USA first quad 0 and pi / 2
-    if (d.country == "USA") {
-        angle = Math.random()  * (Math.PI)
-        color = "white"
-    }
-    else {
-        angle = Math.random() * (2*Math.PI - Math.PI) + Math.PI
-    }
+    // Angle == Country 
+    angle = Math.random()  * (2*Math.PI)
 
 
-    // Radial position by Orbit type
-    // Add noise for scatter
-
-
+    // Radial position by Orbit type + noise for scatter
     if (d.orbitClass == "LEO"){
-        radius = 100 + (Math.random() * 20)
-
+        radius = 100 + (Math.random() * 80)
         spaceSVG.append("circle")
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .attr("r", 1)
+            .attr("r", r)
             .attr("fill", color)
     }
 
     else if (d.orbitClass == "MEO"){
-        radius = 150 + (Math.random() * 20)
-
+        radius = 200 + (Math.random() * 20)
         spaceSVG.append("circle")
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .attr("r", 1)
+            .attr("r", r)
             .attr("fill", color)
     }
      else if (d.orbitClass == "GEO"){
-        radius = 250 + (Math.random() * 20)
-
+        radius = 250 + (Math.random() * 30)
         spaceSVG.append("circle")
             .attr("cx", radius * Math.cos(angle) + centerPoint)
             .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .attr("r", 1)
+            .attr("r", r)
             .attr("fill", color)
     }
 

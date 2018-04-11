@@ -48,43 +48,45 @@
   plot_orbits("visualization");
 
   // Load data
- function parseLine(line) {
-    // Return only the columns we are interested in
-    // Subject to revision!
+  function parseLine(line) {
+        // Return only the columns we are interested in
+        // Subject to revision!
 
-    // Create new Date object so dates are not distorted
-    let split_date = line["Date of Launch"].split("/");
-    let year;
-    if (split_date[2] < 20) {
-      year = '20' + split_date[2];
-    } else {
-      year = '19' + split_date[2];
+        // Create new Date object so dates are not distorted
+        let split_date = line["Date of Launch"].split("/");
+        let year;
+        if (split_date[2] < 20) {
+          year = '20' + split_date[2];
+        } else {
+          year = '19' + split_date[2];
+        }
+        let temp_date = new Date(year, split_date[0], split_date[1]);
+
+        return {
+            satName: line["Name of Satellite, Alternate Names"],
+            launchDate: temp_date,
+            year: Number(year),
+            month: Number(split_date[0]),
+            day: Number(split_date[1]),
+            country: line["Country of Operator/Owner"],
+            users: line["Users"],
+            purpose: line["Purpose"],
+            detailedPurpose: line["Detailed Purpose"],
+            orbitClass: line["Class of Orbit"],
+            orbitType: line["Type of Orbit"],
+            expectedLifetime: line["Expected Lifetime"]
+        }
     }
-    let temp_date = new Date(year, split_date[0], split_date[1]);
+    
+    
+// let temp_date = new Date(year, split_date[0], split_date[1]);
 
-    return {
-        satName: line["Name of Satellite, Alternate Names"],
-        launchDate: temp_date,
-        year: Number(year),
-        month: Number(split_date[0]),
-        day: Number(split_date[1]),
-        country: line["Country of Operator/Owner"],
-        users: line["Users"],
-        purpose: line["Purpose"],
-        detailedPurpose: line["Detailed Purpose"],
-        orbitClass: line["Class of Orbit"],
-        orbitType: line["Type of Orbit"],
-        expectedLifetime: line["Expected Lifetime"]
-    }
-  }
-
-
-  d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
+d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
       satData = data;
-
       satData.forEach(function(d){
         plot_satellites(d);
       })
+
 
   });
 
