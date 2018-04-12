@@ -28,17 +28,28 @@
         <p> [ useFilter ] </p>
         <br>
         <p> [ Quick Stats ]</p>
+        *Wait for all the satellites to load, the hit sat type*
+        Click start to restart
+        <button onclick="start()">Start</button>
+          
+        <button onclick="filterByType()">Satellite Types</button>
+          
+        
+          
       </div>
 
       <div class = "visualization"></div>
+      </div>
+      
   </div>
 </body>
 
 
 <script>
+    
+        
   let satData;
   let colorTheme = "#010305"
-  const centerPoint = 300;
   let spaceSVG;
 
   plot_orbits("visualization");
@@ -75,20 +86,24 @@
     }
     
     
-
-    d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
-      satData = data;
-        
-      satData.forEach(function(d){
-          
-          plot_satellites(d)
-
-      });
+    let start = function() {
     
-      
+        d3.selectAll("g").selectAll("circle").remove();
+
+        d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
+          satData = data;
+
+          satData.forEach(function(d){
+              setTimeout(function(){
+                  plot_satellites(d)}
+                         , 100)
+          });
 
 
-    });
+        });
+    };
+    
+    start();
 
 </script>
     
