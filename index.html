@@ -36,6 +36,9 @@
 
       <div class = "visualization"></div>
   </div>
+  <div class="testViewPort">
+
+  </div>
 </body>
 
 
@@ -43,9 +46,9 @@
   let satData;
   let colorTheme = "#010305"
   const centerPoint = 300;
-  let spaceSVG;
+  let spaceSVG; // declare variable for svg for orbits/satelltes
+  let cartogramSVG; // declare variable for plotting cartogram svg.
 
-  plot_orbits("visualization");
 
   // Load data
  function parseLine(line) {
@@ -81,11 +84,10 @@
 
   d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
       satData = data;
-
+      plot_orbits("visualization");
       satData.forEach(function(d){
         plot_satellites(d);
       })
-
   });
 
 </script>

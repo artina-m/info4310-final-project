@@ -1,3 +1,4 @@
+/* plot orbits. className is passed on as argument*/
 let plot_orbits = function(className) {
     spaceSVG = d3.select("."+String(className))
       .append("svg")
@@ -40,7 +41,7 @@ let plot_orbits = function(className) {
 
 }
 
-
+/* plot satellites. can be further simplified by implementing helper filter functions */
 let plot_satellites = function(d) {
     // Randomly scatter the satellities into different orbit classes
 
@@ -95,4 +96,9 @@ let plot_satellites = function(d) {
             .attr("fill", color)
     }
 
+}
+
+/* plot force-based cartogram */
+let plot_cartogram = function(className) {
+  
 }
