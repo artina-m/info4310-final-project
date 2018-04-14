@@ -1,9 +1,6 @@
 <html>
 
 <head>
-  <!-- References -->
-
-  <!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
     <title>INFO 4310 Final Project</title>
     <link rel = "stylesheet" type="text/css" href = "style.css">
 
@@ -16,25 +13,34 @@
 
 <body>
   <div class = "spaceView1">
+      
       <div class = "sideBar">
-
+          
         <p class = "sectionTitle"> STUFF IN SPACE </p>
-
         <p class = "sectionDesc">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
         </p>
-
+          
         <!-- Add buttons -->
         <br>
-
         <p> [ yearFilter ] </p>
         <p> [ countryFilter ] </p>
         <p> [ useFilter ] </p>
         <br>
         <p> [ Quick Stats ]</p>
+        *Wait for all the satellites to load, the hit sat type*
+        Click start to restart
+        <button onclick="start()">Start</button>
+          
+        <button onclick="filterByType()">Satellite Types</button>
+          
+        
+          
       </div>
 
       <div class = "visualization"></div>
+      </div>
+      
   </div>
   <div class="testViewPort">
 
@@ -43,45 +49,59 @@
 
 
 <script>
+    
+        
   let satData;
   let colorTheme = "#010305"
+<<<<<<< HEAD
   const centerPoint = 300;
   let spaceSVG; // declare variable for svg for orbits/satelltes
   let cartogramSVG; // declare variable for plotting cartogram svg.
+=======
+  let spaceSVG;
+>>>>>>> ee8d490a34bd14b2b14eafd9195a4c9b8bc07173
 
 
   // Load data
- function parseLine(line) {
-    // Return only the columns we are interested in
-    // Subject to revision!
+  function parseLine(line) {
+        // Return only the columns we are interested in
+        // Subject to revision!
 
-    // Create new Date object so dates are not distorted
-    let split_date = line["Date of Launch"].split("/");
-    let year;
-    if (split_date[2] < 20) {
-      year = '20' + split_date[2];
-    } else {
-      year = '19' + split_date[2];
+        // Create new Date object so dates are not distorted
+        let split_date = line["Date of Launch"].split("/");
+        let year;
+        if (split_date[2] < 20) {
+          year = '20' + split_date[2];
+        } else {
+          year = '19' + split_date[2];
+        }
+        let temp_date = new Date(year, split_date[0], split_date[1]);
+
+        return {
+            satName: line["Name of Satellite, Alternate Names"],
+            launchDate: temp_date,
+            year: Number(year),
+            month: Number(split_date[0]),
+            day: Number(split_date[1]),
+            country: line["Country of Operator/Owner"],
+            users: line["Users"],
+            purpose: line["Purpose"],
+            detailedPurpose: line["Detailed Purpose"],
+            orbitClass: line["Class of Orbit"],
+            orbitType: line["Type of Orbit"],
+            expectedLifetime: line["Expected Lifetime"]
+        }
     }
-    let temp_date = new Date(year, split_date[0], split_date[1]);
+    
+    
+    let start = function() {
+    
+        d3.selectAll("g").selectAll("circle").remove();
 
-    return {
-        satName: line["Name of Satellite, Alternate Names"],
-        launchDate: temp_date,
-        year: Number(year),
-        month: Number(split_date[0]),
-        day: Number(split_date[1]),
-        country: line["Country of Operator/Owner"],
-        users: line["Users"],
-        purpose: line["Purpose"],
-        detailedPurpose: line["Detailed Purpose"],
-        orbitClass: line["Class of Orbit"],
-        orbitType: line["Type of Orbit"],
-        expectedLifetime: line["Expected Lifetime"]
-    }
-  }
+        d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
+          satData = data;
 
-
+<<<<<<< HEAD
   d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
       satData = data;
       plot_orbits("visualization");
@@ -89,7 +109,23 @@
         plot_satellites(d);
       })
   });
+=======
+          satData.forEach(function(d){
+              setTimeout(function(){
+                  plot_satellites(d)}
+                         , 100)
+          });
+
+
+        });
+    };
+    
+    start();
+>>>>>>> ee8d490a34bd14b2b14eafd9195a4c9b8bc07173
 
 </script>
+    
+<!-- References -->
+<!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
 
 </html>

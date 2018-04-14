@@ -48,7 +48,9 @@ div {
 }
 .visualization{
     display: inline-block;
+    position: absolute;
 }
+
 
 
 /* Text Elements */
