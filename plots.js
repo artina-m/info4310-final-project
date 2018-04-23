@@ -117,12 +117,10 @@ let plot_satellites = function(d) {
 
 }
 
-<<<<<<< HEAD
 /* plot force-based cartogram */
 let plot_cartogram = function(className) {
   
 }
-=======
 
 let filterByType = function(){
     let angleData = [];
@@ -138,9 +136,9 @@ let filterByType = function(){
     .attr("fill", function(d){
         let color = "white"
         if (d.users.indexOf("Civil") > -1) { color =  "white"}
-        else if (d.users.indexOf("Military") > -1) { color =  "#EC7063"}
+        else if (d.users.indexOf("Military") > -1) { color =  "red"}
         else if (d.users.indexOf("Commercial") > -1) { color =  "#76D7C4"}
-        else if (d.users.indexOf("Government") > -1) { color =  "#0288D1"}
+        else if (d.users.indexOf("Government") > -1) { color =  "blue"}
         return color
     })
     .attr("cx", function(d){
@@ -177,9 +175,3 @@ let filterByType = function(){
     
 
     }
-
-    
-        
-
-
->>>>>>> ee8d490a34bd14b2b14eafd9195a4c9b8bc07173

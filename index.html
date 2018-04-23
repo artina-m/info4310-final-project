@@ -53,13 +53,9 @@
         
   let satData;
   let colorTheme = "#010305"
-<<<<<<< HEAD
   const centerPoint = 300;
-  let spaceSVG; // declare variable for svg for orbits/satelltes
+  //let spaceSVG; // declare variable for svg for orbits/satelltes
   let cartogramSVG; // declare variable for plotting cartogram svg.
-=======
-  let spaceSVG;
->>>>>>> ee8d490a34bd14b2b14eafd9195a4c9b8bc07173
 
 
   // Load data
@@ -93,35 +89,21 @@
         }
     }
     
-    
+    plot_orbits("visualization");
+
     let start = function() {
     
         d3.selectAll("g").selectAll("circle").remove();
 
         d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
-          satData = data;
-
-<<<<<<< HEAD
-  d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
-      satData = data;
-      plot_orbits("visualization");
-      satData.forEach(function(d){
-        plot_satellites(d);
-      })
-  });
-=======
-          satData.forEach(function(d){
-              setTimeout(function(){
-                  plot_satellites(d)}
-                         , 100)
-          });
-
-
-        });
+            satData = data;
+            satData.forEach(function(d){
+                      setTimeout(function(){ plot_satellites(d)}, 100)
+                });
+                });
     };
     
     start();
->>>>>>> ee8d490a34bd14b2b14eafd9195a4c9b8bc07173
 
 </script>
     
