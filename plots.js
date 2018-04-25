@@ -195,6 +195,5 @@ let plot_use = function (className) {
         .attr("id", "space")
         .attr("width", 400)
         .attr("height", 400)
-        .style("background-color", "black")
-        .style("background-color", colorTheme);
+        .style("background-color", "white");
 }
