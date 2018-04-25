@@ -51,6 +51,29 @@ div {
     position: absolute;
 }
 
+.useByCountryView{
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+
+.useViz{
+    display: inline-block;
+    height:100%;
+    width: 35%;
+    background-color: white;
+    margin-left: 10%;
+    margin-top: 40px;
+    text-align: center;
+}
+.useVizBody{
+    display: inline-block;
+    height:100%;
+    width: 45%;
+    background-color: white;
+}
+
 
 
 /* Text Elements */
@@ -67,4 +90,19 @@ div {
     line-height: 18px;
     margin-top: 50px;
     margin-right:50px;
+}
+
+.useTitle{
+    margin: 0 auto;
+    margin-top: 80px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    color: #5D6D7E;
+    width: 70%;
+}
+
+.useDesc{
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 70%;
 }
