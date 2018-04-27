@@ -187,8 +187,19 @@ let filterByType = function () {
 
 }
 
-let plot_use = function (className) {
-    useSvg = d3
+let plot_use = function (className, data) {
+    let stack = d3.stack();
+
+    let margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 40
+    };
+    let width = 400 - margin.left - margin.right;
+    let height = 400 - margin.top - margin.bottom;
+
+    let svg = d3
         .select("." + String(className))
         .append("svg")
         .attr("class", "useSVG")
@@ -196,4 +207,72 @@ let plot_use = function (className) {
         .attr("width", 400)
         .attr("height", 400)
         .style("background-color", "white");
+
+    let g = svg
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    let keys = data
+        .columns
+        .slice(1);
+
+    let x = d3
+        .scaleBand()
+        .rangeRound([0, width])
+        .paddingInner(0.05)
+        .align(0.1)
+        .domain(data.map(function (d) {
+            return d.Country;
+        }));
+
+    let y = d3
+        .scaleLinear()
+        .rangeRound([height, 0])
+        .domain([
+            0,
+            1.0
+        ])
+        .nice();
+
+    let z = d3
+        .scaleOrdinal()
+        .range(["#2ecc71", "#3498db", "#e67e22", "#9b59b6"])
+        .domain(keys);
+
+    g
+        .append("g")
+        .selectAll("g")
+        .data(d3.stack().keys(keys)(data))
+        .enter()
+        .append("g")
+        .attr("fill", function (d) {
+            return z(d.key);
+        })
+        .selectAll("rect")
+        .data(function (d) {
+            return d;
+        })
+        .enter()
+        .append("rect")
+        .attr("x", function (d) {
+            return x(d.data.Country);
+        })
+        .attr("y", function (d) {
+            return y(d[1]);
+        })
+        .attr("height", function (d) {
+            return y(d[0]) - y(d[1]);
+        })
+        .attr("width", x.bandwidth());
+
+    g
+        .append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g
+        .append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y).ticks(null, "s"));
 }
