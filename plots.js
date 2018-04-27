@@ -210,7 +210,6 @@ let plot_use = function (className, data) {
         .attr("width", 400)
         .attr("height", 400)
         .style("background-color", "white");
-<<<<<<< HEAD
 
     let g = svg
         .append("g")
@@ -279,7 +278,6 @@ let plot_use = function (className, data) {
         .append("g")
         .attr("class", "axis")
         .call(d3.axisLeft(y).ticks(null, "s"));
-=======
     
 }
 
@@ -313,5 +311,4 @@ let useCaseProportion = function (data){
     
     
     
->>>>>>> ef49740314423a34c99efae49472e3267bb2faf3
 }
