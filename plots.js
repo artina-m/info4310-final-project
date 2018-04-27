@@ -58,10 +58,10 @@ let plot_orbits = function (className) {
 let plot_satellites = function (d) {
     // Plot satellites as points in respective orbit level ID = satellite name
     let r = 1.2; // Radius of satelllities
-    let centerPoint = 350; // Animation starting point
     let color = "white"
     let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
-    let satSpeed = 1000;
+    let satSpeed = 1500;
+    
 
     // Radial position by Orbit type + noise for scatter
     if (d.orbitClass == "LEO") {
@@ -136,6 +136,8 @@ let filterByType = function () {
 
     // Update the colors based on use case Commericial: Green Governemnt: Blue
     // Military: Red Civil: White
+    
+    
     allSats
         .transition()
         .duration(2000)
@@ -153,17 +155,8 @@ let filterByType = function () {
             return color
         })
         .attr("cx", function (d) {
-            let centerPoint = 350;
-            angle = 2 * Math.PI
-            if (d.users.indexOf("Civil") > -1) {
-                angle = Math.random() * (1 * Math.PI / 8)
-            } else if (d.users.indexOf("Military") > -1) {
-                angle = Math.random() * (3.50 * Math.PI / 8 - 1 * Math.PI / 8) + 1 * Math.PI / 8
-            } else if (d.users.indexOf("Commercial") > -1) {
-                angle = Math.random() * (13.50 * Math.PI / 8 - 3.50 * Math.PI / 8) + 3.5 * Math.PI / 8
-            } else if (d.users.indexOf("Government") > -1) {
-                angle = Math.random() * (16 * Math.PI / 8 - 13.5 * Math.PI / 8) + 13.5 * Math.PI / 8
-            }
+            angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
+                
 
             if (d.orbitClass == "GEO") {
                 radius = 250 + (Math.random() * 30)
@@ -178,13 +171,23 @@ let filterByType = function () {
             return radius * Math.cos(angle) + centerPoint
         })
         .attr("cy", function (d, i) {
-            let centerPoint = 350;
             radius = radiusData[i];
             angle = angleData[i];
             return radius * Math.sin(angle) + centerPoint
-
         })
-
+    
+        spaceSVG.selectAll("line").remove()
+        for (i in useCase) {
+            spaceSVG
+                .append("line")
+                .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
+                .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
+                .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
+                .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
+                .attr("stroke", "lightgrey")
+                .style("opacity", 0.2)
+        }
+    
 }
 
 let plot_use = function (className, data) {
@@ -207,6 +210,7 @@ let plot_use = function (className, data) {
         .attr("width", 400)
         .attr("height", 400)
         .style("background-color", "white");
+<<<<<<< HEAD
 
     let g = svg
         .append("g")
@@ -275,4 +279,39 @@ let plot_use = function (className, data) {
         .append("g")
         .attr("class", "axis")
         .call(d3.axisLeft(y).ticks(null, "s"));
+=======
+    
+}
+
+
+// !! to do create a function that does this for arbitrary categories and filters 
+let useCaseProportion = function (data){
+    let useCase = [];
+    let counts = {};
+    let total = data.length;
+    
+    // Get counts
+    data.forEach(function(d){
+        useCase.push(d.users)
+    })
+    
+    for (var i = 0; i < useCase.length; i++) {
+        var num = useCase[i];
+        counts[num] = counts[num] ? counts[num] + 1 : 1;
+    }
+    
+    // Get percentage
+    let start  = 0;
+    for (i in counts){
+        frac = counts[i]/total
+        piPercent = (2*Math.PI) * frac;
+        end = start + piPercent;
+        counts[i] = {s: start, e:end}
+        start = end;
+    }
+    return counts;
+    
+    
+    
+>>>>>>> ef49740314423a34c99efae49472e3267bb2faf3
 }

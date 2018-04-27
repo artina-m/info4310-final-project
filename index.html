@@ -70,7 +70,7 @@
   let satData;
   let flatData;
   let colorTheme = "#010305"
-  const centerPoint = 300;
+  const centerPoint = 350;
   //let spaceSVG; // declare variable for svg for orbits/satelltes
   let cartogramSVG; // declare variable for plotting cartogram svg.
 
@@ -125,6 +125,7 @@
 
     d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
       satData = data;
+      useCase = useCaseProportion(satData)
 
       d3.csv("usecounts.csv", function (error, data2) {
         flatData = data2;

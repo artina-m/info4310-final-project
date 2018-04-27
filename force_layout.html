@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<title>Force-based Satellite Vis</title>
+<body>
+<svg width="960" height="600"></svg>
+</body>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+let raw_data;
+let vis_data = [];
+
+d3.csv("data.csv", function(error, d) {
+  if (error) { throw error }
+  raw_data = d;
+
+  raw_data.forEach(function(node) {
+    let key_value = {}
+    key_value.date = new Date(node["Date of Launch"]);
+    key_value.country = node["Country of Operator/Owner"];
+    vis_data.push(key_value);
+  })
+
+  // group data by country
+  let dataByCountry = d3.nest()
+    .key(function(d) { return d.country })
+    .entries(vis_data);
+
+  // filter for designated year
+  let filtered_data = []
+
+  dataByCountry.forEach(function(d) {
+    let count = d.values.filter(function(d) {
+      return d.date.getFullYear() === 2017;
+    })
+    // console.log(count.length)
+    filtered_data.push({
+      country: d.key,
+      count: count.length
+    })
+  })
+
+  // boilerplate code for svg
+  let svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+  // div for appending tooltips
+  let div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  // set up the simulation
+  let simulation = d3.forceSimulation()
+                    .nodes(filtered_data);
+
+  // add forces
+  simulation
+    .velocityDecay(0.6)
+    .force("x", d3.forceX().strength(0.002))
+    .force("y", d3.forceY().strength(0.002))
+    .force("collide", d3.forceCollide(6).iterations(10))
+    .force("center_force", d3.forceCenter(width/2, height/2))
+    .on("tick", tickActions);;
+
+  let size = d3.scaleSqrt().range([0, 14]);
+
+  // draw circles for the nodes
+  let node = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll("circle")
+            .data(filtered_data)
+            .enter()
+            .append("circle")
+            .attr("r", function(d) { return d3.scaleLog().range([0, 8])(d.count); })
+            .attr("fill", "blue")
+            .attr("opacity", 0.7)
+            .on("mouseover", function(d) {
+              div.transition().duration(200)
+                .style("opacity", 0.9);
+
+              div.html(d.country + "<br/>" + d.count + " launches")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+               div.transition()
+                 .duration(500)
+                 .style("opacity", 0);
+            });;
+
+  // tick event
+  function tickActions() {
+    // update circle positions to reflect node updates on each tick
+    node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+  }
+
+
+
+})
+
+
+
+</script>
+</html>
