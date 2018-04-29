@@ -61,16 +61,14 @@ div {
 .useViz{
     display: inline-block;
     height:100%;
-    width: 35%;
-    background-color: lightgrey;
-    margin-left: 10%;
+    width: 45%;
     margin-top: 40px;
-    text-align: center;
+    text-align: right;
 }
 .useVizBody{
     display: inline-block;
     height:100%;
-    width: 45%;
+    width: 54%;
     background-color: white;
 }
 
@@ -98,11 +96,28 @@ div {
     font-family: 'Oswald', sans-serif;
     font-size: 28px;
     color: #5D6D7E;
-    width: 70%;
+    width: 80%;
 }
 
 .useDesc{
     margin: 0 auto;
     margin-top: 40px;
-    width: 70%;
+    width: 80%;
+}
+
+/* Chart 2 axis */
+.axis path{
+    stroke: #424949;
+}
+
+.axis line{
+    stroke: #424949;
+}
+
+.axis text{
+    fill: #424949;
+}
+
+.useViz text{
+    fill: #424949;
 }

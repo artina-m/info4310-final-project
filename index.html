@@ -1,68 +1,74 @@
 <html>
 
 <head>
-    <title>INFO 4310 Final Project</title>
-    <link rel = "stylesheet" type="text/css" href = "style.css">
+  <title>INFO 4310 Final Project</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
-    <script src="plots.js"></script>
-    <script src="helpers.js"></script>
+  <script src="plots.js"></script>
+  <script src="helpers.js"></script>
 </head>
 
 <body>
-  <div class = "spaceView1">
-      
-      <div class = "sideBar">
-          
-        <p class = "sectionTitle"> STUFF IN SPACE </p>
-        <p class = "sectionDesc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        </p>
-          
-        <!-- Add buttons -->
-        <br>
-        <p> [ yearFilter ] </p>
-        <p> [ countryFilter ] </p>
-        <p> [ useFilter ] </p>
-        <br>
-        <p> [ Quick Stats ]</p>
-        *Wait for all the satellites to load, the hit sat type*
-        Click start to restart
-        <button onclick="start()">Start</button>
-          
-        <button onclick="filterByType()">Satellite Types</button>
-          
-        
-          
-      </div>
+  <div class="spaceView1">
 
-      <div class = "visualization"></div>
-      </div>
-      
+    <div class="sideBar">
+
+      <p class="sectionTitle"> STUFF IN SPACE </p>
+      <p class="sectionDesc">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      </p>
+
+      <!-- Add buttons -->
+      <br>
+      <p> [ yearFilter ] </p>
+      <p> [ countryFilter ] </p>
+      <p> [ useFilter ] </p>
+      <br>
+      <p> [ Quick Stats ]</p>
+      *Wait for all the satellites to load, the hit sat type* Click start to restart
+      <button onclick="start()">Start</button>
+
+      <button onclick="filterByType()">Satellite Types</button>
+
+
+
+    </div>
+
+    <div class="visualization"></div>
+  </div>
+
   </div>
   <div class="testViewPort">
 
   </div>
   <div class="useByCountryView">
-    <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-    <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
     <div class="useViz">
 
     </div>
     <div class="useVizBody">
       <p class="useTitle">SATELLITE USE CASE BY COUNTRY</p>
-      <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
     </div>
   </div>
 </body>
 
 
 <script>
-    
-        
   let satData;
+  let flatData;
   let colorTheme = "#010305"
   const centerPoint = 350;
   //let spaceSVG; // declare variable for svg for orbits/satelltes
@@ -99,32 +105,36 @@
             expectedLifetime: line["Expected Lifetime"],
             launchMass: Number(line["Launch Mass (kg.)"])
         }
+
     }
-    
-    plot_orbits("visualization");
+  
 
-    plot_use("useViz");
+  plot_orbits("visualization");
 
-    let start = function() {
-    
-        d3.selectAll("g").selectAll("circle").remove();
 
-        d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data){
-            satData = data;
-            useCase = useCaseProportion(satData)
+  let start = function () {
 
-            satData.forEach(function(d){
-                      setTimeout(function(){ plot_satellites(d)}, 100)
-                });
+    d3.selectAll("g").selectAll("circle").remove();
 
-                });
-            
-    };
-    
-    start();
+    d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
+      satData = data;
+      useCase = useCaseProportion(satData)
+
+      d3.csv("use.csv", function (error, data2) {
+        flatData = data2;
+        plot_use("useViz", flatData);
+      });
+
+      satData.forEach(function (d) {
+        setTimeout(function () { plot_satellites(d) }, 100)
+      });
+    });
+  };
+
+  start();
 
 </script>
-    
+
 <!-- References -->
 <!-- Data:  https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WqwEapPwZE4 -->
 

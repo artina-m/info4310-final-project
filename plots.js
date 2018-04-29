@@ -61,12 +61,11 @@ let plot_satellites = function (d) {
     let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
     let satSpeed = 1500;
     let r = d.launchMass || 1;
-
     let rscale = d3.scaleLinear()
         .domain([0,6651])
         .range([1,15])
     r = rscale(r)
-    
+
 
     // Radial position by Orbit type + noise for scatter
     if (d.orbitClass == "LEO") {
@@ -141,8 +140,7 @@ let filterByType = function () {
 
     // Update the colors based on use case Commericial: Green Governemnt: Blue
     // Military: Red Civil: White
-    
-    
+
     allSats
         .transition()
         .duration(2000)
@@ -162,7 +160,6 @@ let filterByType = function () {
         })
         .attr("cx", function (d) {
             angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
-                
 
             if (d.orbitClass == "GEO") {
                 radius = 250 + (Math.random() * 40)
@@ -181,61 +178,202 @@ let filterByType = function () {
             angle = angleData[i];
             return radius * Math.sin(angle) + centerPoint
         })
-    
-        spaceSVG.selectAll("line").remove()
-        for (i in useCase) {
-            spaceSVG
-                .append("line")
-                .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
-                .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
-                .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
-                .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
-                .attr("stroke", "#303030")
-                .style("stroke-width", 1)
-        }
-    
+
+    spaceSVG
+        .selectAll("line")
+        .remove()
+    for (i in useCase) {
+        spaceSVG
+            .append("line")
+            .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
+            .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
+            .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
+            .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
+            .attr("stroke", "lightgrey")
+            .style("opacity", 0.2)
+    }
+
 }
 
-let plot_use = function (className) {
-    useSvg = d3
+let plot_use = function (className, data) {
+    let stack = d3.stack();
+
+    let margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 60
+    };
+    let width = 400 - margin.left - margin.right;
+    let height = 400 - margin.top - margin.bottom;
+
+    let svg = d3
         .select("." + String(className))
         .append("svg")
         .attr("class", "useSVG")
         .attr("id", "space")
-        .attr("width", 400)
+        .attr("width", 520)
         .attr("height", 400)
         .style("background-color", "white");
+
+    let g = svg
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    let keys = data
+        .columns
+        .slice(1);
+
+    let x = d3
+        .scaleBand()
+        .rangeRound([0, width])
+        .paddingInner(0.25)
+        .align(1.0)
+        .domain(data.map(function (d) {
+            return d.Country;
+        }));
+
+    let y = d3
+        .scaleLinear()
+        .rangeRound([height, 0])
+        .domain([0, 1.0])
+        .nice();
+
+    let z = d3
+        .scaleOrdinal()
+        .range(["#5cbae6", "#b6d957", "#fac364", "#d998cb"])
+        .domain(keys);
+
+    g
+        .append("g")
+        .selectAll("g")
+        .data(d3.stack().keys(keys)(data))
+        .enter()
+        .append("g")
+        .attr("fill", function (d) {
+            return z(d.key);
+        })
+        .selectAll("rect")
+        .data(function (d) {
+            return d;
+        })
+        .enter()
+        .append("rect")
+        .attr("x", function (d) {
+            return x(d.data.Country);
+        })
+        .attr("y", function (d) {
+            return y(d[1]);
+        })
+        .attr("height", function (d) {
+            return y(d[0]) - y(d[1]);
+        })
+        .attr("width", x.bandwidth());
+
+    g
+        .append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g
+        .append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y).ticks(null, "s").tickFormat(d3.format(".0%")));
+
+    svg
+        .append("text")
+        .attr("x", -200)
+        .attr("y", 20)
+        .text("Percentage of Country's Satellites")
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-family", "Roboto")
+        .style("fill", "#424949")
+        .style("font-size", 12);
     
+    let legendBox = svg.append("rect")
+    .attr("x", 401)
+    .attr("y", 20)
+    .attr("width", 110)
+    .attr("height", 160)
+    .style("stroke", "#424949")
+    .style("fill", "none")
+    .style("stroke-width", 1);
+    
+    let legendText = svg.append("text")
+    .attr("x", 456)
+    .attr("y", 40)
+    .text("Use Case")
+    .attr("text-anchor", "middle")
+    .style("font-family", "Roboto")
+    .style("font-size", 14);
+
+    let legend = svg
+        .append("g")
+        .attr("font-family", "Roboto")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .selectAll("g")
+        .data(keys.slice().reverse())
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(180," + i * 30 + ")";
+        });
+
+    legend
+        .append("rect")
+        .attr("x", width - 19)
+        .attr("y", 60)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", z);
+
+    legend
+        .append("text")
+        .attr("x", width - 24)
+        .attr("y", 69.5)
+        .attr("dy", "0.32em")
+        .style("font-size", 12)
+        .text(function (d) {
+            return d;
+        });
+
 }
 
-
-// !! to do create a function that does this for arbitrary categories and filters 
-let useCaseProportion = function (data){
+// !! to do create a function that does this for arbitrary categories and
+// filters
+let useCaseProportion = function (data) {
     let useCase = [];
     let counts = {};
     let total = data.length;
-    
+
     // Get counts
-    data.forEach(function(d){
+    data.forEach(function (d) {
         useCase.push(d.users)
     })
-    
+
     for (var i = 0; i < useCase.length; i++) {
         var num = useCase[i];
         counts[num] = counts[num] ? counts[num] + 1 : 1;
     }  
     
+
     // Get percentage
-    let start  = 0;
-    for (i in counts){
-        frac = counts[i]/total
-        piPercent = (2*Math.PI) * frac;
+    let start = 0;
+    for (i in counts) {
+        frac = counts[i] / total
+        piPercent = (2 * Math.PI) * frac;
         end = start + piPercent;
-        counts[i] = {s: start, e:end}
+        counts[i] = {
+            s: start,
+            e: end
+        }
         start = end;
     }
     console.log(counts)
     return counts;
 
-}
 
+}
