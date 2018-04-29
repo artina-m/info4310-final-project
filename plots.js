@@ -57,10 +57,15 @@ let plot_orbits = function (className) {
 /* plot satellites. can be further simplified by implementing helper filter functions */
 let plot_satellites = function (d) {
     // Plot satellites as points in respective orbit level ID = satellite name
-    let r = 1.2; // Radius of satelllities
     let color = "white"
     let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
     let satSpeed = 1500;
+    let r = d.launchMass || 1;
+
+    let rscale = d3.scaleLinear()
+        .domain([0,6651])
+        .range([1,15])
+    r = rscale(r)
     
 
     // Radial position by Orbit type + noise for scatter
@@ -84,7 +89,7 @@ let plot_satellites = function (d) {
             .style("opacity", 1);
 
     } else if (d.orbitClass == "MEO") {
-        radius = 200 + (Math.random() * 20)
+        radius = 200 + (Math.random() * 30)
         dot = satelliteGroup
             .append("circle")
             .attr("class", "satPoint")
@@ -103,7 +108,7 @@ let plot_satellites = function (d) {
             .style("opacity", 1);
 
     } else if (d.orbitClass == "GEO") {
-        radius = 250 + (Math.random() * 30)
+        radius = 250 + (Math.random() * 40)
         dot = satelliteGroup
             .append("circle")
             .attr("class", "satPoint")
@@ -141,16 +146,17 @@ let filterByType = function () {
     allSats
         .transition()
         .duration(2000)
+        .style("opacity", 1)
         .attr("fill", function (d) {
             let color = "white"
             if (d.users.indexOf("Civil") > -1) {
                 color = "white"
             } else if (d.users.indexOf("Military") > -1) {
-                color = "red"
+                color = "#DD1155"
             } else if (d.users.indexOf("Commercial") > -1) {
                 color = "#76D7C4"
             } else if (d.users.indexOf("Government") > -1) {
-                color = "blue"
+                color = "#357DED"
             }
             return color
         })
@@ -159,9 +165,9 @@ let filterByType = function () {
                 
 
             if (d.orbitClass == "GEO") {
-                radius = 250 + (Math.random() * 30)
+                radius = 250 + (Math.random() * 40)
             } else if (d.orbitClass == "MEO") {
-                radius = 200 + (Math.random() * 20)
+                radius = 200 + (Math.random() * 30)
             } else if (d.orbitClass == "LEO") {
                 radius = 100 + (Math.random() * 80)
             }
@@ -184,8 +190,8 @@ let filterByType = function () {
                 .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
                 .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
                 .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
-                .attr("stroke", "lightgrey")
-                .style("opacity", 0.2)
+                .attr("stroke", "#303030")
+                .style("stroke-width", 1)
         }
     
 }
@@ -217,7 +223,7 @@ let useCaseProportion = function (data){
     for (var i = 0; i < useCase.length; i++) {
         var num = useCase[i];
         counts[num] = counts[num] ? counts[num] + 1 : 1;
-    }
+    }  
     
     // Get percentage
     let start  = 0;
@@ -228,8 +234,8 @@ let useCaseProportion = function (data){
         counts[i] = {s: start, e:end}
         start = end;
     }
+    console.log(counts)
     return counts;
-    
-    
-    
+
 }
+
