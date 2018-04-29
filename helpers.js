@@ -10,7 +10,6 @@ let filter_year = function(data, year) {
   })
 }
 
-<<<<<<< HEAD
 /* Code used below to generate flatuse data */
 
  // data counts by major country and use
@@ -37,6 +36,3 @@ let filter_year = function(data, year) {
 //    }
 //  });
 // });
-=======
-
->>>>>>> ef49740314423a34c99efae49472e3267bb2faf3

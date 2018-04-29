@@ -61,7 +61,6 @@ let plot_satellites = function (d) {
     let color = "white"
     let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
     let satSpeed = 1500;
-    
 
     // Radial position by Orbit type + noise for scatter
     if (d.orbitClass == "LEO") {
@@ -136,8 +135,7 @@ let filterByType = function () {
 
     // Update the colors based on use case Commericial: Green Governemnt: Blue
     // Military: Red Civil: White
-    
-    
+
     allSats
         .transition()
         .duration(2000)
@@ -156,7 +154,6 @@ let filterByType = function () {
         })
         .attr("cx", function (d) {
             angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
-                
 
             if (d.orbitClass == "GEO") {
                 radius = 250 + (Math.random() * 30)
@@ -175,19 +172,21 @@ let filterByType = function () {
             angle = angleData[i];
             return radius * Math.sin(angle) + centerPoint
         })
-    
-        spaceSVG.selectAll("line").remove()
-        for (i in useCase) {
-            spaceSVG
-                .append("line")
-                .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
-                .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
-                .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
-                .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
-                .attr("stroke", "lightgrey")
-                .style("opacity", 0.2)
-        }
-    
+
+    spaceSVG
+        .selectAll("line")
+        .remove()
+    for (i in useCase) {
+        spaceSVG
+            .append("line")
+            .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
+            .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
+            .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
+            .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
+            .attr("stroke", "lightgrey")
+            .style("opacity", 0.2)
+    }
+
 }
 
 let plot_use = function (className, data) {
@@ -197,7 +196,7 @@ let plot_use = function (className, data) {
         top: 20,
         right: 20,
         bottom: 30,
-        left: 40
+        left: 60
     };
     let width = 400 - margin.left - margin.right;
     let height = 400 - margin.top - margin.bottom;
@@ -207,7 +206,7 @@ let plot_use = function (className, data) {
         .append("svg")
         .attr("class", "useSVG")
         .attr("id", "space")
-        .attr("width", 400)
+        .attr("width", 520)
         .attr("height", 400)
         .style("background-color", "white");
 
@@ -222,8 +221,8 @@ let plot_use = function (className, data) {
     let x = d3
         .scaleBand()
         .rangeRound([0, width])
-        .paddingInner(0.05)
-        .align(0.1)
+        .paddingInner(0.25)
+        .align(1.0)
         .domain(data.map(function (d) {
             return d.Country;
         }));
@@ -231,15 +230,12 @@ let plot_use = function (className, data) {
     let y = d3
         .scaleLinear()
         .rangeRound([height, 0])
-        .domain([
-            0,
-            1.0
-        ])
+        .domain([0, 1.0])
         .nice();
 
     let z = d3
         .scaleOrdinal()
-        .range(["#2ecc71", "#3498db", "#e67e22", "#9b59b6"])
+        .range(["#5cbae6", "#b6d957", "#fac364", "#d998cb"])
         .domain(keys);
 
     g
@@ -277,38 +273,100 @@ let plot_use = function (className, data) {
     g
         .append("g")
         .attr("class", "axis")
-        .call(d3.axisLeft(y).ticks(null, "s"));
+        .call(d3.axisLeft(y).ticks(null, "s").tickFormat(d3.format(".0%")));
+
+    svg
+        .append("text")
+        .attr("x", -200)
+        .attr("y", 20)
+        .text("Percentage of Country's Satellites")
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-family", "Roboto")
+        .style("fill", "#424949")
+        .style("font-size", 12);
     
+    let legendBox = svg.append("rect")
+    .attr("x", 401)
+    .attr("y", 20)
+    .attr("width", 110)
+    .attr("height", 160)
+    .style("stroke", "#424949")
+    .style("fill", "none")
+    .style("stroke-width", 1);
+    
+    let legendText = svg.append("text")
+    .attr("x", 456)
+    .attr("y", 40)
+    .text("Use Case")
+    .attr("text-anchor", "middle")
+    .style("font-family", "Roboto")
+    .style("font-size", 14);
+
+    let legend = svg
+        .append("g")
+        .attr("font-family", "Roboto")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .selectAll("g")
+        .data(keys.slice().reverse())
+        .enter()
+        .append("g")
+        .attr("transform", function (d, i) {
+            return "translate(180," + i * 30 + ")";
+        });
+
+    legend
+        .append("rect")
+        .attr("x", width - 19)
+        .attr("y", 60)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", z);
+
+    legend
+        .append("text")
+        .attr("x", width - 24)
+        .attr("y", 69.5)
+        .attr("dy", "0.32em")
+        .style("font-size", 12)
+        .text(function (d) {
+            return d;
+        });
+
 }
 
-
-// !! to do create a function that does this for arbitrary categories and filters 
-let useCaseProportion = function (data){
+// !! to do create a function that does this for arbitrary categories and
+// filters
+let useCaseProportion = function (data) {
     let useCase = [];
     let counts = {};
     let total = data.length;
-    
+
     // Get counts
-    data.forEach(function(d){
+    data.forEach(function (d) {
         useCase.push(d.users)
     })
-    
+
     for (var i = 0; i < useCase.length; i++) {
         var num = useCase[i];
-        counts[num] = counts[num] ? counts[num] + 1 : 1;
+        counts[num] = counts[num]
+            ? counts[num] + 1
+            : 1;
     }
-    
+
     // Get percentage
-    let start  = 0;
-    for (i in counts){
-        frac = counts[i]/total
-        piPercent = (2*Math.PI) * frac;
+    let start = 0;
+    for (i in counts) {
+        frac = counts[i] / total
+        piPercent = (2 * Math.PI) * frac;
         end = start + piPercent;
-        counts[i] = {s: start, e:end}
+        counts[i] = {
+            s: start,
+            e: end
+        }
         start = end;
     }
     return counts;
-    
-    
-    
+
 }

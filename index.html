@@ -127,7 +127,7 @@
       satData = data;
       useCase = useCaseProportion(satData)
 
-      d3.csv("usecounts.csv", function (error, data2) {
+      d3.csv("use.csv", function (error, data2) {
         flatData = data2;
         plot_use("useViz", flatData);
       });
