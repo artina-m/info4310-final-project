@@ -11,7 +11,8 @@ let plot_orbits = function (className) {
         .attr("height", "100%")
         .style("background-color", colorTheme);
 
-    satelliteGroup = spaceSVG.append("g");
+    satelliteGroup = spaceSVG.append("g")
+        .attr("class", "allSats");
 
     let ringcolor = "#3F3F3F";
 
@@ -37,7 +38,7 @@ let plot_orbits = function (className) {
         .attr("class", "MEO")
         .attr("cx", centerX)
         .attr("cy", centerY)
-        .attr("r", 200)
+        .attr("r", 220)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
 
@@ -46,11 +47,10 @@ let plot_orbits = function (className) {
         .attr("class", "GEO")
         .attr("cx", centerX)
         .attr("cy", centerY)
-        .attr("r", 250)
+        .attr("r", 270)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
 }
-
 
 
 /* plot satellites. can be further simplified by implementing helper filter functions */
@@ -80,12 +80,14 @@ let plot_satellites = function (d) {
     if (satOrbit == "LEO") {
         radius = 100 + (Math.random() * 80);
     } else if (satOrbit == "MEO") {
-        radius = 200 + (Math.random() * 30)
+        radius = 220 + (Math.random() * 30)
 
     } else if (satOrbit == "GEO") {
-        radius = 250 + (Math.random() * 40)
+        radius = 270 + (Math.random() * 40)
     }
     
+    
+
     // Plot satellites
     var dot = satelliteGroup
             .append("circle")
@@ -136,10 +138,8 @@ let plot_satellites = function (d) {
     
             .on("mouseout", 
                 function(d) {
-                    dot
-                    .attr("r", r)
-                    
-        });
+                    dot.attr("r", r)
+                });
     
     dot
         .transition()
@@ -152,8 +152,6 @@ let plot_satellites = function (d) {
 
 /* plot force-based cartogram */
 let plot_cartogram = function (className) {}
-
-
 
 
 let filterByType = function () {
@@ -187,9 +185,9 @@ let filterByType = function () {
             angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
 
             if (d.orbitClass == "GEO") {
-                radius = 250 + (Math.random() * 40)
+                radius = 270 + (Math.random() * 40)
             } else if (d.orbitClass == "MEO") {
-                radius = 200 + (Math.random() * 30)
+                radius = 220 + (Math.random() * 30)
             } else if (d.orbitClass == "LEO") {
                 radius = 100 + (Math.random() * 80)
             }
@@ -204,9 +202,8 @@ let filterByType = function () {
             return radius * Math.sin(angle) + centerY
         })
 
-    spaceSVG
-        .selectAll("line")
-        .remove()
+    spaceSVG.selectAll("line").remove()
+    
     for (i in useCase) {
         spaceSVG
             .append("line")
@@ -366,10 +363,6 @@ let plot_use = function (className, data) {
         });
 
 }
-
-
-
-
 
 
 
