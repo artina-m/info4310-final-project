@@ -1,13 +1,11 @@
 /* plot orbits. className is passed on as argument*/
 let plot_orbits = function (className) {
-    // This function plots the spaceSVG and orbit levels
-
     spaceSVG = d3
         .select("." + String(className))
         .append("svg")
         .attr("class", "spaceSVG")
         .attr("id", "space")
-        .attr("width", 700)
+        .attr("width", 800)
         .attr("height", 600)
         .style("background-color", "black")
         .attr("height", "100%")
@@ -16,12 +14,11 @@ let plot_orbits = function (className) {
     satelliteGroup = spaceSVG.append("g");
 
     let ringcolor = "#3F3F3F";
-    let centerPoint = 350;
 
     let randomCountries = spaceSVG
         .append("circle")
-        .attr("cx", centerPoint)
-        .attr("cy", centerPoint)
+        .attr("cx", centerX)
+        .attr("cy", centerY)
         .attr("r", 50)
         .attr("fill", "black")
         .attr("stroke", "lightgrey");
@@ -29,8 +26,8 @@ let plot_orbits = function (className) {
     let orbit1 = spaceSVG
         .append("circle")
         .attr("class", "LEO")
-        .attr("cx", centerPoint)
-        .attr("cy", centerPoint)
+        .attr("cx", centerX)
+        .attr("cy", centerY)
         .attr("r", 100)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
@@ -38,8 +35,8 @@ let plot_orbits = function (className) {
     let orbit2 = spaceSVG
         .append("circle")
         .attr("class", "MEO")
-        .attr("cx", centerPoint)
-        .attr("cy", centerPoint)
+        .attr("cx", centerX)
+        .attr("cy", centerY)
         .attr("r", 200)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
@@ -47,89 +44,117 @@ let plot_orbits = function (className) {
     let orbit3 = spaceSVG
         .append("circle")
         .attr("class", "GEO")
-        .attr("cx", centerPoint)
-        .attr("cy", centerPoint)
+        .attr("cx", centerX)
+        .attr("cy", centerY)
         .attr("r", 250)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
 }
 
+
+
 /* plot satellites. can be further simplified by implementing helper filter functions */
 let plot_satellites = function (d) {
     // Plot satellites as points in respective orbit level ID = satellite name
+    
+    // Satellite Info
+    let satName = d.satName;
+    let satCountry = d.country;
+    let satUsers = d.users;
+    let satOrbit = d.orbitClass;
+    let satPurpose = d.purpose;
+    let satMass = d.launchMass;
+    let satLife = d.expectedLifetime;
     let color = "white"
+    let satSpeed = 1500;    // transition speed
+    let r = satMass || 1.5; // radius of circle
+    
+    // Calculations
     let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
-    let satSpeed = 1500;
-    let r = d.launchMass || 1;
     let rscale = d3.scaleLinear()
-        .domain([0,6651])
-        .range([1,15])
+                    .domain([0,6651])
+                    .range([1.5,15])
     r = rscale(r)
 
-
-    // Radial position by Orbit type + noise for scatter
-    if (d.orbitClass == "LEO") {
+    // Location of satellite: Radius on circle depends on orbit level
+    if (satOrbit == "LEO") {
         radius = 100 + (Math.random() * 80);
-        var dot = satelliteGroup
-            .append("circle")
-            .attr("class", "satPoint")
-            .attr("id", d.satName)
-            .attr("cx", 0 + centerPoint)
-            .attr("cy", 0 + centerPoint)
-            .attr("r", r)
-            .attr("fill", color)
-            .style("opacity", 0);
-
-        dot
-            .transition()
-            .duration(satSpeed)
-            .attr("cx", radius * Math.cos(angle) + centerPoint)
-            .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .style("opacity", 1);
-
-    } else if (d.orbitClass == "MEO") {
+    } else if (satOrbit == "MEO") {
         radius = 200 + (Math.random() * 30)
-        dot = satelliteGroup
-            .append("circle")
-            .attr("class", "satPoint")
-            .attr("id", d.satName)
-            .attr("cx", 0 + centerPoint)
-            .attr("cy", 0 + centerPoint)
-            .attr("r", r)
-            .attr("fill", color)
-            .style("opacity", 0);
 
-        dot
-            .transition()
-            .duration(satSpeed)
-            .attr("cx", radius * Math.cos(angle) + centerPoint)
-            .attr("cy", radius * Math.sin(angle) + centerPoint)
-            .style("opacity", 1);
-
-    } else if (d.orbitClass == "GEO") {
+    } else if (satOrbit == "GEO") {
         radius = 250 + (Math.random() * 40)
-        dot = satelliteGroup
+    }
+    
+    // Plot satellites
+    var dot = satelliteGroup
             .append("circle")
             .attr("class", "satPoint")
             .attr("id", d.satName)
-            .attr("cx", 0 + centerPoint)
-            .attr("cy", 0 + centerPoint)
+            .attr("cx", 0 + centerX)
+            .attr("cy", 0 + centerY)
             .attr("r", r)
             .attr("fill", color)
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .on("mouseover", function(d) {
+                d3.selectAll(".satPoint").attr("fill", color)                
+                d3.selectAll(".satInfo").remove() // Clear previous info
+                
+                dot.attr("fill", "#E59866").attr("r", r + 3)
 
-        dot
-            .transition()
+                spaceSVG.append("text")
+                    .text(satName + ",  " + satCountry)
+                    .attr("class", "satInfo")
+                    .attr("fill", "#E59866")
+                    .attr("x", 50)
+                    .attr("y", 650)
+                
+                spaceSVG.append("text")
+                    .text(satUsers + "  Satellite")
+                    .attr("class", "satInfo")
+                    .attr("fill", "white")
+                    .attr("x", 50)
+                    .attr("y", 670)
+                    .style("font-size", 12)
+    
+                spaceSVG.append("text")
+                    .text("Purpose:  " + satPurpose)
+                    .attr("class", "satInfo")
+                    .attr("fill", "white")
+                    .attr("x", 50)
+                    .attr("y", 690)
+                    .style("font-size", 12)
+                
+                spaceSVG.append("text")
+                    .text("Orbit Class: " + satOrbit + " Expected Lifetime:  " + satLife)
+                    .attr("class", "satInfo")
+                    .attr("fill", "white")
+                    .attr("x", 50)
+                    .attr("y", 710)
+                    .style("font-size", 12)
+                })
+    
+            .on("mouseout", 
+                function(d) {
+                    dot
+                    .attr("r", r)
+                    
+        });
+    
+    dot
+        .transition()
             .duration(satSpeed)
-            .attr("cx", radius * Math.cos(angle) + centerPoint)
-            .attr("cy", radius * Math.sin(angle) + centerPoint)
+            .attr("cx", radius * Math.cos(angle) + centerX)
+            .attr("cy", radius * Math.sin(angle) + centerY)
             .style("opacity", 1);
-    }
-
+    
 }
 
 /* plot force-based cartogram */
 let plot_cartogram = function (className) {}
+
+
+
 
 let filterByType = function () {
     let angleData = [];
@@ -171,12 +196,12 @@ let filterByType = function () {
 
             angleData.push(angle);
             radiusData.push(radius);
-            return radius * Math.cos(angle) + centerPoint
+            return radius * Math.cos(angle) + centerX
         })
         .attr("cy", function (d, i) {
             radius = radiusData[i];
             angle = angleData[i];
-            return radius * Math.sin(angle) + centerPoint
+            return radius * Math.sin(angle) + centerY
         })
 
     spaceSVG
@@ -185,10 +210,10 @@ let filterByType = function () {
     for (i in useCase) {
         spaceSVG
             .append("line")
-            .attr("x1", 30 * Math.cos(useCase[i].s) + centerPoint)
-            .attr("x2", 350 * Math.cos(useCase[i].s) + centerPoint)
-            .attr("y1", 30 * Math.sin(useCase[i].s) + centerPoint)
-            .attr("y2", 350 * Math.sin(useCase[i].s) + centerPoint)
+            .attr("x1", 30 * Math.cos(useCase[i].s) + centerX)
+            .attr("x2", 350 * Math.cos(useCase[i].s) + centerX)
+            .attr("y1", 30 * Math.sin(useCase[i].s) + centerY)
+            .attr("y2", 350 * Math.sin(useCase[i].s) + centerY)
             .attr("stroke", "lightgrey")
             .style("opacity", 0.2)
     }
@@ -342,6 +367,12 @@ let plot_use = function (className, data) {
 
 }
 
+
+
+
+
+
+
 // !! to do create a function that does this for arbitrary categories and
 // filters
 let useCaseProportion = function (data) {
@@ -350,30 +381,22 @@ let useCaseProportion = function (data) {
     let total = data.length;
 
     // Get counts
-    data.forEach(function (d) {
-        useCase.push(d.users)
-    })
+    data.forEach(function (d) { useCase.push(d.users) })
 
     for (var i = 0; i < useCase.length; i++) {
         var num = useCase[i];
         counts[num] = counts[num] ? counts[num] + 1 : 1;
     }  
     
-
     // Get percentage
     let start = 0;
     for (i in counts) {
         frac = counts[i] / total
         piPercent = (2 * Math.PI) * frac;
         end = start + piPercent;
-        counts[i] = {
-            s: start,
-            e: end
-        }
+        counts[i] = { s: start, e: end }
         start = end;
     }
     console.log(counts)
     return counts;
-
-
 }

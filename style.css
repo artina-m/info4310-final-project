@@ -72,7 +72,10 @@ div {
     background-color: white;
 }
 
-
+/* Main Visualization */
+.satPoint:hover {
+     cursor: pointer; 
+}
 
 /* Text Elements */
 
