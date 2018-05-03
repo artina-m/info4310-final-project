@@ -5,8 +5,8 @@ let plot_orbits = function (className) {
         .append("svg")
         .attr("class", "spaceSVG")
         .attr("id", "space")
-        .attr("width", 800)
-        .attr("height", 600)
+        .attr("width", 1200)
+        .attr("height", 580)
         .style("background-color", "black")
         .attr("height", "100%")
         .style("background-color", colorTheme);
@@ -15,6 +15,8 @@ let plot_orbits = function (className) {
         .attr("class", "allSats");
 
     let ringcolor = "#3F3F3F";
+    
+
 
     let randomCountries = spaceSVG
         .append("circle")
@@ -29,7 +31,7 @@ let plot_orbits = function (className) {
         .attr("class", "LEO")
         .attr("cx", centerX)
         .attr("cy", centerY)
-        .attr("r", 100)
+        .attr("r", leo)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
 
@@ -38,7 +40,7 @@ let plot_orbits = function (className) {
         .attr("class", "MEO")
         .attr("cx", centerX)
         .attr("cy", centerY)
-        .attr("r", 220)
+        .attr("r", meo)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
 
@@ -47,16 +49,14 @@ let plot_orbits = function (className) {
         .attr("class", "GEO")
         .attr("cx", centerX)
         .attr("cy", centerY)
-        .attr("r", 270)
+        .attr("r", geo)
         .attr("fill", "none")
         .attr("stroke", ringcolor)
-}
+    }
 
 
 /* plot satellites. can be further simplified by implementing helper filter functions */
-let plot_satellites = function (d) {
-    // Plot satellites as points in respective orbit level ID = satellite name
-    
+let plot_satellites = function (d) {  
     // Satellite Info
     let satName = d.satName;
     let satCountry = d.country;
@@ -65,29 +65,27 @@ let plot_satellites = function (d) {
     let satPurpose = d.purpose;
     let satMass = d.launchMass;
     let satLife = d.expectedLifetime;
+    let launchDate = String(d.launchDate).substring(0,16);
     let color = "white"
     let satSpeed = 1500;    // transition speed
     let r = satMass || 1.5; // radius of circle
     
     // Calculations
-    let angle = Math.random() * (2 * Math.PI) // Angle == Country ?
-    let rscale = d3.scaleLinear()
-                    .domain([0,6651])
-                    .range([1.5,15])
+    // Generate random angle between 0 and 2Pi
+    let angle = Math.random() * (2 * Math.PI) 
+    // Scale size of satellite according to launch mass
     r = rscale(r)
 
-    // Location of satellite: Radius on circle depends on orbit level
+    // Plot satellites by orbit level
     if (satOrbit == "LEO") {
-        radius = 100 + (Math.random() * 80);
+        radius = leo + (Math.random() * 120);
     } else if (satOrbit == "MEO") {
-        radius = 220 + (Math.random() * 30)
+        radius = meo + (Math.random() * 30)
 
     } else if (satOrbit == "GEO") {
-        radius = 270 + (Math.random() * 40)
+        radius = geo + (Math.random() * 60)
     }
     
-    
-
     // Plot satellites
     var dot = satelliteGroup
             .append("circle")
@@ -99,55 +97,28 @@ let plot_satellites = function (d) {
             .attr("fill", color)
             .style("opacity", 0)
             .on("mouseover", function(d) {
-                d3.selectAll(".satPoint").attr("fill", color)                
-                d3.selectAll(".satInfo").remove() // Clear previous info
+                // Reset Info
                 
-                dot.attr("fill", "#E59866").attr("r", r + 3)
+                dat = {satName: satName, country: satCountry, users: satUsers, orbitClass: satOrbit, purpose: satPurpose, launchMass: satMass, expectedLifetime: satLife, launchDate: launchDate}
+                d3.selectAll(".satInfo").remove() 
+                
+                // Mark selected satellite
+                d3.select(this).attr("fill", "#E59866").attr("r", 10)
 
-                spaceSVG.append("text")
-                    .text(satName + ",  " + satCountry)
-                    .attr("class", "satInfo")
-                    .attr("fill", "#E59866")
-                    .attr("x", 50)
-                    .attr("y", 650)
-                
-                spaceSVG.append("text")
-                    .text(satUsers + "  Satellite")
-                    .attr("class", "satInfo")
-                    .attr("fill", "white")
-                    .attr("x", 50)
-                    .attr("y", 670)
-                    .style("font-size", 12)
-    
-                spaceSVG.append("text")
-                    .text("Purpose:  " + satPurpose)
-                    .attr("class", "satInfo")
-                    .attr("fill", "white")
-                    .attr("x", 50)
-                    .attr("y", 690)
-                    .style("font-size", 12)
-                
-                spaceSVG.append("text")
-                    .text("Orbit Class: " + satOrbit + " Expected Lifetime:  " + satLife)
-                    .attr("class", "satInfo")
-                    .attr("fill", "white")
-                    .attr("x", 50)
-                    .attr("y", 710)
-                    .style("font-size", 12)
+                satTextBox(spaceSVG,dat,"#E59866", 120)
                 })
     
-            .on("mouseout", 
-                function(d) {
-                    dot.attr("r", r)
-                });
+            .on("mouseout", function(d){
+                d3.select(this).attr("fill", "white").attr("r", r)
+                })
     
+    // Transition satellites from the center to their random position in orbit
     dot
         .transition()
-            .duration(satSpeed)
-            .attr("cx", radius * Math.cos(angle) + centerX)
-            .attr("cy", radius * Math.sin(angle) + centerY)
-            .style("opacity", 1);
-    
+        .duration(satSpeed)
+        .attr("cx", radius * Math.cos(angle) + centerX)
+        .attr("cy", radius * Math.sin(angle) + centerY)
+        .style("opacity", 1);
 }
 
 /* plot force-based cartogram */
@@ -155,45 +126,52 @@ let plot_cartogram = function (className) {}
 
 
 let filterByType = function () {
+    
+    // Update fact text
+    spaceSVG.selectAll(".factText").remove()
+
     let angleData = [];
     let radiusData = [];
+    let mColor = "#E74C3C";
+    let cvColor = "#F4F6F7";
+    let gColor = "#3498DB";
+    let comColor ="#76D7C4";
+        
     let allSats = satelliteGroup
         .selectAll("circle")
         .data(satData)
-
-    // Update the colors based on use case Commericial: Green Governemnt: Blue
-    // Military: Red Civil: White
 
     allSats
         .transition()
         .duration(2000)
         .style("opacity", 1)
         .attr("fill", function (d) {
-            let color = "white"
-            if (d.users.indexOf("Civil") > -1) {
-                color = "white"
-            } else if (d.users.indexOf("Military") > -1) {
-                color = "#DD1155"
-            } else if (d.users.indexOf("Commercial") > -1) {
-                color = "#76D7C4"
-            } else if (d.users.indexOf("Government") > -1) {
-                color = "#357DED"
-            }
+            // Update color according to user
+            // Civil: White, Military: Red, Commercial: Green, Government: Blue
+            let  color = "white"
+            let user = d.users;
+        
+            if (user.startsWith("Civ")) { color = cvColor } 
+            else if (user.startsWith("M")) { color = mColor } 
+            else if (user.startsWith("Comm")) { color = comColor } 
+            else if (user.startsWith("Gov")) { color = gColor }
+        
             return color
         })
         .attr("cx", function (d) {
-            angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
-
+            // Update location in space - useCaseProportion() (helper) called in index.html for calculation
             if (d.orbitClass == "GEO") {
-                radius = 270 + (Math.random() * 40)
+                radius = geo + (Math.random() * 60)
             } else if (d.orbitClass == "MEO") {
-                radius = 220 + (Math.random() * 30)
+                radius = meo + (Math.random() * 30)
             } else if (d.orbitClass == "LEO") {
-                radius = 100 + (Math.random() * 80)
+                radius = leo + (Math.random() * 120)
             }
 
+            angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
             angleData.push(angle);
             radiusData.push(radius);
+        
             return radius * Math.cos(angle) + centerX
         })
         .attr("cy", function (d, i) {
@@ -201,21 +179,53 @@ let filterByType = function () {
             angle = angleData[i];
             return radius * Math.sin(angle) + centerY
         })
+    
+    d3.selectAll(".satPoint")
+        .on("mouseover", function(d) {
+                // Reset Info
+                d3.selectAll(".satInfo").remove() 
+                // Mark selected satellite
+                d3.select(this).attr("fill", "#E59866").attr("r", 10)
 
-    spaceSVG.selectAll("line").remove()
+                // Add supporting text box - edit x poisition in index.html alignX
+                let user = d.users;
+                let  color = "white"
+                if (user.startsWith("Civ")) { color = cvColor } 
+                else if (user.startsWith("M")) { color = mColor } 
+                else if (user.startsWith("Comm")) { color = comColor } 
+                else if (user.startsWith("Gov")) { color = gColor }
+
+                satTextBox(spaceSVG,d, color, 300)
+        })
+        .on("mouseout", function(d){
+            console.log(d.launchMass, rscale(d.launchMass))
+            d3.select(this)
+                    .attr("r", rscale(d.launchMass))
+                    .attr("fill", function(){
+                        let user = d.users;
+                        let  color = "white"
+                        if (user.startsWith("Civ")) { color = cvColor } 
+                        else if (user.startsWith("M")) { color = mColor } 
+                        else if (user.startsWith("Comm")) { color = comColor } 
+                        else if (user.startsWith("Gov")) { color = gColor }
+                        return color;
+                    })
+    });
+ 
     
     for (i in useCase) {
         spaceSVG
             .append("line")
-            .attr("x1", 30 * Math.cos(useCase[i].s) + centerX)
-            .attr("x2", 350 * Math.cos(useCase[i].s) + centerX)
-            .attr("y1", 30 * Math.sin(useCase[i].s) + centerY)
-            .attr("y2", 350 * Math.sin(useCase[i].s) + centerY)
-            .attr("stroke", "lightgrey")
+            .attr("x1", 50 * Math.cos(useCase[i].s) + centerX)
+            .attr("x2", 380 * Math.cos(useCase[i].s) + centerX)
+            .attr("y1", 50 * Math.sin(useCase[i].s) + centerY)
+            .attr("y2", 380 * Math.sin(useCase[i].s) + centerY)
+            .attr("stroke", "grey")
             .style("opacity", 0.2)
-    }
+            .style("stroke-width", 1)
+        }
+    };
 
-}
 
 let plot_use = function (className, data) {
     let stack = d3.stack();
@@ -365,31 +375,3 @@ let plot_use = function (className, data) {
 }
 
 
-
-// !! to do create a function that does this for arbitrary categories and
-// filters
-let useCaseProportion = function (data) {
-    let useCase = [];
-    let counts = {};
-    let total = data.length;
-
-    // Get counts
-    data.forEach(function (d) { useCase.push(d.users) })
-
-    for (var i = 0; i < useCase.length; i++) {
-        var num = useCase[i];
-        counts[num] = counts[num] ? counts[num] + 1 : 1;
-    }  
-    
-    // Get percentage
-    let start = 0;
-    for (i in counts) {
-        frac = counts[i] / total
-        piPercent = (2 * Math.PI) * frac;
-        end = start + piPercent;
-        counts[i] = { s: start, e: end }
-        start = end;
-    }
-    console.log(counts)
-    return counts;
-}
