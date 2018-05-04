@@ -131,6 +131,14 @@
 
 
   let start = function () {
+     spaceSVG.select(".world").remove()
+    let world = spaceSVG
+        .append("image")
+        .attr("xlink:href", "worlmapblue.png")
+        .attr("class", "world")
+        .attr("y", centerY - 40)
+        .attr("x", centerX - 40)
+        .attr("width", 80);
 
     spaceSVG.selectAll("g").selectAll("circle").remove();
     spaceSVG.selectAll(".factText").remove();

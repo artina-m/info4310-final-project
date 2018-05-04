@@ -16,16 +16,6 @@ let plot_orbits = function (className) {
 
     let ringcolor = "#3F3F3F";
     
-
-
-    let randomCountries = spaceSVG
-        .append("circle")
-        .attr("cx", centerX)
-        .attr("cy", centerY)
-        .attr("r", 50)
-        .attr("fill", "black")
-        .attr("stroke", "lightgrey");
-
     let orbit1 = spaceSVG
         .append("circle")
         .attr("class", "LEO")
@@ -128,12 +118,13 @@ let plot_cartogram = function (className) {}
 let filterByType = function () {
     
     // Update fact text
-    spaceSVG.selectAll(".factText").remove()
+ spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
+   spaceSVG.selectAll(".factText").remove()
 
     let angleData = [];
     let radiusData = [];
     let mColor = "#E74C3C";
-    let cvColor = "#F4F6F7";
+    let cvColor = "#F9E79F";
     let gColor = "#3498DB";
     let comColor ="#76D7C4";
         
