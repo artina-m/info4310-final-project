@@ -79,7 +79,7 @@
 
 
 <script>
-  let satData, flatData, dataByCountry;
+  let satData, flatData, dataByCountry, countryCoords;
   let colorTheme = "#010305"
 
   // Center orbits
@@ -131,6 +131,14 @@
             launchMass: parseFloat(line["Launch Mass (kg.)"].replace('"', ''))
         }
 
+    }
+
+    function parseCoords(line) {
+      return {
+        name: String(line.name),
+        lat: +line.latitude,
+        lng: +line.longitude
+      }
     }
 
 
@@ -193,9 +201,6 @@
       dataByCountry = d3.nest()
         .key((d) => d.country)
         .entries(satData);
-
-
-
 
     });
 

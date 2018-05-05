@@ -516,8 +516,19 @@ let plot_use = function (className, data) {
 }
 
 
+// line parser for retrieving world map coordinates
+function parseCoords(line) {
+  return {
+    name: String(line.name),
+    lat: +line.latitude,
+    lng: +line.longitude
+  }
+}
+
+
 /* data have already been grouped on the country level */
 let force_layout = function(data) {
+  // clear the paints
   spaceSVG.select(".world").remove();
   spaceSVG.select(".nodes").remove();
   spaceSVG.selectAll("g").selectAll("circle").remove();
@@ -526,9 +537,6 @@ let force_layout = function(data) {
   spaceSVG.selectAll(".LEO").remove();
   spaceSVG.selectAll(".MEO").remove();
   spaceSVG.selectAll(".GEO").remove();
-
-  // let width = +spaceSVG.attr("width"),
-  // height = +spaceSVG.attr("height");
 
   // prepare for force layout ready data
   let filtered_data = []
@@ -539,34 +547,102 @@ let force_layout = function(data) {
     })
   })
 
-  // set up the simulation
-  let simulation = d3.forceSimulation()
-    .nodes(filtered_data);
+  // mercator projection
+  let projection = d3.geoMercator()
+    .scale(centerX / Math.PI)
+    .translate([centerX, centerY]);
 
-  // add forces
-  simulation
-    .velocityDecay(0.6)
-    .force("x", d3.forceX().strength(0.002))
-    .force("y", d3.forceY().strength(0.002))
-    .force("collide", d3.forceCollide(6).iterations(10))
-    .force("center_force", d3.forceCenter(centerX, centerY))
-    .on("tick", tickActions);
+  // add on country level data
+  d3.csv("country_coordinates.csv", parseCoords, function(d) {
+      countryCoords = d;
 
-  // draw circles for the nodes
-  let node = spaceSVG.append("g")
-            .attr("class", "nodes")
-            .selectAll("circle")
-            .data(filtered_data)
-            .enter()
-            .append("circle")
-            .attr("r", function(d) { return d3.scaleLog().range([0, 8])(d.count); })
-            .attr("fill", "blue")
-            .attr("opacity", 0.7);
+      // join country coordinates with satellites volume data on country name
+      countryCoords.forEach(function(row) {
+        let result = filtered_data.filter(function(entry) {
+          return entry.country === row.name;
+        });
+        row.value = (result[0] !== undefined) ? result[0] : null;
+      })
 
-  // tick event
-  function tickActions() {
-    // update circle positions to reflect node updates on each tick
-    node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-  }
+      // extract only the coordinates, name, and value
+      let nodes = []
+      countryCoords.forEach(function(d) {
+        if (d.value !== null) {
+          let point = projection([d.lat, d.lng])
+          nodes.push({
+            x: point[0], y: point[1],
+            x0: point[0], y0: point[1],
+            count: d.value.count,
+            name: d.value.country
+          })
+        }
+      })
+
+      // set up the simulation
+      let simulation = d3.forceSimulation()
+        .velocityDecay(0.6)
+        .force("x", d3.forceX().strength(0.002))
+        .force("y", d3.forceY().strength(0.002))
+        .force("center_force", d3.forceCenter(centerX, centerY))
+        .force("collide", collide)
+        .nodes(nodes)
+        .on("tick", tickActions);
+
+      // // add forces
+      // simulation
+      //   .velocityDecay(0.6)
+      //   .force("x", d3.forceX().strength(0.002))
+      //   .force("y", d3.forceY().strength(0.002))
+      //   .force("collide", d3.forceCollide(6).iterations(10))
+      //   .force("center_force", d3.forceCenter(centerX, centerY))
+
+
+      let radius = d3.scaleLog().range([0, 8])
+
+      // draw circles for the nodes
+      let node = spaceSVG.append("g")
+                .attr("class", "nodes")
+                .selectAll("circle")
+                .data(nodes)
+                .enter()
+                .append("circle")
+                .attr("r", function(d) { return radius(d.count); })
+                .attr("fill", "blue")
+                .attr("opacity", 0.7);
+
+      // tick event
+      function tickActions() {
+        // update circle positions to reflect node updates on each tick
+        node.attr("cx", function(d) { return d.x - radius(d.count); })
+          .attr("cy", function(d) { return d.y - radius(d.count); })
+      }
+
+      let padding = 3;
+      function collide() {
+        for (var k = 0, iterations = 4, strength = 0.5; k < iterations; ++k) {
+          for (var i = 0, n = nodes.length; i < n; ++i) {
+            for (var a = nodes[i], j = i + 1; j < n; ++j) {
+              var b = nodes[j],
+                  x = a.x + a.vx - b.x - b.vx,
+                  y = a.y + a.vy - b.y - b.vy,
+                  lx = Math.abs(x),
+                  ly = Math.abs(y),
+                  r = a.r + b.r + padding;
+              if (lx < r && ly < r) {
+                if (lx > ly) {
+                  lx = (lx - r) * (x < 0 ? -strength : strength);
+                  a.vx -= lx, b.vx += lx;
+                } else {
+                  ly = (ly - r) * (y < 0 ? -strength : strength);
+                  a.vy -= ly, b.vy += ly;
+                }
+              }
+            }
+          }
+        }
+      }
+  })
+
+
+
 }
