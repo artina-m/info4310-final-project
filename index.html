@@ -24,6 +24,10 @@
       </p>
 
       <!-- Add buttons -->
+        <button onclick='filterByType2("Commercial")' class = "useButton" id = "comB">Commercial</button>
+        <button onclick='filterByType2("Government")'class = "useButton" id = govB>Government</button>
+        <button onclick='filterByType2("Military")' class = "useButton" id = "milB">Military</button>
+        <button onclick='filterByType2("Civil")' class = "useButton" id = "civB">Civil</button>
       <br>
         
 
@@ -33,16 +37,13 @@
       *Wait for all the satellites to load, the hit sat type* Click start to restart
       <button onclick="start()">Start</button>
 
-      <button onclick="filterByType()">Satellite Types</button>
+      <button onclick='callUseCase()'>Satellite Types</button>
 
 
 
     </div>
 
     <div class="rightHand">
-        <div class = "search">
-        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for Satellites"></div>
-      
         <div class = "visualization"></div>
     </div>
       
@@ -89,8 +90,8 @@
   let cartogramSVG; // declare variable for plotting cartogram svg.
     
   const rscale = d3.scaleLinear()
-                .domain([0,6651])
-                .range([1.5,15])
+                .domain([1,6651])
+                .range([1.5,20])
 
 
   // Load data
@@ -107,6 +108,8 @@
           year = '19' + split_date[2];
         }
         let temp_date = new Date(year, split_date[0], split_date[1]);
+      
+
 
         return {
             satName: line["Name of Satellite, Alternate Names"],
@@ -121,7 +124,7 @@
             orbitClass: line["Class of Orbit"],
             orbitType: line["Type of Orbit"],
             expectedLifetime: line["Expected Lifetime"],
-            launchMass: Number(line["Launch Mass (kg.)"])
+            launchMass: parseFloat(line["Launch Mass (kg.)"].replace('"', ''))
         }
 
     }
@@ -131,7 +134,7 @@
 
 
   let start = function () {
-     spaceSVG.select(".world").remove()
+    spaceSVG.select(".world").remove()
     let world = spaceSVG
         .append("image")
         .attr("xlink:href", "worlmapblue.png")
@@ -177,6 +180,12 @@
       });
     
     });
+      
+    // Edit visibility of buttons
+    document.getElementById("comB").style.visibility = "hidden";
+    document.getElementById("civB").style.visibility = "hidden";
+    document.getElementById("govB").style.visibility = "hidden";
+    document.getElementById("milB").style.visibility = "hidden";
   };
 
   start();

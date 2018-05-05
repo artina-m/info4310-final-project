@@ -58,7 +58,7 @@ let plot_satellites = function (d) {
     let launchDate = String(d.launchDate).substring(0,16);
     let color = "white"
     let satSpeed = 1500;    // transition speed
-    let r = satMass || 1.5; // radius of circle
+    let r = satMass || 50; // radius of circle
     
     // Calculations
     // Generate random angle between 0 and 2Pi
@@ -93,9 +93,9 @@ let plot_satellites = function (d) {
                 d3.selectAll(".satInfo").remove() 
                 
                 // Mark selected satellite
-                d3.select(this).attr("fill", "#E59866").attr("r", 10)
+                d3.select(this).attr("fill", "#3498DB").attr("r", 10)
 
-                satTextBox(spaceSVG,dat,"#E59866", 120)
+                satTextBox(spaceSVG,dat,"#3498DB", 120)
                 })
     
             .on("mouseout", function(d){
@@ -118,7 +118,7 @@ let plot_cartogram = function (className) {}
 let filterByType = function () {
     
     // Update fact text
- spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
+   spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
    spaceSVG.selectAll(".factText").remove()
 
     let angleData = [];
@@ -132,6 +132,7 @@ let filterByType = function () {
         .selectAll("circle")
         .data(satData)
 
+    // Update position & color of each satellite
     allSats
         .transition()
         .duration(2000)
@@ -176,7 +177,7 @@ let filterByType = function () {
                 // Reset Info
                 d3.selectAll(".satInfo").remove() 
                 // Mark selected satellite
-                d3.select(this).attr("fill", "#E59866").attr("r", 10)
+                d3.select(this).attr("fill", "white").attr("r", 10)
 
                 // Add supporting text box - edit x poisition in index.html alignX
                 let user = d.users;
@@ -189,9 +190,8 @@ let filterByType = function () {
                 satTextBox(spaceSVG,d, color, 300)
         })
         .on("mouseout", function(d){
-            console.log(d.launchMass, rscale(d.launchMass))
             d3.select(this)
-                    .attr("r", rscale(d.launchMass))
+                    .attr("r", rscale((d.launchMass || 50 )))
                     .attr("fill", function(){
                         let user = d.users;
                         let  color = "white"
@@ -204,19 +204,170 @@ let filterByType = function () {
     });
  
     
-    for (i in useCase) {
+    // Lines seperating sections
+    let lines = [0, 2, 7,11]
+    for (i in lines) {
+        let key = Object.keys(useCase)[i]
         spaceSVG
             .append("line")
-            .attr("x1", 50 * Math.cos(useCase[i].s) + centerX)
-            .attr("x2", 380 * Math.cos(useCase[i].s) + centerX)
-            .attr("y1", 50 * Math.sin(useCase[i].s) + centerY)
-            .attr("y2", 380 * Math.sin(useCase[i].s) + centerY)
-            .attr("stroke", "grey")
-            .style("opacity", 0.2)
+            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
+            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
+            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
+            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
+            .attr("stroke", "lightgrey")
+            .style("opacity", 1)
             .style("stroke-width", 1)
+        }
+
+    lines = [1, 3, 4, 5, 6, 8, 9, 10, 13, 14, 15]
+    for (i in lines) {
+        let key = Object.keys(useCase)[i]
+        spaceSVG
+            .append("line")
+            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
+            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
+            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
+            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
+            .attr("stroke", "grey")
+            .style("opacity", 1)
+            .style("stroke-width", 0.5)
         }
     };
 
+
+
+let filterByType2 = function(selectType) {
+    
+    spaceSVG.selectAll("line").remove()
+    
+   let subCat = useCase[0];
+   let groupCat = useCase[1];
+   let typeData = groupCat[selectType]
+   console.log(groupCat)
+    
+    let start = 0;
+    let frac = groupCat[selectType]/satData.length;
+    let piPercent = (2 * Math.PI) * frac;
+    let end = start + piPercent;
+     // Update fact text
+   spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
+   spaceSVG.selectAll(".factText").remove()
+
+    let angleData = [];
+    let radiusData = [];
+    
+    let typeColor = "white";
+    if (selectType == "Civil") {typeColor = "#F9E79F"}
+    else if (selectType == "Commercial") {typeColor = "#76D7C4"}
+    else if (selectType == "Government") {typeColor = "#3498DB"}
+    else if (selectType == "Military") {typeColor = "#E74C3C"}
+    
+        
+    let allSats = satelliteGroup
+        .selectAll("circle")
+        .data(satData)
+
+    // Update position & color of each satellite
+    allSats
+        .transition()
+        .duration(2000)
+        .style("opacity", 1)
+        .attr("fill", function (d) {
+            // Update color according to user
+            // Civil: White, Military: Red, Commercial: Green, Government: Blue
+            let  color = "white"
+            let user = d.users;
+            if (user.includes(selectType)) {color = typeColor}
+            return color
+        })
+        .attr("cx", function (d) {
+            // Update location in space - useCaseProportion() (helper) called in index.html for calculation
+            let user = d.users;
+            if (d.orbitClass == "GEO") {
+                radius = geo + (Math.random() * 60)
+            } else if (d.orbitClass == "MEO") {
+                radius = meo + (Math.random() * 30)
+            } else if (d.orbitClass == "LEO") {
+                radius = leo + (Math.random() * 120)
+            }
+        
+            if (user.includes(selectType)) {
+                angle = (Math.random() * (end - start) + start) + Math.PI
+            }
+            else {
+                angle = (Math.random() * (2*Math.PI - end) + end) + Math.PI
+            }
+
+            angleData.push(angle);
+            radiusData.push(radius);
+        
+            return radius * Math.cos(angle) + centerX
+        })
+        .attr("cy", function (d, i) {
+            radius = radiusData[i];
+            angle = angleData[i];
+            return radius * Math.sin(angle) + centerY
+        })
+    
+    d3.selectAll(".satPoint")
+        .on("mouseover", function(d) {
+                // Reset Info
+                d3.selectAll(".satInfo").remove() 
+                // Mark selected satellite
+                d3.select(this).attr("fill", "white").attr("r", 10)
+
+                // Add supporting text box - edit x poisition in index.html alignX
+                let user = d.users;
+                let  color = "white"
+                if (user.includes(selectType)) {color = typeColor}
+                satTextBox(spaceSVG,d, color, 300)
+        })
+        .on("mouseout", function(d){
+            d3.select(this)
+                    .attr("r", rscale((d.launchMass || 50 )))
+                    .attr("fill", function(){
+                        let user = d.users;
+                        let  color = "white"
+                        if (user.includes(selectType)) {color = typeColor}
+                        return color
+                    })
+    });
+    
+
+        start = start + Math.PI;
+        end = end + Math.PI;
+    
+        spaceSVG
+            .append("line")
+            .transition()
+            .attr("x1", 40 * Math.cos(start) + centerX)
+            .attr("x2", 380 * Math.cos(start) + centerX)
+            .attr("y1", 40 * Math.sin(start) + centerY)
+            .attr("y2", 380 * Math.sin(start) + centerY)
+            .attr("stroke", "grey")
+            .style("opacity", 1)
+            .style("stroke-width", 1)
+        
+        wiper = spaceSVG
+            .append("line")
+            .attr("x1", 40 * Math.cos(start) + centerX)
+            .attr("x2", 380 * Math.cos(start) + centerX)
+            .attr("y1", 40 * Math.sin(start) + centerY)
+            .attr("y2", 380 * Math.sin(start) + centerY)
+            .attr("stroke", "grey")
+            .style("opacity", 1)
+            .style("stroke-width", 1)
+        
+         wiper.transition()
+            .duration(2000)
+            .attr("x1", 40 * Math.cos(end) + centerX)
+            .attr("x2", 380 * Math.cos(end) + centerX)
+            .attr("y1", 40 * Math.sin(end) + centerY)
+            .attr("y2", 380 * Math.sin(end) + centerY)
+
+
+    };
+    
 
 let plot_use = function (className, data) {
     let stack = d3.stack();

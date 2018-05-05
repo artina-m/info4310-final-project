@@ -11,10 +11,20 @@ let filter_year = function(data, year) {
 }
 
 
+function callUseCase() {
+    document.getElementById("comB").style.visibility = "visible";
+    document.getElementById("civB").style.visibility = "visible";
+    document.getElementById("govB").style.visibility = "visible";
+    document.getElementById("milB").style.visibility = "visible";
+    filterByType2("Commercial")
+}
+
+
 // Calculate use case proportions for main viz
 function useCaseProportion(data) {
     let useCase = [];
-    let counts = {};
+    var counts = {};
+    let piBreak = {}
     let total = data.length;
 
     // Get counts
@@ -25,33 +35,28 @@ function useCaseProportion(data) {
         counts[num] = counts[num] ? counts[num] + 1 : 1;
     }  
     
-    
-    keys = [];
-
-    for (k in counts) {
-        if (counts.hasOwnProperty(k)) {
-            keys.push(k);
-        }
+    // Group into 4 main categories
+    groupedCount = {
+        Civil: counts["Civil"] + counts["Civil/Government"] + counts["Government/Civil"] + counts["Military/Civil"],
+        Commercial: counts["Commercial"] + counts["Commercial/Government"] + counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Commerical"] + counts["Government/Commercial"] + counts["Military/Commercial"],
+        Government: counts["Civil/Government"] + counts["Commercial/Government"] + counts["Commercial/Government/Military"] + counts["Government"] + counts["Government/Civil"] + counts["Government/Commercial"] + counts["Government/Military"] + counts["Military/Government"],
+        Military: counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Government/Military"] + counts["Military/Civil"] + counts["Military/Commercial"] + counts["Military/Government"]
     }
-
-    keys.sort();
-    len = keys.length;
     
+    len = 4
+    keys = Object.keys(groupedCount)
     
     // Get percentage
     let start = 0;
     for (i = 0; i < len; i++) {
         k = keys[i];
-        frac = counts[k] / total
+        frac = groupedCount[k] / total
         piPercent = (2 * Math.PI) * frac;
         end = start + piPercent;
-        counts[k] = { s: start, e: end }
+        piBreak[k] = { s: start, e: end }
         start = end;
     }
-
-
-
-    return counts;
+    return [counts, groupedCount,piBreak];
 }
 
 // Top right corner text box
@@ -119,6 +124,12 @@ function satTextBox(svg,d, c, lineHeight){
     
 }
 
+
+
+
+
+
+
 // Wrap SVG text function
 function wrap(text, width) {
     text.each(function () {
@@ -153,7 +164,6 @@ function wrap(text, width) {
         }
     });
 }
-
 
 
 /* Code used below to generate flatuse data */

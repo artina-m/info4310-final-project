@@ -73,6 +73,12 @@ div {
     background-color: white;
 }
 
+.useButton {
+    visibility: hidden;
+    display: block;
+    margin-left: 50px;
+}
+
 /* Main Visualization */
 .search {
     height: 50px;
@@ -98,6 +104,7 @@ div {
 .satInfo {
     width:20px;
     overflow: hidden;
+    font-family: Roboto;
 }
 
 
