@@ -549,7 +549,7 @@ let force_layout = function(data) {
 
   // mercator projection
   let projection = d3.geoMercator()
-    .scale(centerX / Math.PI)
+    .scale(50)
     .translate([centerX, centerY]);
 
   // add on country level data
@@ -577,12 +577,18 @@ let force_layout = function(data) {
           })
         }
       })
+      console.log(nodes[0].x)
+      console.log(nodes[0].y)
+      console.log(nodes[0].x0)
+      console.log(nodes[0].y0)
+
+
 
       // set up the simulation
       let simulation = d3.forceSimulation()
         .velocityDecay(0.6)
-        .force("x", d3.forceX().strength(0.002))
-        .force("y", d3.forceY().strength(0.002))
+        .force("x", d3.forceX(function(d) {return d.x0;}))
+        .force("y", d3.forceY(function(d) {return d.y0;}))
         .force("center_force", d3.forceCenter(centerX, centerY))
         .force("collide", collide)
         .nodes(nodes)
@@ -599,6 +605,11 @@ let force_layout = function(data) {
 
       let radius = d3.scaleLog().range([0, 8])
 
+      // div's for appending tooltips
+      let div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+
       // draw circles for the nodes
       let node = spaceSVG.append("g")
                 .attr("class", "nodes")
@@ -607,8 +618,21 @@ let force_layout = function(data) {
                 .enter()
                 .append("circle")
                 .attr("r", function(d) { return radius(d.count); })
-                .attr("fill", "blue")
-                .attr("opacity", 0.7);
+                .attr("fill", "grey")
+                .attr("opacity", 0.7)
+                .on("mouseover", function(d) {
+                  div.transition().duration(200)
+                    .style("opacity", 0.9)
+
+                  div.html(d.name + "<br/>" + d.count + "launches")
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px")
+                })
+                .on("mouseout", function(d) {
+                  div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                });
 
       // tick event
       function tickActions() {
@@ -643,6 +667,21 @@ let force_layout = function(data) {
       }
   })
 
+}
 
+/* Generate Bubble Chart */
+let plot_bubble_chart = function(data, use_type) {
+  // instantiate SVG
 
+  // initialize format value
+  let format = d3.format(",d");
+
+  // TODO: color depends on use_type
+  let color = "grey"
+
+  // initialize d3.pack() with size and padding
+
+  // load data
+
+  // init root of hierarchy
 }

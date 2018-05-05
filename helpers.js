@@ -33,8 +33,8 @@ function useCaseProportion(data) {
     for (var i = 0; i < useCase.length; i++) {
         var num = useCase[i];
         counts[num] = counts[num] ? counts[num] + 1 : 1;
-    }  
-    
+    }
+
     // Group into 4 main categories
     groupedCount = {
         Civil: counts["Civil"] + counts["Civil/Government"] + counts["Government/Civil"] + counts["Military/Civil"],
@@ -42,10 +42,10 @@ function useCaseProportion(data) {
         Government: counts["Civil/Government"] + counts["Commercial/Government"] + counts["Commercial/Government/Military"] + counts["Government"] + counts["Government/Civil"] + counts["Government/Commercial"] + counts["Government/Military"] + counts["Military/Government"],
         Military: counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Government/Military"] + counts["Military/Civil"] + counts["Military/Commercial"] + counts["Military/Government"]
     }
-    
+
     len = 4
     keys = Object.keys(groupedCount)
-    
+
     // Get percentage
     let start = 0;
     for (i = 0; i < len; i++) {
@@ -60,7 +60,7 @@ function useCaseProportion(data) {
 }
 
 // Top right corner text box
-function satTextBox(svg,d, c, lineHeight){
+function satTextBox(svg, d, c, lineHeight){
     header = svg.append("text")
         .text(d.satName)
         .attr("class", "satInfo")
@@ -69,9 +69,9 @@ function satTextBox(svg,d, c, lineHeight){
         .attr("x", alignX )
         .attr("y", lineHeight)
         .call(wrap,200)
-                
+
     var numberOfLines = 15* (document.getElementsByTagName('tspan').length) + lineHeight;
-                
+
     subtextColor = "grey"
 
     svg.append("text")
@@ -121,12 +121,8 @@ function satTextBox(svg,d, c, lineHeight){
         .attr("x", alignX)
         .attr("y", numberOfLines + 120)
         .style("font-size", 12)
-    
+
 }
-
-
-
-
 
 
 
