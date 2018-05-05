@@ -1,5 +1,5 @@
-/* Design Guideline 
-    
+/* Design Guideline
+
 Titles: Oswald, 36px
 Text Elements: Roboto, XXpx, #424949
 
@@ -40,7 +40,7 @@ div {
     width: 350;
     border-right: solid 1px grey;
     background-color: white;
-   
+
 }
 
 .sideBar p {
@@ -85,6 +85,7 @@ div {
     width: 100%;
     background-color: black;
 }
+
 #myInput {
     float: right;
     margin-top: 20px;
@@ -98,7 +99,7 @@ div {
 }
 
 .satPoint:hover {
-     cursor: pointer; 
+     cursor: pointer;
 }
 
 .satInfo {

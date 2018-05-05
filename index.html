@@ -29,9 +29,9 @@
         <button onclick='filterByType2("Military")' class = "useButton" id = "milB">Military</button>
         <button onclick='filterByType2("Civil")' class = "useButton" id = "civB">Civil</button>
       <br>
-        
 
-        
+
+
 
       <br>
       *Wait for all the satellites to load, the hit sat type* Click start to restart
@@ -39,20 +39,23 @@
 
       <button onclick='callUseCase()'>Satellite Types</button>
 
+      <button onclick='force_layout(dataByCountry)'>Force Layout</button>
 
 
-    </div>
+
+    </div> <!-- end of sidBar div -->
 
     <div class="rightHand">
         <div class = "visualization"></div>
     </div>
-      
-  </div>
+
+  </div> <!-- end of spaceView1 div -->
 
   </div>
-  <div class="testViewPort">
 
-  </div>
+
+  <div class="testViewPort"></div>
+
   <div class="useByCountryView">
     <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
@@ -69,26 +72,29 @@
         aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
     </div>
-  </div>
+  </div> <!-- end of useByCountryView div -->
+
+
 </body>
 
 
 <script>
-  let satData;
-  let flatData;
+  let satData, flatData, dataByCountry;
   let colorTheme = "#010305"
+
   // Center orbits
   const centerX = 460;
   const centerY = 380;
-    // Radius for orbit levels
-    const leo = 100;
-    const meo = 260;
-    const geo = 320;
-    const alignX = 920;
+
+  // Radius for orbit levels
+  const leo = 100;
+  const meo = 260;
+  const geo = 320;
+  const alignX = 920;
 
   //let spaceSVG; // declare variable for svg for orbits/satelltes
-  let cartogramSVG; // declare variable for plotting cartogram svg.
-    
+  // let cartogramSVG; // declare variable for plotting cartogram svg.
+
   const rscale = d3.scaleLinear()
                 .domain([1,6651])
                 .range([1.5,20])
@@ -108,8 +114,6 @@
           year = '19' + split_date[2];
         }
         let temp_date = new Date(year, split_date[0], split_date[1]);
-      
-
 
         return {
             satName: line["Name of Satellite, Alternate Names"],
@@ -128,7 +132,7 @@
         }
 
     }
-  
+
 
   plot_orbits("visualization");
 
@@ -143,10 +147,12 @@
         .attr("x", centerX - 40)
         .attr("width", 80);
 
+    // remove pixels to "restart" plotting
     spaceSVG.selectAll("g").selectAll("circle").remove();
     spaceSVG.selectAll(".factText").remove();
     spaceSVG.selectAll("line").remove();
-      
+
+    // append tooltip texts
     spaceSVG.append("text")
     .text("1738")
     .attr("x", alignX).attr("y", 50)
@@ -160,15 +166,19 @@
     .style("font-size", 16)
     .attr("fill", "white")
 
+    // add separator line between title and dynamic info for tooltips
     spaceSVG.append("line")
     .attr("x1", alignX).attr("x2", alignX +200)
     .attr("y1", 90).attr("y2", 90)
     .attr("class", "factText")
     .attr("stroke", "lightgrey").attr("stroke-width", 0.5)
 
+    // load data
     d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
       satData = data;
       useCase = useCaseProportion(satData)
+
+
 
       d3.csv("use.csv", function (error, data2) {
         flatData = data2;
@@ -178,9 +188,17 @@
       satData.forEach(function (d) {
         setTimeout(function () { plot_satellites(d) }, 100)
       });
-    
+
+      //prepare data for Demers Cartogram
+      dataByCountry = d3.nest()
+        .key((d) => d.country)
+        .entries(satData);
+
+
+
+
     });
-      
+
     // Edit visibility of buttons
     document.getElementById("comB").style.visibility = "hidden";
     document.getElementById("civB").style.visibility = "hidden";

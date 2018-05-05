@@ -11,7 +11,7 @@
 let raw_data;
 let vis_data = [];
 
-d3.csv("data.csv", function(error, d) {
+d3.csv("UCS_Satellite_Database.csv", function(error, d) {
   if (error) { throw error }
   raw_data = d;
 
@@ -62,7 +62,7 @@ d3.csv("data.csv", function(error, d) {
     .force("y", d3.forceY().strength(0.002))
     .force("collide", d3.forceCollide(6).iterations(10))
     .force("center_force", d3.forceCenter(width/2, height/2))
-    .on("tick", tickActions);;
+    .on("tick", tickActions);
 
   let size = d3.scaleSqrt().range([0, 14]);
 
