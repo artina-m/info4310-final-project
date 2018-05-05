@@ -30,14 +30,13 @@
         <button onclick='filterByType2("Civil")' class = "useButton" id = "civB">Civil</button>
       <br>
 
-
-
-
       <br>
       *Wait for all the satellites to load, the hit sat type* Click start to restart
       <button onclick="start()">Start</button>
 
       <button onclick='callUseCase()'>Satellite Types</button>
+
+      <button onclick='plot_bubble_chart(satData, "Commercial")'>Temp Button</button>
 
       <!-- <button onclick='force_layout(dataByCountry)'>Force Layout</button> -->
 
@@ -79,12 +78,16 @@
 
 
 <script>
-  let satData, flatData, dataByCountry, countryCoords;
-  let colorTheme = "#010305"
+  let satData, flatData, dataByCountry;
+  let colorTheme = "#010305";
 
   // Center orbits
   const centerX = 460;
   const centerY = 380;
+
+  // spaceSVG dimensions
+  const width = 1200
+  const height = 580
 
   // Radius for orbit levels
   const leo = 100;
@@ -197,10 +200,7 @@
         setTimeout(function () { plot_satellites(d) }, 100)
       });
 
-      //prepare data for Demers Cartogram
-      dataByCountry = d3.nest()
-        .key((d) => d.country)
-        .entries(satData);
+
 
     });
 

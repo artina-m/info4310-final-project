@@ -671,17 +671,86 @@ let force_layout = function(data) {
 
 /* Generate Bubble Chart */
 let plot_bubble_chart = function(data, use_type) {
-  // instantiate SVG
-
-  // initialize format value
   let format = d3.format(",d");
 
-  // TODO: color depends on use_type
-  let color = "grey"
+  // TODO: get user_type from button
+  // let use = document.getElementById("")
+  // get the use_type from button
+  let temp_data = nest_by_country_and_use(data).filter(function(d) {
+    return d.key === use_type;
+  });
 
-  // initialize d3.pack() with size and padding
+  // generate bubble chart formatted data
+  let bubbles = []
+  temp_data[0].values.forEach(function(d) {
+    bubbles.push({
+      id: d.key,
+      value: d.values.length
+    })
+  })
 
-  // load data
+  // building bubble chart
+  let pack = d3.pack()
+    .size([width, height])
+    .padding(1.5);
 
-  // init root of hierarchy
+  d3.selection.prototype.moveToFront = function() {
+    return this.each(function() {
+      this.parentNode.appendChild(this);
+    });
+  };
+
+  let root = d3.hierarchy({children: bubbles})
+    .sum(function(d) { return d.value; })
+    .each(function(d) {
+      if (id = d.data.id) {
+        var id, i = id.lastIndexOf(".");
+        d.id = id;
+        d.package = id.slice(0, i);
+        d.class = id.slice(i+1);
+      }
+    });
+
+  let node = spaceSVG.selectAll(".node")
+    .data(pack(root).leaves())
+    .enter().append("g")
+      .attr('class', "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node.append("circle")
+    .attr("id", function(d) { return d.id; })
+    .attr("r", function(d) {return d.r; })
+    .style("fill", "lightgrey");
+
+  d3.selectAll(".node")
+  .on("mouseover", function(d) {
+    d3.select(this).moveToFront();
+    let circle = d3.select(this).select("circle");
+    circle.transition().duration(500)
+    .attr("r", d => d.r*2)
+  })
+  .on("mouseout", function(d) {
+    let circle = d3.select(this).select("circle");
+    circle.transition().duration(500).attr("r", d => d.r )
+  });
+
+  node.append("clipPath")
+    .attr("id", function(d) { return "clip-" + d.id; })
+  .append("use")
+    .attr("xlink:href", function(d) { return "#" + d.id; });
+
+  node.append("text")
+    .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+  .selectAll("tspan")
+  .data(function(d) { return d.class; })
+  .enter().append("tspan")
+    .style("pointer-events", "none")
+    .attr("x", 0)
+    .attr("y", function(d, i, nodes) {
+      return 13 + (i - nodes.length / 2 -0.5) * 10;
+    })
+    .text(function(d) {return d;})
+
+  node.append("title")
+    .text(function(d) { return d.id + "\n" + format(d.value); });
 }

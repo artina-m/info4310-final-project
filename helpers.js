@@ -188,3 +188,11 @@ function wrap(text, width) {
 //    }
 //  });
 // });
+
+// summarize data by country
+function nest_by_country_and_use(data) {
+  return d3.nest()
+    .key((d) => d.users)
+    .key((d) => d.country)
+    .entries(data);
+}
