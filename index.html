@@ -30,16 +30,19 @@
         <button onclick='filterByType2("Civil")' class = "useButton" id = "civB">Civil</button>
       <br>
 
-
-
-
       <br>
       *Wait for all the satellites to load, the hit sat type* Click start to restart
       <button onclick="start()">Start</button>
 
       <button onclick='callUseCase()'>Satellite Types</button>
 
+<<<<<<< HEAD
       <button onclick='callCountry()'>Force Layout</button>
+=======
+      <button onclick='plot_bubble_chart(satData, "Commercial")'>Temp Button</button>
+
+      <!-- <button onclick='force_layout(dataByCountry)'>Force Layout</button> -->
+>>>>>>> origin/master
 
 
 
@@ -79,12 +82,16 @@
 
 
 <script>
-  let satData, flatData, dataByCountry, countryCoords;
-  let colorTheme = "#010305"
+  let satData, flatData, dataByCountry;
+  let colorTheme = "#010305";
 
   // Center orbits
   const centerX = 460;
   const centerY = 380;
+
+  // spaceSVG dimensions
+  const width = 1200
+  const height = 580
 
   // Radius for orbit levels
   const leo = 100;
@@ -142,12 +149,82 @@
     }
 
 
+<<<<<<< HEAD
     plot_orbits("visualization");
 
 
     start();
 
    
+=======
+  plot_orbits("visualization");
+
+
+  let start = function () {
+    spaceSVG.select(".world").remove()
+    let world = spaceSVG
+        .append("image")
+        .attr("xlink:href", "worlmapblue.png")
+        .attr("class", "world")
+        .attr("y", centerY - 40)
+        .attr("x", centerX - 40)
+        .attr("width", 80);
+
+    // remove pixels to "restart" plotting
+    spaceSVG.selectAll("g").selectAll("circle").remove();
+    spaceSVG.selectAll(".factText").remove();
+    spaceSVG.selectAll("line").remove();
+
+    // append tooltip texts
+    spaceSVG.append("text")
+    .text("1738")
+    .attr("x", alignX).attr("y", 50)
+    .attr("class","factText")
+    .style("font-size", 24).attr("fill", "white")
+
+    spaceSVG.append("text")
+    .text("Active orbiting satillites")
+    .attr("x", alignX).attr("y", 70)
+    .attr("class","factText")
+    .style("font-size", 16)
+    .attr("fill", "white")
+
+    // add separator line between title and dynamic info for tooltips
+    spaceSVG.append("line")
+    .attr("x1", alignX).attr("x2", alignX +200)
+    .attr("y1", 90).attr("y2", 90)
+    .attr("class", "factText")
+    .attr("stroke", "lightgrey").attr("stroke-width", 0.5)
+
+    // load data
+    d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
+      satData = data;
+      useCase = useCaseProportion(satData)
+
+
+
+      d3.csv("use.csv", function (error, data2) {
+        flatData = data2;
+        plot_use("useViz", flatData);
+      });
+
+      satData.forEach(function (d) {
+        setTimeout(function () { plot_satellites(d) }, 100)
+      });
+
+
+
+    });
+
+    // Edit visibility of buttons
+    document.getElementById("comB").style.visibility = "hidden";
+    document.getElementById("civB").style.visibility = "hidden";
+    document.getElementById("govB").style.visibility = "hidden";
+    document.getElementById("milB").style.visibility = "hidden";
+  };
+
+  start();
+>>>>>>> origin/master
 
 </script>
 
