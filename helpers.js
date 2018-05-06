@@ -200,18 +200,10 @@ function satTextBox(svg, d, c, lineHeight){
         .attr("fill", subtextColor)
         .attr("x", alignX)
         .attr("y", numberOfLines + 120)
-        .style("font-size", 12)
-<<<<<<< HEAD
-    
-}
-
-=======
-
+        .style("font-size", 12)    
 }
 
 
-
->>>>>>> origin/master
 // Wrap SVG text function
 function wrap(text, width) {
     text.each(function () {
