@@ -14,8 +14,12 @@
 <body>
   <div id="overlay">
       <p class = "overlayTitle">Do you know what's in space?</p>
-      <p class = "overlayDesc">Instructions and details about this cool project. Filler text yay.</p>
-      <p clsss = "overlayClick">Click to begin</p>
+      <p class = "overlayDesc">Explore every active satellite orbiting Earth</p>
+      <p style = "opacity:0.8; font-family:Roboto; font-size:14;">CLICK TO BEGIN</p>
+      
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+      
     </div>
   <div class="spaceView1" id = "spaceView1">
    
@@ -49,6 +53,7 @@
       <button onclick='callUseCase()'>Satellite Types</button>
 
       <button onclick='callCountry()'>Force Layout</button>
+        <button onclick='callNextSection()'>Next Section</button>
 
 
 
@@ -94,7 +99,7 @@
   let colorTheme = "#010305"
 
   // Center orbits
-  const centerX = 460;
+  const centerX = 450;
   const centerY = 400;
 
   // Radius for orbit levels

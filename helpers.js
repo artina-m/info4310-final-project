@@ -9,8 +9,9 @@ function overlay () {
         .attr("class", "world")
         .attr("y", centerY - 40)
         .attr("x", centerX - 40)
-        .attr("width", 80);
-    
+        .attr("width", 80)
+        ;
+        
     document.getElementById("overlay").onclick = start;
     document.getElementById("textBar1").style.marginTop = 800;
     document.getElementById("textBar1").style.opacity = 0;
@@ -125,7 +126,9 @@ function callCountry() {
 }
 
 /* Transition to bottom infograph */
-function callNextSection() {}
+function callNextSection() {
+    $('.useByCountryView').scrollTop(0);
+}
 
 
 

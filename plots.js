@@ -8,6 +8,7 @@ let plot_orbits = function (className) {
         .attr("width", 1200)
         .attr("height", 580)
         .attr("height", "100%")
+        .style("z-index", 5)
         .style("background-color", colorTheme);
 
     satelliteGroup = spaceSVG.append("g")
