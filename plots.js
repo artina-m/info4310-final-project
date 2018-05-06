@@ -7,7 +7,6 @@ let plot_orbits = function (className) {
         .attr("id", "space")
         .attr("width", 1200)
         .attr("height", 580)
-        .style("background-color", "black")
         .attr("height", "100%")
         .style("background-color", colorTheme);
 
@@ -546,10 +545,12 @@ let force_layout = function(data) {
       count: d.values.length
     })
   })
-
+  
+  
+  
   // mercator projection
   let projection = d3.geoMercator()
-    .scale(50)
+    .scale(centerX / Math.PI)
     .translate([centerX, centerY]);
 
   // add on country level data
@@ -577,18 +578,12 @@ let force_layout = function(data) {
           })
         }
       })
-      console.log(nodes[0].x)
-      console.log(nodes[0].y)
-      console.log(nodes[0].x0)
-      console.log(nodes[0].y0)
-
-
 
       // set up the simulation
       let simulation = d3.forceSimulation()
         .velocityDecay(0.6)
-        .force("x", d3.forceX(function(d) {return d.x0;}))
-        .force("y", d3.forceY(function(d) {return d.y0;}))
+        .force("x", d3.forceX().strength(0.002))
+        .force("y", d3.forceY().strength(0.002))
         .force("center_force", d3.forceCenter(centerX, centerY))
         .force("collide", collide)
         .nodes(nodes)
@@ -605,11 +600,6 @@ let force_layout = function(data) {
 
       let radius = d3.scaleLog().range([0, 8])
 
-      // div's for appending tooltips
-      let div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0)
-
       // draw circles for the nodes
       let node = spaceSVG.append("g")
                 .attr("class", "nodes")
@@ -618,21 +608,8 @@ let force_layout = function(data) {
                 .enter()
                 .append("circle")
                 .attr("r", function(d) { return radius(d.count); })
-                .attr("fill", "grey")
-                .attr("opacity", 0.7)
-                .on("mouseover", function(d) {
-                  div.transition().duration(200)
-                    .style("opacity", 0.9)
-
-                  div.html(d.name + "<br/>" + d.count + "launches")
-                  .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 28) + "px")
-                })
-                .on("mouseout", function(d) {
-                  div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-                });
+                .attr("fill", "blue")
+                .attr("opacity", 0.7);
 
       // tick event
       function tickActions() {
@@ -667,90 +644,6 @@ let force_layout = function(data) {
       }
   })
 
-}
 
-/* Generate Bubble Chart */
-let plot_bubble_chart = function(data, use_type) {
-  let format = d3.format(",d");
 
-  // TODO: get user_type from button
-  // let use = document.getElementById("")
-  // get the use_type from button
-  let temp_data = nest_by_country_and_use(data).filter(function(d) {
-    return d.key === use_type;
-  });
-
-  // generate bubble chart formatted data
-  let bubbles = []
-  temp_data[0].values.forEach(function(d) {
-    bubbles.push({
-      id: d.key,
-      value: d.values.length
-    })
-  })
-
-  // building bubble chart
-  let pack = d3.pack()
-    .size([width, height])
-    .padding(1.5);
-
-  d3.selection.prototype.moveToFront = function() {
-    return this.each(function() {
-      this.parentNode.appendChild(this);
-    });
-  };
-
-  let root = d3.hierarchy({children: bubbles})
-    .sum(function(d) { return d.value; })
-    .each(function(d) {
-      if (id = d.data.id) {
-        var id, i = id.lastIndexOf(".");
-        d.id = id;
-        d.package = id.slice(0, i);
-        d.class = id.slice(i+1);
-      }
-    });
-
-  let node = spaceSVG.selectAll(".node")
-    .data(pack(root).leaves())
-    .enter().append("g")
-      .attr('class', "node")
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-  node.append("circle")
-    .attr("id", function(d) { return d.id; })
-    .attr("r", function(d) {return d.r; })
-    .style("fill", "lightgrey");
-
-  d3.selectAll(".node")
-  .on("mouseover", function(d) {
-    d3.select(this).moveToFront();
-    let circle = d3.select(this).select("circle");
-    circle.transition().duration(500)
-    .attr("r", d => d.r*2)
-  })
-  .on("mouseout", function(d) {
-    let circle = d3.select(this).select("circle");
-    circle.transition().duration(500).attr("r", d => d.r )
-  });
-
-  node.append("clipPath")
-    .attr("id", function(d) { return "clip-" + d.id; })
-  .append("use")
-    .attr("xlink:href", function(d) { return "#" + d.id; });
-
-  node.append("text")
-    .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
-  .selectAll("tspan")
-  .data(function(d) { return d.class; })
-  .enter().append("tspan")
-    .style("pointer-events", "none")
-    .attr("x", 0)
-    .attr("y", function(d, i, nodes) {
-      return 13 + (i - nodes.length / 2 -0.5) * 10;
-    })
-    .text(function(d) {return d;})
-
-  node.append("title")
-    .text(function(d) { return d.id + "\n" + format(d.value); });
 }

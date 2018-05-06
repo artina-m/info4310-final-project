@@ -1,5 +1,48 @@
-// Transition Functions between visualizations and bottom section
+/* Transition Functions */
+
+/* Build Overlay */
+function overlay () {
+    on();
+    let world = spaceSVG
+        .append("image")
+        .attr("xlink:href", "worlmapblue.png")
+        .attr("class", "world")
+        .attr("y", centerY - 40)
+        .attr("x", centerX - 40)
+        .attr("width", 80);
+    
+    document.getElementById("overlay").onclick = start;
+    document.getElementById("textBar1").style.marginTop = 800;
+    document.getElementById("textBar1").style.opacity = 0;
+    document.getElementById("textBar2").style.marginTop = 800;
+    document.getElementById("textBar2").style.opacity = 0;
+}
+
+function on() {
+    document.getElementById("overlay").style.display = "block";
+}
+
+function off() {
+    document.getElementById("overlay").style.display = "none";
+    $( "#textBar1" ).animate({
+    opacity: 1,
+    marginTop: "200"
+    }, 600, function() {
+    // Animation complete.
+  });
+    
+    $( "#textBar2" ).animate({
+    opacity: 1,
+    marginTop: "0"
+    }, 600, function() {
+    // Animation complete.
+  });
+}
+
+
+/* Launch Satellities*/
 let start = function () {
+    off();
     spaceSVG.select(".world").remove()
     let world = spaceSVG
         .append("image")
@@ -66,6 +109,7 @@ let start = function () {
       
   };
 
+/* Transition to user type view */
 function callUseCase() {
     document.getElementById("comB").style.visibility = "visible";
     document.getElementById("civB").style.visibility = "visible";
@@ -75,10 +119,12 @@ function callUseCase() {
     filterByType2("Commercial")
 }
 
+/* Transition to country view */
 function callCountry() {
     force_layout(dataByCountry)
 }
 
+/* Transition to bottom infograph */
 function callNextSection() {}
 
 
@@ -94,11 +140,6 @@ let filter_year = function(data, year) {
     return d.year === +year
   })
 }
-
-
-
-
-
 
 // Calculate use case proportions for main viz
 function useCaseProportion(data) {
