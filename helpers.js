@@ -1,3 +1,88 @@
+// Transition Functions between visualizations and bottom section
+let start = function () {
+    spaceSVG.select(".world").remove()
+    let world = spaceSVG
+        .append("image")
+        .attr("xlink:href", "worlmapblue.png")
+        .attr("class", "world")
+        .attr("y", centerY - 40)
+        .attr("x", centerX - 40)
+        .attr("width", 80);
+
+    // remove pixels to "restart" plotting
+    spaceSVG.selectAll("g").selectAll("circle").remove();
+    spaceSVG.selectAll(".factText").remove();
+    spaceSVG.selectAll("line").remove();
+
+    // append tooltip texts
+    spaceSVG.append("text")
+    .text("1738")
+    .attr("x", alignX).attr("y", 50)
+    .attr("class","factText")
+    .style("font-size", 24).attr("fill", "white")
+
+    spaceSVG.append("text")
+    .text("Active orbiting satillites")
+    .attr("x", alignX).attr("y", 70)
+    .attr("class","factText")
+    .style("font-size", 16)
+    .attr("fill", "white")
+
+    // add separator line between title and dynamic info for tooltips
+    spaceSVG.append("line")
+    .attr("x1", alignX).attr("x2", alignX +200)
+    .attr("y1", 90).attr("y2", 90)
+    .attr("class", "factText")
+    .attr("stroke", "lightgrey").attr("stroke-width", 0.5)
+
+    // load data
+    d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
+      satData = data;
+      useCase = useCaseProportion(satData)
+
+
+
+      d3.csv("use.csv", function (error, data2) {
+        flatData = data2;
+        plot_use("useViz", flatData);
+      });
+
+      satData.forEach(function (d) {
+        setTimeout(function () { plot_satellites(d) }, 100)
+      });
+
+      //prepare data for Demers Cartogram
+      dataByCountry = d3.nest()
+        .key((d) => d.country)
+        .entries(satData);
+
+    });
+
+    // Edit visibility of buttons
+    document.getElementById("comB").style.visibility = "hidden";
+    document.getElementById("civB").style.visibility = "hidden";
+    document.getElementById("govB").style.visibility = "hidden";
+    document.getElementById("milB").style.visibility = "hidden";
+      
+  };
+
+function callUseCase() {
+    document.getElementById("comB").style.visibility = "visible";
+    document.getElementById("civB").style.visibility = "visible";
+    document.getElementById("govB").style.visibility = "visible";
+    document.getElementById("milB").style.visibility = "visible";
+    
+    filterByType2("Commercial")
+}
+
+function callCountry() {
+    force_layout(dataByCountry)
+}
+
+function callNextSection() {}
+
+
+
 let filter_year_and_purpose = function(data, year, purpose) {
   data.filter(function(d) {
     return d.year === Number(year) && d.purpose === String(purpose);
@@ -11,13 +96,8 @@ let filter_year = function(data, year) {
 }
 
 
-function callUseCase() {
-    document.getElementById("comB").style.visibility = "visible";
-    document.getElementById("civB").style.visibility = "visible";
-    document.getElementById("govB").style.visibility = "visible";
-    document.getElementById("milB").style.visibility = "visible";
-    filterByType2("Commercial")
-}
+
+
 
 
 // Calculate use case proportions for main viz
@@ -123,12 +203,6 @@ function satTextBox(svg,d, c, lineHeight){
         .style("font-size", 12)
     
 }
-
-
-
-
-
-
 
 // Wrap SVG text function
 function wrap(text, width) {
