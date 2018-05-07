@@ -133,6 +133,7 @@ div {
     width: 100%;
     display: inline-block;
     position: sticky;
+    float: left;
     top: 0;
    }
 
@@ -157,7 +158,7 @@ div {
     background-color: white;
     height: 100%;
     width: 100%;
-    display: inline-block;
+    float: left;
 }
 
 .useViz{

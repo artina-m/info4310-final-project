@@ -13,20 +13,20 @@
 
 <body>
   <div id="overlay">
-      <p class = "overlayTitle">Do you know what's in space?</p>
-      <p class = "overlayDesc">Explore every active satellite orbiting Earth</p>
-      <p style = "opacity:0.8; font-family:Roboto; font-size:14;">CLICK TO BEGIN</p>
-      
-      <div class="stars"></div>
-      <div class="twinkling"></div>
-      
-    </div>
-  <div class="spaceView1" id = "spaceView1">
-   
-    <div class="sideBar" id = "side">
+    <p class="overlayTitle">Do you know what's in space?</p>
+    <p class="overlayDesc">Explore every active satellite orbiting Earth</p>
+    <p style="opacity:0.8; font-family:Roboto; font-size:14;">CLICK TO BEGIN</p>
 
-      <p class="sectionTitle" id = "textBar1"> STUFF IN SPACE </p>
-      <p class="sectionDesc" id = "textBar2">
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+  </div>
+  <div class="spaceView1" id="spaceView1">
+
+    <div class="sideBar" id="side">
+
+      <p class="sectionTitle" id="textBar1"> STUFF IN SPACE </p>
+      <p class="sectionDesc" id="textBar2">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
         aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -34,41 +34,40 @@
 
       <br>
       <!-- Add buttons -->
-        <div style = "align-content: center;text-align:center; width: 100%">
-        <button onclick='filterByType2("Commercial")' class = "useButton" id = "comB">Commercial</button>
-        <button onclick='filterByType2("Government")'class = "useButton" id = govB>Government</button>
-        <button onclick='filterByType2("Military")' class = "useButton" id = "milB">Military</button>
-        <button onclick='filterByType2("Civil")' class = "useButton" id = "civB">Civil</button>
-        </div>
+      <div style="align-content: center;text-align:center; width: 100%">
+        <button onclick='filterByType2("Commercial")' class="useButton" id="comB">Commercial</button>
+        <button onclick='filterByType2("Government")' class="useButton" id="govB">Government</button>
+        <button onclick='filterByType2("Military")' class="useButton" id="milB">Military</button>
+        <button onclick='filterByType2("Civil")' class="useButton" id="civB">Civil</button>
+      </div>
       <br>
 
 
 
 
       <br>
-        <p style = "color:white"> Convert these buttons into scrollable functions</p>
+      <p style="color:white"> Convert these buttons into scrollable functions</p>
 
       <button onclick="start()">Start</button>
 
       <button onclick='callUseCase()'>Satellite Types</button>
 
       <button onclick='callCountry()'>Force Layout</button>
-        <button onclick='callNextSection()'>Next Section</button>
+      <button onclick='callNextSection()'>Next Section</button>
 
 
 
-    </div> <!-- end of sidBar div -->
+    </div>
+    <!-- end of sidBar div -->
 
     <div class="rightHand">
-        <div class = "visualization"></div>
+      <div class="visualization"></div>
     </div>
 
-  </div> <!-- end of spaceView1 div -->
-
   </div>
+  <!-- end of spaceView1 div -->
 
-
-  <div class="testViewPort"></div>
+  <!-- <div class="testViewPort"></div> -->
 
   <div class="useByCountryView">
     <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -86,9 +85,10 @@
         aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
     </div>
-      
-      
-  </div> <!-- end of useByCountryView div -->
+
+
+  </div>
+  <!-- end of useByCountryView div -->
 
 
 </body>
@@ -112,58 +112,58 @@
   // let cartogramSVG; // declare variable for plotting cartogram svg.
 
   const rscale = d3.scaleLinear()
-                .domain([1,6651])
-                .range([1.5,20])
+    .domain([1, 6651])
+    .range([1.5, 20])
 
 
   // Load data
   function parseLine(line) {
-        // Return only the columns we are interested in
-        // Subject to revision!
+    // Return only the columns we are interested in
+    // Subject to revision!
 
-        // Create new Date object so dates are not distorted
-        let split_date = line["Date of Launch"].split("/");
-        let year;
-        if (split_date[2] < 20) {
-          year = '20' + split_date[2];
-        } else {
-          year = '19' + split_date[2];
-        }
-        let temp_date = new Date(year, split_date[0], split_date[1]);
+    // Create new Date object so dates are not distorted
+    let split_date = line["Date of Launch"].split("/");
+    let year;
+    if (split_date[2] < 20) {
+      year = '20' + split_date[2];
+    } else {
+      year = '19' + split_date[2];
+    }
+    let temp_date = new Date(year, split_date[0], split_date[1]);
 
-        return {
-            satName: line["Name of Satellite, Alternate Names"],
-            launchDate: temp_date,
-            year: Number(year),
-            month: Number(split_date[0]),
-            day: Number(split_date[1]),
-            country: line["Country of Operator/Owner"],
-            users: line["Users"],
-            purpose: line["Purpose"],
-            detailedPurpose: line["Detailed Purpose"],
-            orbitClass: line["Class of Orbit"],
-            orbitType: line["Type of Orbit"],
-            expectedLifetime: line["Expected Lifetime"],
-            launchMass: parseFloat(line["Launch Mass (kg.)"].replace('"', ''))
-        }
-
+    return {
+      satName: line["Name of Satellite, Alternate Names"],
+      launchDate: temp_date,
+      year: Number(year),
+      month: Number(split_date[0]),
+      day: Number(split_date[1]),
+      country: line["Country of Operator/Owner"],
+      users: line["Users"],
+      purpose: line["Purpose"],
+      detailedPurpose: line["Detailed Purpose"],
+      orbitClass: line["Class of Orbit"],
+      orbitType: line["Type of Orbit"],
+      expectedLifetime: line["Expected Lifetime"],
+      launchMass: parseFloat(line["Launch Mass (kg.)"].replace('"', ''))
     }
 
-    function parseCoords(line) {
-      return {
-        name: String(line.name),
-        lat: +line.latitude,
-        lng: +line.longitude
-      }
+  }
+
+  function parseCoords(line) {
+    return {
+      name: String(line.name),
+      lat: +line.latitude,
+      lng: +line.longitude
     }
+  }
 
 
-    plot_orbits("visualization");
+  plot_orbits("visualization");
 
 
-    overlay();
+  overlay();
 
-   
+
 
 </script>
 
