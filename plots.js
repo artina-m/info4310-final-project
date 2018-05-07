@@ -5,8 +5,7 @@ let plot_orbits = function (className) {
         .append("svg")
         .attr("class", "spaceSVG")
         .attr("id", "space")
-        .attr("width", 1200)
-        .attr("height", 580)
+        .attr("width", 800)
         .attr("height", "100%")
         .style("z-index", 5)
         .style("background-color", colorTheme);
@@ -90,15 +89,15 @@ let plot_satellites = function (d) {
                 // Reset Info
 
                 dat = {satName: satName, country: satCountry, users: satUsers, orbitClass: satOrbit, purpose: satPurpose, launchMass: satMass, expectedLifetime: satLife, launchDate: launchDate}
-                d3.selectAll(".satInfo").remove()
 
                 // Mark selected satellite
                 d3.select(this).attr("fill", "#3498DB").attr("r", 10)
 
-                satTextBox(spaceSVG,dat,"#3498DB", 120)
+                satTextBox(dat,"#3498DB")
                 })
 
             .on("mouseout", function(d){
+                $("#selectedSat").html("");
                 d3.select(this).attr("fill", "white").attr("r", r)
                 })
 
@@ -112,127 +111,6 @@ let plot_satellites = function (d) {
 }
 
 
-let filterByType = function () {
-
-    // Update fact text
-   spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
-   spaceSVG.selectAll(".factText").remove();
-   spaceSVG.select(".nodes").remove();
-
-    let angleData = [];
-    let radiusData = [];
-    let mColor = "#E74C3C";
-    let cvColor = "#F9E79F";
-    let gColor = "#3498DB";
-    let comColor ="#76D7C4";
-
-    let allSats = satelliteGroup
-        .selectAll("circle")
-        .data(satData)
-
-    // Update position & color of each satellite
-    allSats
-        .transition()
-        .duration(2000)
-        .style("opacity", 1)
-        .attr("fill", function (d) {
-            // Update color according to user
-            // Civil: White, Military: Red, Commercial: Green, Government: Blue
-            let  color = "white"
-            let user = d.users;
-
-            if (user.startsWith("Civ")) { color = cvColor }
-            else if (user.startsWith("M")) { color = mColor }
-            else if (user.startsWith("Comm")) { color = comColor }
-            else if (user.startsWith("Gov")) { color = gColor }
-
-            return color
-        })
-        .attr("cx", function (d) {
-            // Update location in space - useCaseProportion() (helper) called in index.html for calculation
-            if (d.orbitClass == "GEO") {
-                radius = geo + (Math.random() * 60)
-            } else if (d.orbitClass == "MEO") {
-                radius = meo + (Math.random() * 30)
-            } else if (d.orbitClass == "LEO") {
-                radius = leo + (Math.random() * 120)
-            }
-
-            angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
-            angleData.push(angle);
-            radiusData.push(radius);
-
-            return radius * Math.cos(angle) + centerX
-        })
-        .attr("cy", function (d, i) {
-            radius = radiusData[i];
-            angle = angleData[i];
-            return radius * Math.sin(angle) + centerY
-        })
-
-    d3.selectAll(".satPoint")
-        .on("mouseover", function(d) {
-                // Reset Info
-                d3.selectAll(".satInfo").remove()
-                // Mark selected satellite
-                d3.select(this).attr("fill", "white").attr("r", 10)
-
-                // Add supporting text box - edit x poisition in index.html alignX
-                let user = d.users;
-                let  color = "white"
-                if (user.startsWith("Civ")) { color = cvColor }
-                else if (user.startsWith("M")) { color = mColor }
-                else if (user.startsWith("Comm")) { color = comColor }
-                else if (user.startsWith("Gov")) { color = gColor }
-
-                satTextBox(spaceSVG,d, color, 300)
-        })
-        .on("mouseout", function(d){
-            d3.select(this)
-                    .attr("r", rscale((d.launchMass || 50 )))
-                    .attr("fill", function(){
-                        let user = d.users;
-                        let  color = "white"
-                        if (user.startsWith("Civ")) { color = cvColor }
-                        else if (user.startsWith("M")) { color = mColor }
-                        else if (user.startsWith("Comm")) { color = comColor }
-                        else if (user.startsWith("Gov")) { color = gColor }
-                        return color;
-                    })
-    });
-
-
-    // Lines seperating sections
-    let lines = [0, 2, 7,11]
-    for (i in lines) {
-        let key = Object.keys(useCase)[i]
-        spaceSVG
-            .append("line")
-            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
-            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
-            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
-            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
-            .attr("stroke", "lightgrey")
-            .style("opacity", 1)
-            .style("stroke-width", 1)
-        }
-
-    lines = [1, 3, 4, 5, 6, 8, 9, 10, 13, 14, 15]
-    for (i in lines) {
-        let key = Object.keys(useCase)[i]
-        spaceSVG
-            .append("line")
-            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
-            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
-            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
-            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
-            .attr("stroke", "grey")
-            .style("opacity", 1)
-            .style("stroke-width", 0.5)
-        }
-    };
-
-
 
 let filterByType2 = function(selectType) {
 
@@ -242,7 +120,6 @@ let filterByType2 = function(selectType) {
    let subCat = useCase[0];
    let groupCat = useCase[1];
    let typeData = groupCat[selectType]
-   console.log(groupCat)
 
     let start = 0;
     let frac = groupCat[selectType]/satData.length;
@@ -310,8 +187,6 @@ let filterByType2 = function(selectType) {
 
     d3.selectAll(".satPoint")
         .on("mouseover", function(d) {
-                // Reset Info
-                d3.selectAll(".satInfo").remove()
                 // Mark selected satellite
                 d3.select(this).attr("fill", "white").attr("r", 10)
 
@@ -319,9 +194,10 @@ let filterByType2 = function(selectType) {
                 let user = d.users;
                 let  color = "white"
                 if (user.includes(selectType)) {color = typeColor}
-                satTextBox(spaceSVG,d, color, 300)
+                satTextBox(d, color)
         })
         .on("mouseout", function(d){
+            $("#selectedSat").html("");
             d3.select(this)
                     .attr("r", rscale((d.launchMass || 50 )))
                     .attr("fill", function(){
@@ -331,7 +207,6 @@ let filterByType2 = function(selectType) {
                         return color
                     })
     });
-
 
         start = start + Math.PI;
         end = end + Math.PI;
@@ -363,7 +238,24 @@ let filterByType2 = function(selectType) {
             .attr("x2", 380 * Math.cos(end) + centerX)
             .attr("y1", 40 * Math.sin(end) + centerY)
             .attr("y2", 380 * Math.sin(end) + centerY)
-
+         
+         spaceSVG.append("text")
+             .text(typeData)
+             .attr("x", alignX).attr("y", 50)
+             .attr("class","factText")
+             .style("font-size", 24).attr("fill", "white")
+         
+          spaceSVG.append("text")
+            .text(selectType + " Satellites")
+            .attr("x", alignX).attr("y", 70)
+            .attr("class","factText")
+            .style("font-size", 16).attr("fill", typeColor)
+          
+          spaceSVG.append("line")
+        .attr("x1", alignX).attr("x2", alignX +200)
+        .attr("y1", 90).attr("y2", 90)
+              .attr("class", "factText")
+              .attr("stroke", "lightgrey").attr("stroke-width", 0.5)
 
     };
 

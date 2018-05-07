@@ -62,7 +62,16 @@
 
     <div class="rightHand">
       <div class="visualization"></div>
+      <div class = "rightDiv"> 
+          <div class = "satInfo" id = "overview">
+          <p id = "total"></p>
+          <p id = "totalCat"></p>
+          </div>
+          <div id = "selectedSat"></div>
+      </div>
     </div>
+      
+    
 
   </div>
   <!-- end of spaceView1 div -->
@@ -99,13 +108,13 @@
   let colorTheme = "#010305"
 
   // Center orbits
-  const centerX = 450;
+  const centerX = 410;
   const centerY = 400;
 
   // Radius for orbit levels
-  const leo = 100;
-  const meo = 260;
-  const geo = 320;
+  const leo = 80;
+  const meo = 220;
+  const geo = 280;
   const alignX = 920;
 
   //let spaceSVG; // declare variable for svg for orbits/satelltes
