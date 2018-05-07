@@ -9,9 +9,8 @@ function overlay () {
         .attr("class", "world")
         .attr("y", centerY - 30)
         .attr("x", centerX - 30)
-        .attr("width", 60)
-        ;
-        
+        .attr("width", 60);
+
     document.getElementById("overlay").onclick = start;
     document.getElementById("textBar1").style.marginTop = 800;
     document.getElementById("textBar1").style.opacity = 0;
@@ -31,7 +30,7 @@ function off() {
     }, 600, function() {
     // Animation complete.
   });
-    
+
     $( "#textBar2" ).animate({
     opacity: 1,
     marginTop: "0"
@@ -59,8 +58,8 @@ let start = function () {
     // append tooltip texts
     $("#total").html("1738");
     $("#totalCat").html("Active Orbiting Satellites");
-    
-  
+
+
     // add separator line between title and dynamic info for tooltips
     spaceSVG.append("line")
     .attr("x1", alignX).attr("x2", alignX +200)
@@ -86,6 +85,7 @@ let start = function () {
 
       //prepare data for Demers Cartogram
       dataByCountry = d3.nest()
+        .key((d) => d.users)
         .key((d) => d.country)
         .entries(satData);
 
@@ -97,7 +97,7 @@ let start = function () {
     document.getElementById("govB").style.visibility = "hidden";
     document.getElementById("milB").style.visibility = "hidden";
 
-    
+
   };
 
 /* Transition to user type view */
@@ -106,13 +106,14 @@ function callUseCase() {
     document.getElementById("civB").style.visibility = "visible";
     document.getElementById("govB").style.visibility = "visible";
     document.getElementById("milB").style.visibility = "visible";
-    
+
     filterByType2("Commercial")
 }
 
 /* Transition to country view */
 function callCountry() {
-    force_layout(dataByCountry)
+    // force_layout(dataByCountry)
+    plot_bubble_chart(dataByCountry, "Civil")
 }
 
 /* Transition to bottom infograph */
@@ -180,64 +181,64 @@ function satTextBox(d, c){
     $("#selectedSat").html("");
 
     var selectedSat = document.getElementById('selectedSat');
-    
+
     var para = document.createElement("p");
     var node = document.createTextNode(d.satName);
     para.appendChild(node);
-    
+
     para.style.color = c;
     para.style.fontSize = 16;
     para.style.fontWeight = 600;
     para.style.lineHeight = 1.2;
     para.style.marginBottom = 10;
-    
+
     selectedSat.appendChild(para);
-    
-    
+
+
     var para = document.createElement("p");
     var node = document.createTextNode(d.country);
     para.appendChild(node);
-    
-    
+
+
     para.style.color = "white";
     para.style.fontSize = 12;
     para.style.fontWeight = 600;
     para.style.lineHeight = 1.2;
     para.style.marginBottom = 4;
-    
+
     selectedSat.appendChild(para);
-    
-    
+
+
     var para = document.createElement("p");
     var node = document.createTextNode(d.users + " Satellite");
     para.appendChild(node);
-    
+
     selectedSat.appendChild(para);
 
-    
+
     var para = document.createElement("p");
     var node = document.createTextNode("Purpose: " + d.purpose);
     para.appendChild(node);
-    
+
     selectedSat.appendChild(para);
-    
+
     var para = document.createElement("p");
     var node = document.createTextNode("Orbit Class: " + d.orbitClass);
     para.appendChild(node);
-    
+
     selectedSat.appendChild(para);
 
-    
+
     var para = document.createElement("p");
     var node = document.createTextNode("Launch Date: " + String(d.launchDate).substring(0,16));
     para.appendChild(node);
-    
+
     selectedSat.appendChild(para);
 
     var para = document.createElement("p");
     var node = document.createTextNode("Expected Lifetime: " + d.expectedLifetime);
     para.appendChild(node);
-    
+
     selectedSat.appendChild(para);
 
 }
