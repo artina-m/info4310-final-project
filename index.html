@@ -46,7 +46,7 @@
       <br>
       <p style="color:white"> Convert these buttons into scrollable functions</p>
 
-      <button onclick="start()">Start</button>
+      <button onclick="start(),introtext();">Start</button>
 
       <button onclick='callUseCase()'>Satellite Types</button>
 
@@ -184,6 +184,9 @@
 
   function civilsat(){
     document.getElementById("textBar2").innerHTML = "Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites are owned and used by universities all around the world. There are currently 155 civil satellites in orbit currently. Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.";
+  }
+  function introtext(){
+    document.getElementById("textBar2").innerHTML = "Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use."
   }
 
 
