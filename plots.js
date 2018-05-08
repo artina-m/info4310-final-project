@@ -99,7 +99,7 @@ let plot_satellites = function (d) {
             .on("mouseout", function(d){
                 $("#selectedSat").html("");
                 d3.select(this).attr("fill", "white").attr("r", r)
-                })
+            })
 
     // Transition satellites from the center to their random position in orbit
     dot
@@ -269,6 +269,7 @@ let plot_use = function (className, data) {
         bottom: 30,
         left: 60
     };
+
     let width = 400 - margin.left - margin.right;
     let height = 400 - margin.top - margin.bottom;
 
@@ -285,9 +286,8 @@ let plot_use = function (className, data) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let keys = data
-        .columns
-        .slice(1);
+    let keys = data.columns.slice(1);
+    console.log(keys)
 
     let x = d3
         .scaleBand()
@@ -304,36 +304,50 @@ let plot_use = function (className, data) {
         .domain([0, 1.0])
         .nice();
 
+    // let typeColor = "white";
+    // if (use_type == "Civil") {typeColor = "#F9E79F"}
+    // else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+    // else if (use_type == "Government") {typeColor = "#3498DB"}
+    // else if (use_type == "Military") {typeColor = "#E74C3C"}
+
     let z = d3
         .scaleOrdinal()
-        .range(["#5cbae6", "#b6d957", "#fac364", "#d998cb"])
+        .range(["#76D7C4", "#F9E79F", "#E74C3C", "#3498DB"])
         .domain(keys);
 
-    g
-        .append("g")
-        .selectAll("g")
-        .data(d3.stack().keys(keys)(data))
-        .enter()
-        .append("g")
-        .attr("fill", function (d) {
-            return z(d.key);
-        })
-        .selectAll("rect")
-        .data(function (d) {
-            return d;
-        })
-        .enter()
-        .append("rect")
-        .attr("x", function (d) {
-            return x(d.data.Country);
-        })
-        .attr("y", function (d) {
-            return y(d[1]);
-        })
-        .attr("height", function (d) {
-            return y(d[0]) - y(d[1]);
-        })
-        .attr("width", x.bandwidth());
+    let tooltip = d3.select("useViz").append("div").attr("class", "tooltip");
+
+    g.append("g")
+    .selectAll("g")
+    .data(d3.stack().keys(keys)(data))
+    .enter()
+    .append("g")
+    .attr("fill", function (d) {
+        return z(d.key);
+    })
+    .selectAll("rect")
+    .data(function (d) {
+        return d;
+    })
+    .enter()
+    .append("rect")
+    .attr("x", function (d) {
+        return x(d.data.Country);
+    })
+    .attr("y", function (d) {
+        return y(d[1]);
+    })
+    .attr("height", function (d) {
+        return y(d[0]) - y(d[1]);
+    })
+    .attr("width", x.bandwidth())
+    .on("mouseover", function(d) {
+      tooltip
+        .style("left", d3.event.pageX - 50 + "px")
+        .style("top", d3.event.pageY - 70 + "px")
+        .style("display", "inline-block")
+        .html((d.key));
+    });
 
     g
         .append("g")
@@ -542,10 +556,13 @@ function parseCoords(line) {
 // }
 
 function plot_bubble_chart(data, use_type) {
-    
-// remove previous bubble chart
+  // make color consistent with use type vis
+  let typeColor = "white";
+  if (use_type == "Civil") {typeColor = "#F9E79F"}
+  else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+  else if (use_type == "Government") {typeColor = "#3498DB"}
+  else if (use_type == "Military") {typeColor = "#E74C3C"}
 
-    
   let bubble_data = []
   let format = d3.format(",d");
 
@@ -582,10 +599,50 @@ function plot_bubble_chart(data, use_type) {
 
   node.append("circle")
       .attr("id", function(d) { return d.id; })
-      .style("fill", "lightblue")
+      .style("fill", typeColor)
+      .on("mouseover", function(d) {
+        // clear text for new description
+        $("#selectedSat").html("");
+
+        var selectedSat = document.getElementById("selectedSat");
+        var para = document.createElement("p");
+        var node = document.createTextNode(String(d.id));
+        para.appendChild(node);
+
+        para.style.color = "#3498DB";
+        para.style.fontSize = 16;
+        para.style.fontWeight = 600;
+        para.style.lineHeight = 1.2;
+        para.style.marginBottom = 10;
+
+        selectedSat.appendChild(para);
+
+        var para = document.createElement("p");
+        var node = document.createTextNode(
+          String(d.value) + " " +
+          String(use_type).toLowerCase() +
+          " satellite(s)"
+        );
+        para.appendChild(node);
+
+
+        para.style.color = "white";
+        para.style.fontSize = 12;
+        para.style.fontWeight = 600;
+        para.style.lineHeight = 1.2;
+        para.style.marginBottom = 4;
+
+        selectedSat.appendChild(para);
+
+      })
+      .on("mouseout", function(d){
+          $("#selectedSat").html("");
+          d3.select(this).attr("fill", "white").attr("r", r)
+      })
       .attr("class", "circleNode")
       .attr("r", 0).transition().duration(1000)
-      .attr("r", function(d) { return d.r; })
+      .attr("r", function(d) { return d.r; });
+
 
 
   node.append("clipPath")
@@ -600,9 +657,18 @@ function plot_bubble_chart(data, use_type) {
     .enter().append("tspan")
       .attr("x", 0)
       .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-      .text(function(d) { return d; })
+      .text(function(d) { return d.id; })
+      // .attr("font-size", "12px")
     .attr("text-anchor", "middle");
 
-  node.append("title")
-      .text(function(d) { return d.id + "\n" + format(d.value); });
+  node.append("text")
+    .attr("dy", ".3em")
+    .style("text-anchor", "middle")
+    .text(function(d) { return d.id; });
+
+}
+
+// plot small multiple line chart
+function plot_small_multiples(className, data) {
+  
 }

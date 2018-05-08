@@ -107,10 +107,12 @@ function callUseCase() {
 
     // Remove bubble map
     let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
-    d3.selectAll(".node").transition().duration(1000).remove()
+
+    d3.selectAll(".node")
+      .transition().duration(1000).remove()
 
     // Bring back orbital levels and image
-     let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
+    let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
 
     let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", meo).attr("opacity", 1)
 
@@ -124,10 +126,11 @@ function callUseCase() {
     document.getElementById("civB").style.visibility = "visible";
     document.getElementById("govB").style.visibility = "visible";
     document.getElementById("milB").style.visibility = "visible";
+    // Default the use type upon clicking to be "Commercial"
     filterByType2("Commercial")
 
      // Update button functions
-    document.getElementById("comB").onclick = function () { filterByType2("Commercial"); };
+    document.getElementById("comB").onclick = function () {filterByType2("Commercial"); };
     document.getElementById("govB").onclick =function () { filterByType2("Government"); };
     document.getElementById("civB").onclick =function () { filterByType2("Civil"); };
     document.getElementById("milB").onclick =function () { filterByType2("Military"); };
@@ -138,7 +141,10 @@ function callUseCase() {
 
 /* Transition to country view */
 function callCountry(topic) {
-    // Apply circle transition
+    // remove bubble chart before plotting
+    spaceSVG.selectAll(".node").remove();
+
+    // Apply circle transition (to the center of spaceSVG)
    let circ =  d3.selectAll(".satPoint").transition().duration(1000).attr("cx", centerX).attr("cy", centerY).style("opacity", 0)
 
    // Remove orbital levels
@@ -149,6 +155,7 @@ function callCountry(topic) {
     let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
 
     let lin =  spaceSVG.selectAll("line").attr("opacity", 0)
+    // remove the wiper for use case viz
     wiper.remove()
 
     d3.select(".world").style("opacity",0)
@@ -171,10 +178,6 @@ function callCountry(topic) {
         d3.selectAll(".node").remove()
         plot_bubble_chart(dataByCountry,"Military"); };
 
-
-// TODO: Need to take in the value from the click
-
-// TODO: remove other components
     plot_bubble_chart(dataByCountry, topic)
 }
 
@@ -183,6 +186,8 @@ function callNextSection() {
     $("html, body").animate({
         scrollTop: $('.useByCountryView').offset().top
    }, 300);
+
+   // TODO: plot_small_multiples(data)
 }
 
 
@@ -238,8 +243,9 @@ function useCaseProportion(data) {
     return [counts, groupedCount,piBreak];
 }
 
-// Top right corner text box
+// Top right corner text box for description on "tooltip"
 function satTextBox(d, c){
+    // clear text for new description
     $("#selectedSat").html("");
 
     var selectedSat = document.getElementById('selectedSat');
@@ -323,6 +329,7 @@ function wrap(text, width) {
                         .attr("x", x)
                         .attr("y", y)
                         .attr("dy", dy + "em");
+
         while (word = words.pop()) {
             line.push(word);
             tspan.text(line.join(" "));
@@ -340,34 +347,6 @@ function wrap(text, width) {
         }
     });
 }
-
-
-/* Code used below to generate flatuse data */
-
- // data counts by major country and use
-//  let satCountNest = d3.nest()
-//  .key(function (d) { return d.country; })
-//  .key(function (d) { return d.users; })
-//  .rollup(function (v) { return v.length; })
-//  .entries(satData);
-
-// // four major countries
-// let satCountFourCountries = satCountNest.filter(function (d) {
-//  return d.key == "China" || d.key == "USA" || d.key == "Russia" || d.key == "India";
-// });
-
-// let satCountFourCountriesFlat = []
-// satCountFourCountries.forEach(function (country) {
-//  country.values.forEach(function (countryVals) {
-//    if (countryVals.key == "Military" || countryVals.key == "Commercial" || countryVals.key == "Civil" || countryVals.key == "Government") {
-//      satCountFourCountriesFlat.push({
-//        country: country.key,
-//        use: countryVals.key,
-//        count: countryVals.value
-//      });
-//    }
-//  });
-// });
 
 // summarize data by country
 function nest_by_country_and_use(data) {

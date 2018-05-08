@@ -7,6 +7,16 @@ Dark Theme Background: #010305
 
 */
 
+.tooltip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #6F257F;
+  padding: 14px;
+  text-align: center;
+}
 
 @import url('https://fonts.googleapis.com/css?family=Oswald|Roboto');
 
@@ -30,7 +40,7 @@ div {
     display: none; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
-    top: 0; 
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -187,7 +197,7 @@ div {
     height: 100%;
     width: 200px;
     margin-right:0;
-    
+
 }
 
 .useByCountryView{
