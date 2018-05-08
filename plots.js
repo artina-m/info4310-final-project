@@ -580,9 +580,16 @@ function plot_bubble_chart(data, use_type) {
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
+  let typeColor = "white";
+    if (use_type == "Civil") {typeColor = "#F9E79F"}
+    else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+    else if (use_type == "Government") {typeColor = "#3498DB"}
+    else if (use_type == "Military") {typeColor = "#EC7063"}
+    
   node.append("circle")
       .attr("id", function(d) { return d.id; })
-      .style("fill", "lightblue")
+      .style("fill",  "#010305")
+      .attr("stroke", typeColor)
       .attr("class", "circleNode")
       .attr("r", 0).transition().duration(1000)
       .attr("r", function(d) { return d.r; })
@@ -601,7 +608,8 @@ function plot_bubble_chart(data, use_type) {
       .attr("x", 0)
       .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
       .text(function(d) { return d; })
-    .attr("text-anchor", "middle");
+    .attr("text-anchor", "middle")
+    .attr("fill", "white");
 
   node.append("title")
       .text(function(d) { return d.id + "\n" + format(d.value); });
