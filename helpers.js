@@ -113,7 +113,7 @@ let start = function () {
     document.getElementById("govB").style.visibility = "hidden";
     document.getElementById("milB").style.visibility = "hidden";
 
-
+    $(".useNextButton").css("display", "block");
   };
 
 /* Transition to user type view */

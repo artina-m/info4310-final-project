@@ -270,14 +270,14 @@ div {
     padding: 0;
     cursor: pointer !important;
     outline: inherit;
-    display: block;
+    display: none;
     width: 100px;
     height: 80px;
     margin: 0 auto;
 }
 
 .useNextButton p {
-    margin-top: 30px;
+    margin-top: 500%;
     margin-bottom: -22px;
     margin-left: 0px;
     font-size: 14px;
