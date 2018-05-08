@@ -190,7 +190,9 @@ function callCountry(topic) {
        $("#civB").css("border", "solid 1px white")
        $("#govB").css("border", "solid 1px white")
        $("#milB").css("border", "solid 1px white")
-
+   
+    document.getElementById("totalCat").innerHTML = ""
+    document.getElementById("total").innerHTML = "Satellites by Country"
     // Apply circle transition (to the center of spaceSVG)
    let circ =  d3.selectAll(".satPoint").transition().duration(1000).attr("cx", centerX).attr("cy", centerY).style("opacity", 0)
 
@@ -333,10 +335,11 @@ function satTextBox(d, c){
     para.appendChild(node);
 
     para.style.color = c;
-    para.style.fontSize = 16;
+    para.style.fontSize = 20;
     para.style.fontWeight = 600;
     para.style.lineHeight = 1.2;
     para.style.marginBottom = 10;
+    para.style.fontFamily = "Oswald"
 
     selectedSat.appendChild(para);
 

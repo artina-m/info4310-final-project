@@ -116,10 +116,15 @@ let filterByType2 = function(selectType) {
 
     spaceSVG.selectAll("line").remove();
     spaceSVG.select(".nodes").remove();
+    
+   
 
    let subCat = useCase[0];
    let groupCat = useCase[1];
    let typeData = groupCat[selectType]
+   
+    document.getElementById("totalCat").innerHTML = selectType + " Satellites"
+    document.getElementById("total").innerHTML = groupCat[selectType]
 
     let start = 0;
     let frac = groupCat[selectType]/satData.length;
@@ -562,6 +567,7 @@ function plot_bubble_chart(data, use_type) {
   else if (use_type == "Commercial") {typeColor = "#76D7C4"}
   else if (use_type == "Government") {typeColor = "#3498DB"}
   else if (use_type == "Military") {typeColor = "#E74C3C"}
+    
 
   let bubble_data = []
   let format = d3.format(",d");
@@ -603,11 +609,11 @@ function plot_bubble_chart(data, use_type) {
     else if (use_type == "Government") {typeColor = "#3498DB"}
     else if (use_type == "Military") {typeColor = "#EC7063"}
     
+    
   node.append("circle")
       .attr("id", function(d) { return d.id; })
-      .style("fill",  "#010305")
+      .attr("fill",  "#010305")
       .attr("stroke", typeColor)
-      .style("fill", "#010305")
       .on("mouseover", function(d) {
         // clear text for new description
         $("#selectedSat").html("");
@@ -618,10 +624,11 @@ function plot_bubble_chart(data, use_type) {
         para.appendChild(node);
 
         para.style.color = typeColor;
-        para.style.fontSize = 16;
+        para.style.fontSize = 20;
         para.style.fontWeight = 600;
         para.style.lineHeight = 1.2;
         para.style.marginBottom = 10;
+        para.style.fontFamily = "Oswald"
 
         selectedSat.appendChild(para);
 
@@ -633,19 +640,21 @@ function plot_bubble_chart(data, use_type) {
         );
         para.appendChild(node);
 
-
         para.style.color = "white";
-        para.style.fontSize = 12;
-        para.style.fontWeight = 600;
+        para.style.fontSize = 16;
+        para.style.fontWeight = 200;
         para.style.lineHeight = 1.2;
         para.style.marginBottom = 4;
 
         selectedSat.appendChild(para);
+      
+        d3.select(this).attr("fill", typeColor).transition()
+            .attr("r", d.r + 10)
 
       })
       .on("mouseout", function(d){
           $("#selectedSat").html("");
-          d3.select(this).attr("fill", "white").attr("r", r)
+          d3.select(this).attr("fill", "#010305").transition().attr("r", d.r)
       })
       .attr("class", "circleNode")
       .attr("r", 0).transition().duration(1000)
@@ -665,7 +674,7 @@ function plot_bubble_chart(data, use_type) {
     .enter().append("tspan")
     .attr("x", 0)
     .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-    .text(function(d) { return d; })
+    .text(function(d) { return d})
     .attr("text-anchor", "middle")
     .attr("fill", "white");
 
