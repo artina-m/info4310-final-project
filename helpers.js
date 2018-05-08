@@ -261,6 +261,13 @@ function callNextSection() {
    // TODO: plot_small_multiples(data)
 }
 
+function callFirstSection() {
+    // $('.spaceView1').css("display", "block");
+    $("html, body").animate({
+        scrollTop: $('.spaceView1').offset().top
+   }, 300);
+}
+
 
 
 let filter_year_and_purpose = function(data, year, purpose) {

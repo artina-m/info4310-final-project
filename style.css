@@ -221,7 +221,7 @@ div {
 .useVizBody{
     display: inline-block;
     height:100%;
-    width: 54%;
+    width: 44%;
     background-color: white;
 }
 
@@ -273,7 +273,7 @@ div {
     display: none;
     width: 100px;
     height: 80px;
-    margin: 0 auto;
+    margin-left: 100px;
 }
 
 .useNextButton p {
@@ -282,6 +282,29 @@ div {
     margin-left: 0px;
     font-size: 14px;
     color: white;
+}
+
+.usePrevButton {
+    background: none;
+    color: black;
+    border: none;
+    padding: 0;
+    cursor: pointer !important;
+    outline: inherit;
+    display: block;
+    width: 100px;
+    height: 80px;
+    margin-top: 20px;
+    margin-bottom: -80px;
+    margin-left: 90%;
+}
+
+.usePrevButton p {
+    margin-top: 0;
+    margin-bottom: -78px;
+    margin-left: 0px;
+    font-size: 14px;
+    color: black;
 }
 
 /* Text Elements */
@@ -317,6 +340,13 @@ div {
     margin: 0 auto;
     margin-top: 40px;
     width: 80%;
+}
+
+.useDesc2{
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 90%;
+    margin-right: 0;
 }
 
 /* Chart 2 axis */
