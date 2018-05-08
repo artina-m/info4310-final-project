@@ -5,8 +5,7 @@ let plot_orbits = function (className) {
         .append("svg")
         .attr("class", "spaceSVG")
         .attr("id", "space")
-        .attr("width", 1200)
-        .attr("height", 580)
+        .attr("width", 800)
         .attr("height", "100%")
         .style("z-index", 5)
         .style("background-color", colorTheme);
@@ -90,17 +89,17 @@ let plot_satellites = function (d) {
                 // Reset Info
 
                 dat = {satName: satName, country: satCountry, users: satUsers, orbitClass: satOrbit, purpose: satPurpose, launchMass: satMass, expectedLifetime: satLife, launchDate: launchDate}
-                d3.selectAll(".satInfo").remove()
 
                 // Mark selected satellite
                 d3.select(this).attr("fill", "#3498DB").attr("r", 10)
 
-                satTextBox(spaceSVG,dat,"#3498DB", 120)
+                satTextBox(dat,"#3498DB")
                 })
 
             .on("mouseout", function(d){
+                $("#selectedSat").html("");
                 d3.select(this).attr("fill", "white").attr("r", r)
-                })
+            })
 
     // Transition satellites from the center to their random position in orbit
     dot
@@ -112,127 +111,6 @@ let plot_satellites = function (d) {
 }
 
 
-let filterByType = function () {
-
-    // Update fact text
-   spaceSVG.select(".world").transition().attr("xlink:href", "worldMap.png")
-   spaceSVG.selectAll(".factText").remove();
-   spaceSVG.select(".nodes").remove();
-
-    let angleData = [];
-    let radiusData = [];
-    let mColor = "#E74C3C";
-    let cvColor = "#F9E79F";
-    let gColor = "#3498DB";
-    let comColor ="#76D7C4";
-
-    let allSats = satelliteGroup
-        .selectAll("circle")
-        .data(satData)
-
-    // Update position & color of each satellite
-    allSats
-        .transition()
-        .duration(2000)
-        .style("opacity", 1)
-        .attr("fill", function (d) {
-            // Update color according to user
-            // Civil: White, Military: Red, Commercial: Green, Government: Blue
-            let  color = "white"
-            let user = d.users;
-
-            if (user.startsWith("Civ")) { color = cvColor }
-            else if (user.startsWith("M")) { color = mColor }
-            else if (user.startsWith("Comm")) { color = comColor }
-            else if (user.startsWith("Gov")) { color = gColor }
-
-            return color
-        })
-        .attr("cx", function (d) {
-            // Update location in space - useCaseProportion() (helper) called in index.html for calculation
-            if (d.orbitClass == "GEO") {
-                radius = geo + (Math.random() * 60)
-            } else if (d.orbitClass == "MEO") {
-                radius = meo + (Math.random() * 30)
-            } else if (d.orbitClass == "LEO") {
-                radius = leo + (Math.random() * 120)
-            }
-
-            angle = Math.random() * (useCase[d.users].e - useCase[d.users].s) + useCase[d.users].s
-            angleData.push(angle);
-            radiusData.push(radius);
-
-            return radius * Math.cos(angle) + centerX
-        })
-        .attr("cy", function (d, i) {
-            radius = radiusData[i];
-            angle = angleData[i];
-            return radius * Math.sin(angle) + centerY
-        })
-
-    d3.selectAll(".satPoint")
-        .on("mouseover", function(d) {
-                // Reset Info
-                d3.selectAll(".satInfo").remove()
-                // Mark selected satellite
-                d3.select(this).attr("fill", "white").attr("r", 10)
-
-                // Add supporting text box - edit x poisition in index.html alignX
-                let user = d.users;
-                let  color = "white"
-                if (user.startsWith("Civ")) { color = cvColor }
-                else if (user.startsWith("M")) { color = mColor }
-                else if (user.startsWith("Comm")) { color = comColor }
-                else if (user.startsWith("Gov")) { color = gColor }
-
-                satTextBox(spaceSVG,d, color, 300)
-        })
-        .on("mouseout", function(d){
-            d3.select(this)
-                    .attr("r", rscale((d.launchMass || 50 )))
-                    .attr("fill", function(){
-                        let user = d.users;
-                        let  color = "white"
-                        if (user.startsWith("Civ")) { color = cvColor }
-                        else if (user.startsWith("M")) { color = mColor }
-                        else if (user.startsWith("Comm")) { color = comColor }
-                        else if (user.startsWith("Gov")) { color = gColor }
-                        return color;
-                    })
-    });
-
-
-    // Lines seperating sections
-    let lines = [0, 2, 7,11]
-    for (i in lines) {
-        let key = Object.keys(useCase)[i]
-        spaceSVG
-            .append("line")
-            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
-            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
-            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
-            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
-            .attr("stroke", "lightgrey")
-            .style("opacity", 1)
-            .style("stroke-width", 1)
-        }
-
-    lines = [1, 3, 4, 5, 6, 8, 9, 10, 13, 14, 15]
-    for (i in lines) {
-        let key = Object.keys(useCase)[i]
-        spaceSVG
-            .append("line")
-            .attr("x1", 40 * Math.cos(useCase[key].s) + centerX)
-            .attr("x2", 380 * Math.cos(useCase[key].s) + centerX)
-            .attr("y1", 40 * Math.sin(useCase[key].s) + centerY)
-            .attr("y2", 380 * Math.sin(useCase[key].s) + centerY)
-            .attr("stroke", "grey")
-            .style("opacity", 1)
-            .style("stroke-width", 0.5)
-        }
-    };
-
-
 
 let filterByType2 = function(selectType) {
 
@@ -242,7 +120,6 @@ let filterByType2 = function(selectType) {
    let subCat = useCase[0];
    let groupCat = useCase[1];
    let typeData = groupCat[selectType]
-   console.log(groupCat)
 
     let start = 0;
     let frac = groupCat[selectType]/satData.length;
@@ -310,8 +187,6 @@ let filterByType2 = function(selectType) {
 
     d3.selectAll(".satPoint")
         .on("mouseover", function(d) {
-                // Reset Info
-                d3.selectAll(".satInfo").remove()
                 // Mark selected satellite
                 d3.select(this).attr("fill", "white").attr("r", 10)
 
@@ -319,9 +194,10 @@ let filterByType2 = function(selectType) {
                 let user = d.users;
                 let  color = "white"
                 if (user.includes(selectType)) {color = typeColor}
-                satTextBox(spaceSVG,d, color, 300)
+                satTextBox(d, color)
         })
         .on("mouseout", function(d){
+            $("#selectedSat").html("");
             d3.select(this)
                     .attr("r", rscale((d.launchMass || 50 )))
                     .attr("fill", function(){
@@ -331,7 +207,6 @@ let filterByType2 = function(selectType) {
                         return color
                     })
     });
-
 
         start = start + Math.PI;
         end = end + Math.PI;
@@ -364,6 +239,23 @@ let filterByType2 = function(selectType) {
             .attr("y1", 40 * Math.sin(end) + centerY)
             .attr("y2", 380 * Math.sin(end) + centerY)
 
+         spaceSVG.append("text")
+             .text(typeData)
+             .attr("x", alignX).attr("y", 50)
+             .attr("class","factText")
+             .style("font-size", 24).attr("fill", "white")
+
+          spaceSVG.append("text")
+            .text(selectType + " Satellites")
+            .attr("x", alignX).attr("y", 70)
+            .attr("class","factText")
+            .style("font-size", 16).attr("fill", typeColor)
+
+          spaceSVG.append("line")
+        .attr("x1", alignX).attr("x2", alignX +200)
+        .attr("y1", 90).attr("y2", 90)
+              .attr("class", "factText")
+              .attr("stroke", "lightgrey").attr("stroke-width", 0.5)
 
     };
 
@@ -377,6 +269,7 @@ let plot_use = function (className, data) {
         bottom: 30,
         left: 60
     };
+
     let width = 400 - margin.left - margin.right;
     let height = 400 - margin.top - margin.bottom;
 
@@ -393,9 +286,8 @@ let plot_use = function (className, data) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let keys = data
-        .columns
-        .slice(1);
+    let keys = data.columns.slice(1);
+    console.log(keys)
 
     let x = d3
         .scaleBand()
@@ -412,36 +304,50 @@ let plot_use = function (className, data) {
         .domain([0, 1.0])
         .nice();
 
+    // let typeColor = "white";
+    // if (use_type == "Civil") {typeColor = "#F9E79F"}
+    // else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+    // else if (use_type == "Government") {typeColor = "#3498DB"}
+    // else if (use_type == "Military") {typeColor = "#E74C3C"}
+
     let z = d3
         .scaleOrdinal()
-        .range(["#5cbae6", "#b6d957", "#fac364", "#d998cb"])
+        .range(["#76D7C4", "#F9E79F", "#E74C3C", "#3498DB"])
         .domain(keys);
 
-    g
-        .append("g")
-        .selectAll("g")
-        .data(d3.stack().keys(keys)(data))
-        .enter()
-        .append("g")
-        .attr("fill", function (d) {
-            return z(d.key);
-        })
-        .selectAll("rect")
-        .data(function (d) {
-            return d;
-        })
-        .enter()
-        .append("rect")
-        .attr("x", function (d) {
-            return x(d.data.Country);
-        })
-        .attr("y", function (d) {
-            return y(d[1]);
-        })
-        .attr("height", function (d) {
-            return y(d[0]) - y(d[1]);
-        })
-        .attr("width", x.bandwidth());
+    let tooltip = d3.select("useViz").append("div").attr("class", "tooltip");
+
+    g.append("g")
+    .selectAll("g")
+    .data(d3.stack().keys(keys)(data))
+    .enter()
+    .append("g")
+    .attr("fill", function (d) {
+        return z(d.key);
+    })
+    .selectAll("rect")
+    .data(function (d) {
+        return d;
+    })
+    .enter()
+    .append("rect")
+    .attr("x", function (d) {
+        return x(d.data.Country);
+    })
+    .attr("y", function (d) {
+        return y(d[1]);
+    })
+    .attr("height", function (d) {
+        return y(d[0]) - y(d[1]);
+    })
+    .attr("width", x.bandwidth())
+    .on("mouseover", function(d) {
+      tooltip
+        .style("left", d3.event.pageX - 50 + "px")
+        .style("top", d3.event.pageY - 70 + "px")
+        .style("display", "inline-block")
+        .html((d.key));
+    });
 
     g
         .append("g")
@@ -527,124 +433,246 @@ function parseCoords(line) {
 
 
 /* data have already been grouped on the country level */
-let force_layout = function(data) {
-  // clear the paints
-  spaceSVG.select(".world").remove();
-  spaceSVG.select(".nodes").remove();
-  spaceSVG.selectAll("g").selectAll("circle").remove();
-  spaceSVG.selectAll("line").remove();
-  spaceSVG.selectAll(".factText").remove();
-  spaceSVG.selectAll(".LEO").remove();
-  spaceSVG.selectAll(".MEO").remove();
-  spaceSVG.selectAll(".GEO").remove();
+// let force_layout = function(data) {
+//   // clear the paints
+//   spaceSVG.select(".world").remove();
+//   spaceSVG.select(".nodes").remove();
+//   spaceSVG.selectAll("g").selectAll("circle").remove();
+//   spaceSVG.selectAll("line").remove();
+//   spaceSVG.selectAll(".factText").remove();
+//   spaceSVG.selectAll(".LEO").remove();
+//   spaceSVG.selectAll(".MEO").remove();
+//   spaceSVG.selectAll(".GEO").remove();
+//
+//   // prepare for force layout ready data
+//   let filtered_data = []
+//   data.forEach(function(d) {
+//     filtered_data.push({
+//       country: d.key,
+//       count: d.values.length
+//     })
+//   })
+//
+//
+//
+//   // mercator projection
+//   let projection = d3.geoMercator()
+//     .scale(centerX / Math.PI)
+//     .translate([centerX, centerY]);
+//
+//   // add on country level data
+//   d3.csv("country_coordinates.csv", parseCoords, function(d) {
+//       countryCoords = d;
+//
+//       // join country coordinates with satellites volume data on country name
+//       countryCoords.forEach(function(row) {
+//         let result = filtered_data.filter(function(entry) {
+//           return entry.country === row.name;
+//         });
+//         row.value = (result[0] !== undefined) ? result[0] : null;
+//       })
+//
+//       // extract only the coordinates, name, and value
+//       let nodes = []
+//       countryCoords.forEach(function(d) {
+//         if (d.value !== null) {
+//           let point = projection([d.lat, d.lng])
+//           nodes.push({
+//             x: point[0], y: point[1],
+//             x0: point[0], y0: point[1],
+//             count: d.value.count,
+//             name: d.value.country
+//           })
+//         }
+//       })
+//
+//       // set up the simulation
+//       let simulation = d3.forceSimulation()
+//         .velocityDecay(0.6)
+//         .force("x", d3.forceX().strength(0.002))
+//         .force("y", d3.forceY().strength(0.002))
+//         .force("center_force", d3.forceCenter(centerX, centerY))
+//         .force("collide", collide)
+//         .nodes(nodes)
+//         .on("tick", tickActions);
+//
+//       // // add forces
+//       // simulation
+//       //   .velocityDecay(0.6)
+//       //   .force("x", d3.forceX().strength(0.002))
+//       //   .force("y", d3.forceY().strength(0.002))
+//       //   .force("collide", d3.forceCollide(6).iterations(10))
+//       //   .force("center_force", d3.forceCenter(centerX, centerY))
+//
+//
+//       let radius = d3.scaleLog().range([0, 8])
+//
+//       // draw circles for the nodes
+//       let node = spaceSVG.append("g")
+//                 .attr("class", "nodes")
+//                 .selectAll("circle")
+//                 .data(nodes)
+//                 .enter()
+//                 .append("circle")
+//                 .attr("r", function(d) { return radius(d.count); })
+//                 .attr("fill", "blue")
+//                 .attr("opacity", 0.7);
+//
+//       // tick event
+//       function tickActions() {
+//         // update circle positions to reflect node updates on each tick
+//         node.attr("cx", function(d) { return d.x - radius(d.count); })
+//           .attr("cy", function(d) { return d.y - radius(d.count); })
+//       }
+//
+//       let padding = 3;
+//       function collide() {
+//         for (var k = 0, iterations = 4, strength = 0.5; k < iterations; ++k) {
+//           for (var i = 0, n = nodes.length; i < n; ++i) {
+//             for (var a = nodes[i], j = i + 1; j < n; ++j) {
+//               var b = nodes[j],
+//                   x = a.x + a.vx - b.x - b.vx,
+//                   y = a.y + a.vy - b.y - b.vy,
+//                   lx = Math.abs(x),
+//                   ly = Math.abs(y),
+//                   r = a.r + b.r + padding;
+//               if (lx < r && ly < r) {
+//                 if (lx > ly) {
+//                   lx = (lx - r) * (x < 0 ? -strength : strength);
+//                   a.vx -= lx, b.vx += lx;
+//                 } else {
+//                   ly = (ly - r) * (y < 0 ? -strength : strength);
+//                   a.vy -= ly, b.vy += ly;
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//   })
+//
+//
+//
+// }
 
-  // prepare for force layout ready data
-  let filtered_data = []
-  data.forEach(function(d) {
-    filtered_data.push({
-      country: d.key,
-      count: d.values.length
+function plot_bubble_chart(data, use_type) {
+  // make color consistent with use type vis
+  let typeColor = "white";
+  if (use_type == "Civil") {typeColor = "#F9E79F"}
+  else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+  else if (use_type == "Government") {typeColor = "#3498DB"}
+  else if (use_type == "Military") {typeColor = "#E74C3C"}
+
+  let bubble_data = []
+  let format = d3.format(",d");
+
+  // filter data by type
+  data.filter(function(d) {
+    return d.key === String(use_type);
+  })[0].values.forEach(function(item) {
+    bubble_data.push({
+      id: item.key,
+      value: +item.values.length
     })
   })
-  
-  
-  
-  // mercator projection
-  let projection = d3.geoMercator()
-    .scale(centerX / Math.PI)
-    .translate([centerX, centerY]);
 
-  // add on country level data
-  d3.csv("country_coordinates.csv", parseCoords, function(d) {
-      countryCoords = d;
+  let pack = d3.pack()
+    .size([width, height])
+    .padding(1.5);
 
-      // join country coordinates with satellites volume data on country name
-      countryCoords.forEach(function(row) {
-        let result = filtered_data.filter(function(entry) {
-          return entry.country === row.name;
-        });
-        row.value = (result[0] !== undefined) ? result[0] : null;
-      })
-
-      // extract only the coordinates, name, and value
-      let nodes = []
-      countryCoords.forEach(function(d) {
-        if (d.value !== null) {
-          let point = projection([d.lat, d.lng])
-          nodes.push({
-            x: point[0], y: point[1],
-            x0: point[0], y0: point[1],
-            count: d.value.count,
-            name: d.value.country
-          })
+  let root = d3.hierarchy({children: bubble_data})
+      .sum(function(d) { return d.value; })
+      .each(function(d) {
+        if (id = d.data.id) {
+          var id, i = id.lastIndexOf(".");
+          d.id = id;
+          d.package = id.slice(0, i);
+          d.class = id.slice(i + 1);
         }
+      });
+
+  let node = spaceSVG.selectAll(".node")
+    .data(pack(root).leaves())
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  typeColor = "white";
+    if (use_type == "Civil") {typeColor = "#F9E79F"}
+    else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+    else if (use_type == "Government") {typeColor = "#3498DB"}
+    else if (use_type == "Military") {typeColor = "#EC7063"}
+    
+  node.append("circle")
+      .attr("id", function(d) { return d.id; })
+      .style("fill",  "#010305")
+      .attr("stroke", typeColor)
+      .style("fill", "#010305")
+      .on("mouseover", function(d) {
+        // clear text for new description
+        $("#selectedSat").html("");
+
+        var selectedSat = document.getElementById("selectedSat");
+        var para = document.createElement("p");
+        var node = document.createTextNode(String(d.id));
+        para.appendChild(node);
+
+        para.style.color = typeColor;
+        para.style.fontSize = 16;
+        para.style.fontWeight = 600;
+        para.style.lineHeight = 1.2;
+        para.style.marginBottom = 10;
+
+        selectedSat.appendChild(para);
+
+        var para = document.createElement("p");
+        var node = document.createTextNode(
+          String(d.value) + " " +
+          String(use_type).toLowerCase() +
+          " satellite(s)"
+        );
+        para.appendChild(node);
+
+
+        para.style.color = "white";
+        para.style.fontSize = 12;
+        para.style.fontWeight = 600;
+        para.style.lineHeight = 1.2;
+        para.style.marginBottom = 4;
+
+        selectedSat.appendChild(para);
+
       })
-
-      // set up the simulation
-      let simulation = d3.forceSimulation()
-        .velocityDecay(0.6)
-        .force("x", d3.forceX().strength(0.002))
-        .force("y", d3.forceY().strength(0.002))
-        .force("center_force", d3.forceCenter(centerX, centerY))
-        .force("collide", collide)
-        .nodes(nodes)
-        .on("tick", tickActions);
-
-      // // add forces
-      // simulation
-      //   .velocityDecay(0.6)
-      //   .force("x", d3.forceX().strength(0.002))
-      //   .force("y", d3.forceY().strength(0.002))
-      //   .force("collide", d3.forceCollide(6).iterations(10))
-      //   .force("center_force", d3.forceCenter(centerX, centerY))
-
-
-      let radius = d3.scaleLog().range([0, 8])
-
-      // draw circles for the nodes
-      let node = spaceSVG.append("g")
-                .attr("class", "nodes")
-                .selectAll("circle")
-                .data(nodes)
-                .enter()
-                .append("circle")
-                .attr("r", function(d) { return radius(d.count); })
-                .attr("fill", "blue")
-                .attr("opacity", 0.7);
-
-      // tick event
-      function tickActions() {
-        // update circle positions to reflect node updates on each tick
-        node.attr("cx", function(d) { return d.x - radius(d.count); })
-          .attr("cy", function(d) { return d.y - radius(d.count); })
-      }
-
-      let padding = 3;
-      function collide() {
-        for (var k = 0, iterations = 4, strength = 0.5; k < iterations; ++k) {
-          for (var i = 0, n = nodes.length; i < n; ++i) {
-            for (var a = nodes[i], j = i + 1; j < n; ++j) {
-              var b = nodes[j],
-                  x = a.x + a.vx - b.x - b.vx,
-                  y = a.y + a.vy - b.y - b.vy,
-                  lx = Math.abs(x),
-                  ly = Math.abs(y),
-                  r = a.r + b.r + padding;
-              if (lx < r && ly < r) {
-                if (lx > ly) {
-                  lx = (lx - r) * (x < 0 ? -strength : strength);
-                  a.vx -= lx, b.vx += lx;
-                } else {
-                  ly = (ly - r) * (y < 0 ? -strength : strength);
-                  a.vy -= ly, b.vy += ly;
-                }
-              }
-            }
-          }
-        }
-      }
-  })
+      .on("mouseout", function(d){
+          $("#selectedSat").html("");
+          d3.select(this).attr("fill", "white").attr("r", r)
+      })
+      .attr("class", "circleNode")
+      .attr("r", 0).transition().duration(1000)
+      .attr("r", function(d) { return d.r; });
 
 
 
+  node.append("clipPath")
+      .attr("id", function(d) { return "clip-" + d.id; })
+        .append("use")
+      .attr("xlink:href", function(d) { return "#" + d.id; });
+
+  node.append("text")
+      .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+    .selectAll("tspan")
+    .data(function(d) { return d.class.split(/(?=[A-Z][^A-Z])/g); })
+    .enter().append("tspan")
+    .attr("x", 0)
+    .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
+    .text(function(d) { return d; })
+    .attr("text-anchor", "middle")
+    .attr("fill", "white");
+
+
+}
+
+// plot small multiple line chart
+function plot_small_multiples(className, data) {
+  
 }

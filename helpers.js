@@ -7,11 +7,10 @@ function overlay () {
         .append("image")
         .attr("xlink:href", "worlmapblue.png")
         .attr("class", "world")
-        .attr("y", centerY - 40)
-        .attr("x", centerX - 40)
-        .attr("width", 80)
-        ;
-        
+        .attr("y", centerY - 30)
+        .attr("x", centerX - 30)
+        .attr("width", 60);
+
     document.getElementById("overlay").onclick = start;
     document.getElementById("textBar1").style.marginTop = 800;
     document.getElementById("textBar1").style.opacity = 0;
@@ -25,19 +24,20 @@ function on() {
 
 function off() {
     document.getElementById("overlay").style.display = "none";
+
     $( "#textBar1" ).animate({
     opacity: 1,
     marginTop: "200"
     }, 600, function() {
     // Animation complete.
-  });
-    
+    });
+
     $( "#textBar2" ).animate({
-    opacity: 1,
-    marginTop: "0"
-    }, 600, function() {
-    // Animation complete.
-  });
+      opacity: 1,
+      marginTop: "0"
+      }, 600, function() {
+      // Animation complete.
+    });
 }
 
 
@@ -45,32 +45,36 @@ function off() {
 let start = function () {
     off();
     spaceSVG.select(".world").remove()
+
     let world = spaceSVG
         .append("image")
         .attr("xlink:href", "worlmapblue.png")
         .attr("class", "world")
-        .attr("y", centerY - 40)
-        .attr("x", centerX - 40)
-        .attr("width", 80);
+        .attr("y", centerY - 30)
+        .attr("x", centerX - 30)
+        .attr("width", 60);
 
     // remove pixels to "restart" plotting
     spaceSVG.selectAll("g").selectAll("circle").remove();
-    spaceSVG.selectAll(".factText").remove();
-    spaceSVG.selectAll("line").remove();
 
     // append tooltip texts
-    spaceSVG.append("text")
-    .text("1738")
-    .attr("x", alignX).attr("y", 50)
-    .attr("class","factText")
-    .style("font-size", 24).attr("fill", "white")
+    $("#total").html("1738");
+    $("#totalCat").html("Active Orbiting Satellites");
+    
+    // Remove bubble map
+    let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
+    d3.selectAll(".node").transition().duration(1000).remove()
+    
+    // Bring back orbital levels and image
+     let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
+   
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", meo).attr("opacity", 1)
+   
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", geo).attr("opacity", 1)
+    
+    d3.select(".world").style("opacity",1)
 
-    spaceSVG.append("text")
-    .text("Active orbiting satillites")
-    .attr("x", alignX).attr("y", 70)
-    .attr("class","factText")
-    .style("font-size", 16)
-    .attr("fill", "white")
+
 
     // add separator line between title and dynamic info for tooltips
     spaceSVG.append("line")
@@ -97,6 +101,7 @@ let start = function () {
 
       //prepare data for Demers Cartogram
       dataByCountry = d3.nest()
+        .key((d) => d.users)
         .key((d) => d.country)
         .entries(satData);
 
@@ -107,22 +112,143 @@ let start = function () {
     document.getElementById("civB").style.visibility = "hidden";
     document.getElementById("govB").style.visibility = "hidden";
     document.getElementById("milB").style.visibility = "hidden";
-      
+
+
   };
 
 /* Transition to user type view */
 function callUseCase() {
+    $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+
+    // Remove bubble map
+    let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
+
+    d3.selectAll(".node")
+      .transition().duration(1000).remove()
+
+    // Bring back orbital levels and image
+    let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
+
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", meo).attr("opacity", 1)
+
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", geo).attr("opacity", 1)
+
+    d3.select(".world").style("opacity",1)
+
+
+    // Need this to hide at the start
     document.getElementById("comB").style.visibility = "visible";
     document.getElementById("civB").style.visibility = "visible";
     document.getElementById("govB").style.visibility = "visible";
     document.getElementById("milB").style.visibility = "visible";
-    
+    // Default the use type upon clicking to be "Commercial"
     filterByType2("Commercial")
+
+     // Update button functions
+    document.getElementById("comB").onclick = function () {
+       $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+
+        filterByType2("Commercial"); 
+    };
+    document.getElementById("govB").onclick =function () {
+      $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px #3498DB")
+       $("#milB").css("border", "solid 1px white")
+        
+        filterByType2("Government"); };
+    document.getElementById("civB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px #F9E79F")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+
+        
+        filterByType2("Civil"); };
+    document.getElementById("milB").onclick =function () {
+       $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border","solid 1px #E74C3C")
+
+        
+        filterByType2("Military"); };
+
 }
 
 /* Transition to country view */
-function callCountry() {
-    force_layout(dataByCountry)
+function callCountry(topic) {
+    // remove bubble chart before plotting
+    spaceSVG.selectAll(".node").remove();
+    $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+
+    // Apply circle transition (to the center of spaceSVG)
+   let circ =  d3.selectAll(".satPoint").transition().duration(1000).attr("cx", centerX).attr("cy", centerY).style("opacity", 0)
+
+   // Remove orbital levels
+   let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+
+    let lin =  spaceSVG.selectAll("line").attr("opacity", 0)
+    // remove the wiper for use case viz
+    wiper.remove()
+
+    d3.select(".world").style("opacity",0)
+
+    // Update buttons
+    document.getElementById("comB").onclick = function () {
+        $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+        
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Commercial"); };
+    
+    document.getElementById("govB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px #3498DB")
+       $("#milB").css("border", "solid 1px white")
+        
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+    plot_bubble_chart(dataByCountry,"Government"); };
+    
+    document.getElementById("civB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px #F9E79F")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+        
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Civil"); };
+    
+    document.getElementById("milB").onclick =function () {
+        $("#comB").css("border", " solid 1pxwhite")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border","solid 1px #E74C3C")
+        
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Military"); };
+
+    plot_bubble_chart(dataByCountry, topic)
 }
 
 /* Transition to bottom infograph */
@@ -131,6 +257,8 @@ function callNextSection() {
     $("html, body").animate({
         scrollTop: $('.useByCountryView').offset().top
    }, 300);
+
+   // TODO: plot_small_multiples(data)
 }
 
 
@@ -186,68 +314,72 @@ function useCaseProportion(data) {
     return [counts, groupedCount,piBreak];
 }
 
-// Top right corner text box
-function satTextBox(svg, d, c, lineHeight){
-    header = svg.append("text")
-        .text(d.satName)
-        .attr("class", "satInfo")
-        .attr("id", "header")
-        .attr("fill", c)
-        .attr("x", alignX )
-        .attr("y", lineHeight)
-        .call(wrap,200)
+// Top right corner text box for description on "tooltip"
+function satTextBox(d, c){
+    // clear text for new description
+    $("#selectedSat").html("");
 
-    var numberOfLines = 15* (document.getElementsByTagName('tspan').length) + lineHeight;
+    var selectedSat = document.getElementById('selectedSat');
 
-    subtextColor = "grey"
+    var para = document.createElement("p");
+    var node = document.createTextNode(d.satName);
+    para.appendChild(node);
 
-    svg.append("text")
-        .text(d.country)
-        .attr("class", "satInfo")
-        .attr("fill", "white")
-        .attr("x", alignX)
-        .attr("y", numberOfLines + 10)
-        .style("font-size", 14)
+    para.style.color = c;
+    para.style.fontSize = 16;
+    para.style.fontWeight = 600;
+    para.style.lineHeight = 1.2;
+    para.style.marginBottom = 10;
 
-    svg.append("text")
-        .text(d.users+ "  Satellite")
-        .attr("class", "satInfo")
-        .attr("fill", subtextColor)
-        .attr("x", alignX)
-        .attr("y", numberOfLines + 40)
-        .style("font-size", 12)
+    selectedSat.appendChild(para);
 
-    svg.append("text")
-        .text("Purpose:  " + d.purpose)
-        .attr("class", "satInfo")
-        .attr("fill", subtextColor)
-        .attr("x", alignX)
-        .attr("y",  numberOfLines + 60)
-        .style("font-size", 12)
 
-    svg.append("text")
-        .text("Orbit Class: " + d.orbitClass)
-        .attr("class", "satInfo")
-        .attr("fill", subtextColor)
-        .attr("x", alignX)
-        .attr("y", numberOfLines + 80)
-        .style("font-size", 12)
+    var para = document.createElement("p");
+    var node = document.createTextNode(d.country);
+    para.appendChild(node);
 
-    svg.append("text")
-        .text("Launch Date: " + String(d.launchDate).substring(0,16))
-        .attr("class", "satInfo")
-        .attr("fill", subtextColor)
-        .attr("x", alignX)
-        .attr("y", numberOfLines + 100)
-        .style("font-size", 12)
 
-    svg.append("text")
-        .text("Expected Lifetime: " + d.expectedLifetime)
-        .attr("class", "satInfo")
-        .attr("fill", subtextColor)
-        .attr("x", alignX)
-        .attr("y", numberOfLines + 120)
-        .style("font-size", 12)    
+    para.style.color = "white";
+    para.style.fontSize = 12;
+    para.style.fontWeight = 600;
+    para.style.lineHeight = 1.2;
+    para.style.marginBottom = 4;
+
+    selectedSat.appendChild(para);
+
+
+    var para = document.createElement("p");
+    var node = document.createTextNode(d.users + " Satellite");
+    para.appendChild(node);
+
+    selectedSat.appendChild(para);
+
+
+    var para = document.createElement("p");
+    var node = document.createTextNode("Purpose: " + d.purpose);
+    para.appendChild(node);
+
+    selectedSat.appendChild(para);
+
+    var para = document.createElement("p");
+    var node = document.createTextNode("Orbit Class: " + d.orbitClass);
+    para.appendChild(node);
+
+    selectedSat.appendChild(para);
+
+
+    var para = document.createElement("p");
+    var node = document.createTextNode("Launch Date: " + String(d.launchDate).substring(0,16));
+    para.appendChild(node);
+
+    selectedSat.appendChild(para);
+
+    var para = document.createElement("p");
+    var node = document.createTextNode("Expected Lifetime: " + d.expectedLifetime);
+    para.appendChild(node);
+
+    selectedSat.appendChild(para);
+
 }
 
 
@@ -268,6 +400,7 @@ function wrap(text, width) {
                         .attr("x", x)
                         .attr("y", y)
                         .attr("dy", dy + "em");
+
         while (word = words.pop()) {
             line.push(word);
             tspan.text(line.join(" "));
@@ -285,34 +418,6 @@ function wrap(text, width) {
         }
     });
 }
-
-
-/* Code used below to generate flatuse data */
-
- // data counts by major country and use
-//  let satCountNest = d3.nest()
-//  .key(function (d) { return d.country; })
-//  .key(function (d) { return d.users; })
-//  .rollup(function (v) { return v.length; })
-//  .entries(satData);
-
-// // four major countries
-// let satCountFourCountries = satCountNest.filter(function (d) {
-//  return d.key == "China" || d.key == "USA" || d.key == "Russia" || d.key == "India";
-// });
-
-// let satCountFourCountriesFlat = []
-// satCountFourCountries.forEach(function (country) {
-//  country.values.forEach(function (countryVals) {
-//    if (countryVals.key == "Military" || countryVals.key == "Commercial" || countryVals.key == "Civil" || countryVals.key == "Government") {
-//      satCountFourCountriesFlat.push({
-//        country: country.key,
-//        use: countryVals.key,
-//        count: countryVals.value
-//      });
-//    }
-//  });
-// });
 
 // summarize data by country
 function nest_by_country_and_use(data) {

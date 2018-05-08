@@ -6,7 +6,7 @@
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="fisheye.js"></script>
+  <!-- <script src="fisheye.js"></script> -->
   <script src="helpers.js"></script>
   <script src="plots.js"></script>
 </head>
@@ -27,18 +27,16 @@
 
       <p class="sectionTitle" id="textBar1"> STUFF IN SPACE </p>
       <p class="sectionDesc" id="textBar2">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use.
       </p>
 
       <br>
       <!-- Add buttons -->
       <div style="align-content: center;text-align:center; width: 100%">
-        <button onclick='filterByType2("Commercial")' class="useButton" id="comB">Commercial</button>
-        <button onclick='filterByType2("Government")' class="useButton" id="govB">Government</button>
-        <button onclick='filterByType2("Military")' class="useButton" id="milB">Military</button>
-        <button onclick='filterByType2("Civil")' class="useButton" id="civB">Civil</button>
+        <button onclick='filterByType2("Commercial"); comsat();' class="useButton" id="comB">Commercial</button>
+        <button onclick='filterByType2("Government"); govsat();' class="useButton" id="govB">Government</button>
+        <button onclick='filterByType2("Military"); milsat();' class="useButton" id="milB">Military</button>
+        <button onclick='filterByType2("Civil"); civilsat();' class="useButton" id="civB">Civil</button>
       </div>
       <br>
 
@@ -48,11 +46,13 @@
       <br>
       <p style="color:white"> Convert these buttons into scrollable functions</p>
 
-      <button onclick="start()">Start</button>
+      <button onclick="start(),introtext();">Start</button>
 
       <button onclick='callUseCase()'>Satellite Types</button>
 
-      <button onclick='callCountry()'>Force Layout</button>
+      <button onclick='callCountry("Commercial")'>Force Layout</button>
+      <button onclick='callNextSection()'>Next Section</button>
+
 
       <button class="useNextButton" onclick='callNextSection()'><p>NEXT</p><img class="useCaseNext" src="assets/white-arrow.png" alt="next section" /></button>
 
@@ -61,7 +61,16 @@
 
     <div class="rightHand">
       <div class="visualization"></div>
+      <div class = "rightDiv">
+          <div class = "satInfo" id = "overview">
+            <p id = "total"></p>
+            <p id = "totalCat"></p>
+          </div>
+          <div id = "selectedSat"></div>
+      </div>
     </div>
+
+
 
   </div>
   <!-- end of spaceView1 div -->
@@ -75,15 +84,15 @@
     <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
       irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-    <div class="useViz">
 
-    </div>
+    <div class="useViz"></div>
+
     <div class="useVizBody">
       <p class="useTitle">SATELLITE USE CASE BY COUNTRY</p>
-      <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      <p class="useDesc">Currently over 40 countries have built and launched satellites. This is a vast increase of the last couple of decades. For example, in 1966 only The United States, The USSR, France, The United Kingdom, Canada, and Italy had satellites. Now more and more countries are enjoying the benefits of satellites! Currently the United States leads the way with 803 operating satellites, with Russia and China following behind. As you can see from the graphs each country uses their satellites for a wide variety of purposes and do not have the same makeup of types of satellites.</p>
     </div>
+
+    <div class="smallMultiples"></div>
 
 
   </div>
@@ -96,16 +105,22 @@
 <script>
   let satData, flatData, dataByCountry, countryCoords;
   let colorTheme = "#010305"
+  // declare wiper so it can be referenced in functions
+  let wiper;
 
   // Center orbits
-  const centerX = 450;
+  const centerX = 410;
   const centerY = 400;
 
   // Radius for orbit levels
-  const leo = 100;
-  const meo = 260;
-  const geo = 320;
+  const leo = 80;
+  const meo = 220;
+  const geo = 280;
   const alignX = 920;
+
+  // SVG dimensions
+  const width = 800;
+  const height = 800;
 
   //let spaceSVG; // declare variable for svg for orbits/satelltes
   // let cartogramSVG; // declare variable for plotting cartogram svg.
@@ -162,6 +177,26 @@
 
   overlay();
 
+
+  //alternate descriptions upon clicking
+
+  function comsat(){
+    document.getElementById("textBar2").innerHTML = "Commercial satellites are satellites used in a variety of ways. They are normally used for satellite navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over the Atlantic Ocean.";
+  }
+  function govsat(){
+    document.getElementById("textBar2").innerHTML = "Government Satellites are typically used in meteorological or within research settings. Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.";
+  }
+
+  function milsat(){
+    document.getElementById("textBar2").innerHTML = "Most military satellites are used for the purpose of intelligence gathering, navigation, or military communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of military satellites.";
+  }
+
+  function civilsat(){
+    document.getElementById("textBar2").innerHTML = "Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites are owned and used by universities all around the world. There are currently 155 civil satellites in orbit currently. Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.";
+  }
+  function introtext(){
+    document.getElementById("textBar2").innerHTML = "Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use."
+  }
 
 
 </script>

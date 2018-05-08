@@ -7,8 +7,21 @@ Dark Theme Background: #010305
 
 */
 
-
 @import url('https://fonts.googleapis.com/css?family=Oswald|Roboto');
+
+
+.tooltip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #6F257F;
+  padding: 14px;
+  text-align: center;
+}
+
+
 
 p {
     font-family: Roboto;
@@ -25,14 +38,12 @@ div {
 }
 
 
-
-
 #overlay {
     position: fixed; /* Sit on top of the page content */
     display: none; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
-    top: 0; 
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -113,6 +124,7 @@ div {
     font-family: Oswald;
     margin-bottom: 0;
     z-index:5;
+    opacity: 1;
 }
 
 
@@ -122,6 +134,7 @@ div {
     font-size: 18;
     font-weight:100;
     z-index: 5;
+    opacity: 1;
 }
 
 
@@ -144,7 +157,6 @@ div {
     background-color:  #010305;
 
 }
-
 .sideBar p {
     margin-left: 50px;
 }
@@ -152,6 +164,43 @@ div {
     display: inline-block;
     position: absolute;
     height: 100%;
+}
+
+#selectedSat p{
+    color: grey;
+    font-size:12px;
+    font-family: Roboto;
+    margin:0;
+}
+
+#overview {
+    width: 100%;
+}
+#total, #totalCat {
+    color: white;
+    font-family: Oswald;
+    font-size: 24;
+    margin:0;
+}
+
+#total {
+    margin-top: 50;
+}
+#totalCat {
+    font-size: 16;
+    margin-bottom: 50;
+}
+
+.visualization{
+    display: inline-block;
+}
+.rightDiv{
+    display: inline-block;
+    float:right;
+    height: 100%;
+    width: 200px;
+    margin-right:0;
+
 }
 
 .useByCountryView{
@@ -184,33 +233,18 @@ div {
     height: 30px;
     font-size: 14;
     color: white;
-    border: solid 1px #3498DB;
+    border: solid 1px white;
     border-radius: 5px;
     font-family: Roboto;
     font-weight: 600;
     margin: auto;
     margin-top: 10px;
+    text-decoration: none;
+    outline: none;
 
 }
 
 /* Main Visualization */
-.search {
-    height: 50px;
-    width: 100%;
-    background-color: black;
-}
-
-#myInput {
-    float: right;
-    margin-top: 20px;
-    margin-right: 20px;
-    background-color: black;
-    color: white;
-    font-size: 14px;
-    outline: none;
-    border: none;
-    border-bottom: solid lightgrey  1px;
-}
 
 .satPoint:hover {
      cursor: pointer;
@@ -251,6 +285,9 @@ div {
 }
 
 /* Text Elements */
+.factText{
+    font-family: Oswald;
+}
 
 .sectionTitle{
     font-family: 'Oswald', sans-serif;
