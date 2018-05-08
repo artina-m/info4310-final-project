@@ -542,6 +542,10 @@ function parseCoords(line) {
 // }
 
 function plot_bubble_chart(data, use_type) {
+    
+// remove previous bubble chart
+
+    
   let bubble_data = []
   let format = d3.format(",d");
 
@@ -578,8 +582,11 @@ function plot_bubble_chart(data, use_type) {
 
   node.append("circle")
       .attr("id", function(d) { return d.id; })
+      .style("fill", "lightblue")
+      .attr("class", "circleNode")
+      .attr("r", 0).transition().duration(1000)
       .attr("r", function(d) { return d.r; })
-      .style("fill", "lightblue");
+
 
   node.append("clipPath")
       .attr("id", function(d) { return "clip-" + d.id; })
@@ -593,7 +600,8 @@ function plot_bubble_chart(data, use_type) {
     .enter().append("tspan")
       .attr("x", 0)
       .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-      .text(function(d) { return d; });
+      .text(function(d) { return d; })
+    .attr("text-anchor", "middle");
 
   node.append("title")
       .text(function(d) { return d.id + "\n" + format(d.value); });
