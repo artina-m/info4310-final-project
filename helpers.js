@@ -102,18 +102,76 @@ let start = function () {
 
 /* Transition to user type view */
 function callUseCase() {
+
+    // Remove bubble map
+    let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
+    d3.selectAll(".node").transition().duration(1000).remove()
+    
+    // Bring back orbital levels and image
+     let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
+   
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", meo).attr("opacity", 1)
+   
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", geo).attr("opacity", 1)
+    
+    d3.select(".world").style("opacity",1)
+
+    
+    // Need this to hide at the start
     document.getElementById("comB").style.visibility = "visible";
     document.getElementById("civB").style.visibility = "visible";
     document.getElementById("govB").style.visibility = "visible";
     document.getElementById("milB").style.visibility = "visible";
-
     filterByType2("Commercial")
+    
+     // Update button functions
+    document.getElementById("comB").onclick = function () { filterByType2("Commercial"); }; 
+    document.getElementById("govB").onclick =function () { filterByType2("Government"); }; 
+    document.getElementById("civB").onclick =function () { filterByType2("Civil"); }; 
+    document.getElementById("milB").onclick =function () { filterByType2("Military"); }; 
+    
+    
+    
 }
 
 /* Transition to country view */
-function callCountry() {
+function callCountry(topic) {
+    // Apply circle transition
+   let circ =  d3.selectAll(".satPoint").transition().duration(1000).attr("cx", centerX).attr("cy", centerY).style("opacity", 0)
+   
+   // Remove orbital levels
+   let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+   
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+   
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", 0).attr("opacity", 0)
+    
+    let lin =  spaceSVG.selectAll("line").attr("opacity", 0)
+    wiper.remove()
+    
+    d3.select(".world").style("opacity",0)
+    
+    // Update buttons
+    document.getElementById("comB").onclick = function () {
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Commercial"); }; 
+    document.getElementById("govB").onclick =function () {
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+    plot_bubble_chart(dataByCountry,"Government"); }; 
+    document.getElementById("civB").onclick =function () { 
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Civil"); }; 
+    document.getElementById("milB").onclick =function () {
+        let nodes = d3.selectAll(".circleNode").remove()
+        d3.selectAll(".node").remove()
+        plot_bubble_chart(dataByCountry,"Military"); }; 
+    
+
     // force_layout(dataByCountry)
-    plot_bubble_chart(dataByCountry, "Civil")
+    plot_bubble_chart(dataByCountry, topic)
 }
 
 /* Transition to bottom infograph */
