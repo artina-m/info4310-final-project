@@ -118,6 +118,10 @@ let start = function () {
 
 /* Transition to user type view */
 function callUseCase() {
+    $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
 
     // Remove bubble map
     let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
@@ -144,12 +148,37 @@ function callUseCase() {
     filterByType2("Commercial")
 
      // Update button functions
-    document.getElementById("comB").onclick = function () {filterByType2("Commercial"); };
-    document.getElementById("govB").onclick =function () { filterByType2("Government"); };
-    document.getElementById("civB").onclick =function () { filterByType2("Civil"); };
-    document.getElementById("milB").onclick =function () { filterByType2("Military"); };
+    document.getElementById("comB").onclick = function () {
+       $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
 
+        filterByType2("Commercial"); 
+    };
+    document.getElementById("govB").onclick =function () {
+      $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px #3498DB")
+       $("#milB").css("border", "solid 1px white")
+        
+        filterByType2("Government"); };
+    document.getElementById("civB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px #F9E79F")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
 
+        
+        filterByType2("Civil"); };
+    document.getElementById("milB").onclick =function () {
+       $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border","solid 1px #E74C3C")
+
+        
+        filterByType2("Military"); };
 
 }
 
@@ -157,6 +186,10 @@ function callUseCase() {
 function callCountry(topic) {
     // remove bubble chart before plotting
     spaceSVG.selectAll(".node").remove();
+    $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
 
     // Apply circle transition (to the center of spaceSVG)
    let circ =  d3.selectAll(".satPoint").transition().duration(1000).attr("cx", centerX).attr("cy", centerY).style("opacity", 0)
@@ -176,18 +209,41 @@ function callCountry(topic) {
 
     // Update buttons
     document.getElementById("comB").onclick = function () {
+        $("#comB").css("border", "solid 1px #76D7C4")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+        
         let nodes = d3.selectAll(".circleNode").remove()
         d3.selectAll(".node").remove()
         plot_bubble_chart(dataByCountry,"Commercial"); };
+    
     document.getElementById("govB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px #3498DB")
+       $("#milB").css("border", "solid 1px white")
+        
         let nodes = d3.selectAll(".circleNode").remove()
         d3.selectAll(".node").remove()
     plot_bubble_chart(dataByCountry,"Government"); };
+    
     document.getElementById("civB").onclick =function () {
+        $("#comB").css("border", "solid 1px white")
+       $("#civB").css("border", "solid 1px #F9E79F")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border", "solid 1px white")
+        
         let nodes = d3.selectAll(".circleNode").remove()
         d3.selectAll(".node").remove()
         plot_bubble_chart(dataByCountry,"Civil"); };
+    
     document.getElementById("milB").onclick =function () {
+        $("#comB").css("border", " solid 1pxwhite")
+       $("#civB").css("border", "solid 1px white")
+       $("#govB").css("border", "solid 1px white")
+       $("#milB").css("border","solid 1px #E74C3C")
+        
         let nodes = d3.selectAll(".circleNode").remove()
         d3.selectAll(".node").remove()
         plot_bubble_chart(dataByCountry,"Military"); };

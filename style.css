@@ -232,12 +232,14 @@ div {
     height: 30px;
     font-size: 14;
     color: white;
-    border: solid 1px #3498DB;
+    border: solid 1px white;
     border-radius: 5px;
     font-family: Roboto;
     font-weight: 600;
     margin: auto;
     margin-top: 10px;
+    text-decoration: none;
+    outline: none;
 
 }
 
