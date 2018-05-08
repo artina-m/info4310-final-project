@@ -159,6 +159,7 @@ div {
     height: 100%;
     width: 100%;
     float: left;
+    display: none;
 }
 
 .useViz{
@@ -221,7 +222,33 @@ div {
     font-family: Roboto;
 }
 
+/* Button */
+.useCaseNext {
+    width: 100px;
+    height: 80px;
+    cursor: pointer !important;
+}
 
+.useNextButton {
+    background: none;
+    color: white;
+    border: none;
+    padding: 0;
+    cursor: pointer !important;
+    outline: inherit;
+    display: block;
+    width: 100px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.useNextButton p {
+    margin-top: 30px;
+    margin-bottom: -22px;
+    margin-left: 0px;
+    font-size: 14px;
+    color: white;
+}
 
 /* Text Elements */
 

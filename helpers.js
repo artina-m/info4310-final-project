@@ -127,6 +127,7 @@ function callCountry() {
 
 /* Transition to bottom infograph */
 function callNextSection() {
+    $('.useByCountryView').css("display", "block");
     $("html, body").animate({
         scrollTop: $('.useByCountryView').offset().top
    }, 300);
