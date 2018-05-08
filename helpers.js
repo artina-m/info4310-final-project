@@ -24,19 +24,20 @@ function on() {
 
 function off() {
     document.getElementById("overlay").style.display = "none";
+
     $( "#textBar1" ).animate({
     opacity: 1,
     marginTop: "200"
     }, 600, function() {
     // Animation complete.
-  });
+    });
 
     $( "#textBar2" ).animate({
-    opacity: 1,
-    marginTop: "0"
-    }, 600, function() {
-    // Animation complete.
-  });
+      opacity: 1,
+      marginTop: "0"
+      }, 600, function() {
+      // Animation complete.
+    });
 }
 
 
@@ -44,6 +45,7 @@ function off() {
 let start = function () {
     off();
     spaceSVG.select(".world").remove()
+    
     let world = spaceSVG
         .append("image")
         .attr("xlink:href", "worlmapblue.png")
@@ -113,6 +115,10 @@ function callUseCase() {
 /* Transition to country view */
 function callCountry() {
     // force_layout(dataByCountry)
+
+    // TODO: Need to take in the value from the click
+
+    // TODO: remove other components
     plot_bubble_chart(dataByCountry, "Civil")
 }
 
