@@ -58,6 +58,20 @@ let start = function () {
     // append tooltip texts
     $("#total").html("1738");
     $("#totalCat").html("Active Orbiting Satellites");
+    
+    // Remove bubble map
+    let nodes = d3.selectAll(".circleNode").transition().duration(1000).attr("r", 0).remove()
+    d3.selectAll(".node").transition().duration(1000).remove()
+    
+    // Bring back orbital levels and image
+     let leoR =  d3.selectAll(".LEO").transition().duration(1000).attr("r", leo).attr("opacity", 1)
+   
+    let meoR =  d3.selectAll(".MEO").transition().duration(1000).attr("r", meo).attr("opacity", 1)
+   
+    let geoR =  d3.selectAll(".GEO").transition().duration(1000).attr("r", geo).attr("opacity", 1)
+    
+    d3.select(".world").style("opacity",1)
+
 
 
     // add separator line between title and dynamic info for tooltips
