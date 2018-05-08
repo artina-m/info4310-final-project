@@ -6,7 +6,7 @@
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="fisheye.js"></script>
+  <!-- <script src="fisheye.js"></script> -->
   <script src="helpers.js"></script>
   <script src="plots.js"></script>
 </head>
@@ -62,8 +62,8 @@
       <div class="visualization"></div>
       <div class = "rightDiv">
           <div class = "satInfo" id = "overview">
-          <p id = "total"></p>
-          <p id = "totalCat"></p>
+            <p id = "total"></p>
+            <p id = "totalCat"></p>
           </div>
           <div id = "selectedSat"></div>
       </div>
@@ -83,13 +83,15 @@
     <p class="useDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
       irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-    <div class="useViz">
 
-    </div>
+    <div class="useViz"></div>
+
     <div class="useVizBody">
       <p class="useTitle">SATELLITE USE CASE BY COUNTRY</p>
       <p class="useDesc">Currently over 40 countries have built and launched satellites. This is a vast increase of the last couple of decades. For example, in 1966 only The United States, The USSR, France, The United Kingdom, Canada, and Italy had satellites. Now more and more countries are enjoying the benefits of satellites! Currently the United States leads the way with 803 operating satellites, with Russia and China following behind. As you can see from the graphs each country uses their satellites for a wide variety of purposes and do not have the same makeup of types of satellites.</p>
     </div>
+
+    <div class="smallMultiples"></div>
 
 
   </div>
@@ -102,6 +104,8 @@
 <script>
   let satData, flatData, dataByCountry, countryCoords;
   let colorTheme = "#010305"
+  // declare wiper so it can be referenced in functions
+  let wiper;
 
   // Center orbits
   const centerX = 410;
