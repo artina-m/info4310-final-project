@@ -3,10 +3,66 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
 <script>
-let satData;
+let satData, sm_data, nested_data;
 
-d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, data) {
-  satData = data;
+var margin = {top: 20, right: 20, bottom: 100, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the line
+var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); }); // count to be computed.
+
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, d) {
+  satData = d;
+
+  // prepare data for line chart ready format
+  sm_data = []
+  satData.forEach(function(d) {
+    sm_data.push({
+      symbol: d.users,
+      date: new Date(d.year, d.month)
+    })
+  })
+
+  nested_data = d3.nest()
+    .key(function(d) { return d.symbol; })
+    .key(function(d) { return d.date; })
+    .entries(sm_data);
+
+  // civil data only
+  data = []
+  nested_data[0].values.forEach(function(d) {
+    data.push({
+      date: d.key,
+      close: d.values.length
+    })
+  })
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", line);
 })
 
 
