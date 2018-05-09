@@ -330,6 +330,7 @@ let plot_use = function (className, data) {
     .attr("fill", function (d) {
         return z(d.key);
     })
+    .style("opacity", 0.95)
     .selectAll("rect")
     .data(function (d) {
         return d;
@@ -412,7 +413,8 @@ let plot_use = function (className, data) {
         .attr("y", 60)
         .attr("width", 19)
         .attr("height", 19)
-        .attr("fill", z);
+        .attr("fill", z)
+        .style("opacity", 0.95);
 
     legend
         .append("text")
