@@ -214,14 +214,14 @@ div {
 
 .useViz{
     display: inline-block;
-    height:50%;
+    height:55%;
     width: 45%;
     margin-top: 20px;
     text-align: right;
 }
 .useVizBody{
     display: inline-block;
-    height:50%;
+    height:55%;
     width: 44%;
     background-color: white;
 }
@@ -378,7 +378,7 @@ div {
 
 .useDesc{
     margin: 0 auto;
-    margin-top: 40px;
+    margin-top: 20px;
     width: 80%;
 }
 
