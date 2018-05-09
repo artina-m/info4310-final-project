@@ -116,13 +116,46 @@ let filterByType2 = function(selectType) {
 
     spaceSVG.selectAll("line").remove();
     spaceSVG.select(".nodes").remove();
-    
-   
+    spaceSVG.selectAll(".voronoi").remove();
+
+    // added voronoi tessllation
+    let voronoi = d3.voronoi()
+      .x(function(d) {
+        let user = d.users;
+        if (d.orbitClass == "GEO") {
+            radius = geo + (Math.random() * 60)
+        } else if (d.orbitClass == "MEO") {
+            radius = meo + (Math.random() * 30)
+        } else if (d.orbitClass == "LEO") {
+            radius = leo + (Math.random() * 120)
+        }
+
+        if (user.includes(selectType)) {
+            angle = (Math.random() * (end - start) + start) + Math.PI
+        }
+        else {
+            angle = (Math.random() * (2*Math.PI - end) + end) + Math.PI
+        }
+
+        angleData.push(angle);
+        radiusData.push(radius);
+
+        return radius * Math.cos(angle) + centerX
+      })
+      .y(function(d) {
+        radius = radiusData[i];
+        angle = angleData[i];
+        return radius * Math.sin(angle) + centerY
+      })
+
+    let voronoiGroup = spaceSVG.append("g")
+      .attr("class", "voronoi");
+
 
    let subCat = useCase[0];
    let groupCat = useCase[1];
    let typeData = groupCat[selectType]
-   
+
     document.getElementById("totalCat").innerHTML = selectType + " Satellites"
     document.getElementById("total").innerHTML = groupCat[selectType]
 
@@ -567,7 +600,7 @@ function plot_bubble_chart(data, use_type) {
   else if (use_type == "Commercial") {typeColor = "#76D7C4"}
   else if (use_type == "Government") {typeColor = "#3498DB"}
   else if (use_type == "Military") {typeColor = "#E74C3C"}
-    
+
 
   let bubble_data = []
   let format = d3.format(",d");
@@ -608,8 +641,8 @@ function plot_bubble_chart(data, use_type) {
     else if (use_type == "Commercial") {typeColor = "#76D7C4"}
     else if (use_type == "Government") {typeColor = "#3498DB"}
     else if (use_type == "Military") {typeColor = "#EC7063"}
-    
-    
+
+
   node.append("circle")
       .attr("id", function(d) { return d.id; })
       .attr("fill",  "#010305")
@@ -647,7 +680,7 @@ function plot_bubble_chart(data, use_type) {
         para.style.marginBottom = 4;
 
         selectedSat.appendChild(para);
-      
+
         d3.select(this).attr("fill", typeColor).transition()
             .attr("r", d.r + 10)
 
@@ -683,5 +716,5 @@ function plot_bubble_chart(data, use_type) {
 
 // plot small multiple line chart
 function plot_small_multiples(className, data) {
-  
+
 }

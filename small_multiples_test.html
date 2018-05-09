@@ -18,6 +18,8 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.close); }); // count to be computed.
 
+console.log(line)
+
 // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
@@ -42,7 +44,7 @@ d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, d) {
 
   nested_data = d3.nest()
     .key(function(d) { return d.symbol; })
-    .key(function(d) { return d.date; })
+    .key(function(d) { return +d.date; })
     .entries(sm_data);
 
   // civil data only
@@ -53,6 +55,8 @@ d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, d) {
       close: d.values.length
     })
   })
+
+  console.log(data)
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
