@@ -258,6 +258,44 @@ div {
 }
 
 /* Button */
+.satTypesButton {
+    display: inline-block;
+    background-color: #010305;
+    width: 138px;
+    height: 30px;
+    font-size: 14;
+    color: white;
+    border: solid 1px white;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-weight: 600;
+    margin: auto;
+    margin-top: 10px;
+    text-decoration: none;
+    outline: none;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.forceLayoutButton {
+    display: inline-block;
+    background-color: #010305;
+    width: 138px;
+    height: 30px;
+    font-size: 14;
+    color: white;
+    border: solid 1px white;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-weight: 600;
+    margin: auto;
+    margin-top: 10px;
+    text-decoration: none;
+    outline: none;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 .useCaseNext {
     width: 100px;
     height: 80px;
