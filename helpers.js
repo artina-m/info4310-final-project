@@ -188,7 +188,7 @@ function callUseCase() {
     $("#govB").css("border", "solid 1px white")
     $("#milB").css("border", "solid 1px white")
 
-    $(".satTypesButton").css("border", "solid 1px #e74c3c")
+    $(".satTypesButton").css("border", "solid 1px #2ecc71")
     $(".forceLayoutButton").css("border", "solid 1px white")
 
     // Remove bubble map
@@ -299,7 +299,7 @@ function callUseCase() {
 function callCountry(topic) {
 
     $(".satTypesButton").css("border", "solid 1px white")
-    $(".forceLayoutButton").css("border", "solid 1px #e74c3c")
+    $(".forceLayoutButton").css("border", "solid 1px #2ecc71")
 
     // remove bubble chart before plotting
     spaceSVG
