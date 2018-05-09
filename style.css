@@ -172,6 +172,9 @@ div {
     font-family: Roboto;
     margin:0;
 }
+#selectedSat{
+    height: 400px;
+}
 
 #overview {
     width: 100%;

@@ -709,9 +709,10 @@ function plot_bubble_chart(data, use_type) {
     .enter().append("tspan")
     .attr("x", 0)
     .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-    .text(function(d) { return d})
+    .text(function(d) { return d })
     .attr("text-anchor", "middle")
-    .attr("fill", "white");
+    .attr("fill", "white")
+    .style("font-family", "Roboto");
 
 
 }
