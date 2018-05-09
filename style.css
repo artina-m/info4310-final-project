@@ -312,7 +312,7 @@ div {
     display: none;
     width: 100px;
     height: 80px;
-    margin-left: 100px;
+    margin-left: 110px;
 }
 
 .useNextButton p {
@@ -322,6 +322,7 @@ div {
     font-size: 14px;
     color: white;
 }
+
 
 .usePrevButton {
     background: none;
