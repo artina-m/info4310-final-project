@@ -29,9 +29,13 @@
       <p class="sectionDesc" id="textBar2">
         Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use.
       </p>
+        
+        <br>
+        <!-- Image only shows on launch view, remains hidden otherwise -->
+        <img class = "orbitImg" src = "orbitLevels.png" width = 300px;></img>
 
       <br>
-      <!-- Add buttons -->
+      <!-- Buttons are initially hidden until use and country view is prompted -->
       <div style="align-content: center;text-align:center; width: 100%">
         <button onclick='filterByType2("Commercial"); comsat();' class="useButton" id="comB">Commercial</button>
         <button onclick='filterByType2("Government"); govsat();' class="useButton" id="govB">Government</button>
@@ -40,8 +44,8 @@
       </div>
       <br>
 
+      
       <a href="#" class="previous round" id = "navButton1" onclick = "start()">&#8249;</a>
-        
       <a href="#" class="next round" id = "navButton2" onclick = "callUseCase()" >&#8250;</a>
 
         
@@ -56,6 +60,7 @@
             <p id = "totalCat"></p>
           </div>
           <div id = "selectedSat"></div>
+          
           <button class="useNextButton" onclick='callNextSection()'><p>NEXT</p><img class="useCaseNext" src="assets/white-arrow.png" alt="next section" /></button>
       </div>
     </div>

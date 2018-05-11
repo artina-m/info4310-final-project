@@ -76,6 +76,8 @@ let start = function () {
         .attr("x", centerX - 30)
         .attr("width", 60);
     
+    $(".orbitImg").css("visibility", "visible");
+    
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;
     document.getElementById("navButton2").onclick = callUseCase;
@@ -198,6 +200,8 @@ function callUseCase() {
 
     $(".satTypesButton").css("border", "solid 1px #2ecc71")
     $(".forceLayoutButton").css("border", "solid 1px white")
+    
+    $(".orbitImg").css("visibility", "hidden");
     
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;

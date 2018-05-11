@@ -197,6 +197,7 @@ let filterByType2 = function(selectType) {
         .attr("cx", function (d) {
             // Update location in space - useCaseProportion() (helper) called in index.html for calculation
             let user = d.users;
+
             if (d.orbitClass == "GEO") {
                 radius = geo + (Math.random() * 60)
             } else if (d.orbitClass == "MEO") {

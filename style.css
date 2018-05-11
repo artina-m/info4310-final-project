@@ -161,6 +161,9 @@ div {
     margin-left: 50px;
 }
 
+.orbitImg{
+    position: absolute;
+}
 /* Navigation Buttons */
 #navButton1, #navButton2 {
     text-decoration: none;
