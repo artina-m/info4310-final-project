@@ -220,6 +220,12 @@ function callUseCase() {
         .transition()
         .duration(1000)
         .remove()
+    
+    
+    
+    
+   
+    
 
     // Bring back orbital levels and image
     let leoR = d3
