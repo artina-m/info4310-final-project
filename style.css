@@ -22,7 +22,6 @@ Dark Theme Background: #010305
 }
 
 
-
 p {
     font-family: Roboto;
     color: #424949 ;
@@ -161,6 +160,21 @@ div {
     margin-left: 50px;
 }
 
+.sectionTitle{
+    font-family: 'Oswald', sans-serif;
+    font-size: 36px;
+    color: white;
+}
+
+.sectionDesc{
+    font-size: 10px;
+    line-height: 18px;
+    margin-top: 50px;
+    margin-right:50px;
+    color: grey;
+}
+
+
 .orbitImg{
     position: absolute;
     margin-left: 20px;
@@ -243,6 +257,7 @@ div {
 .visualization{
     display: inline-block;
 }
+
 .rightDiv{
     display: inline-block;
     float:right;
@@ -433,20 +448,6 @@ div {
     font-family: Oswald;
 }
 
-.sectionTitle{
-    font-family: 'Oswald', sans-serif;
-    font-size: 36px;
-    color: white;
-    margin-top: 80px;
-}
-
-.sectionDesc{
-    font-size: 10px;
-    line-height: 18px;
-    margin-top: 50px;
-    margin-right:50px;
-    color: grey;
-}
 
 .useTitle{
     margin: 0 auto;

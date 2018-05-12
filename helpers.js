@@ -64,6 +64,7 @@ function off() {
 let start = function () {
     off();
     
+     document.getElementById("textBar1").innerHTML = "A lot of &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; satellites."
     spaceSVG
         .select(".world")
         .remove()
@@ -203,8 +204,8 @@ function callUseCase() {
     
     $(".orbitImg").css("visibility", "hidden");
     
-    $(".sectionTitle").innerHTML = "What are their purpose?"
-    
+    document.getElementById("textBar1").innerHTML = "What are they used for?"
+        
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;
     document.getElementById("navButton2").onclick = callCountry;
@@ -316,6 +317,8 @@ function callUseCase() {
 
 /* Transition to country view */
 function callCountry() {
+    
+    document.getElementById("textBar1").innerHTML = "Who's launching them?"
 
     $(".satTypesButton").css("border", "solid 1px white")
     $(".forceLayoutButton").css("border", "solid 1px #2ecc71")
