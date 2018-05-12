@@ -487,3 +487,11 @@ div {
 .useViz text{
     fill: #424949;
 }
+
+/* Infographic */
+
+.infoGraph {
+    display: none;
+    height: 100%;
+    float: left;
+}
