@@ -63,6 +63,7 @@ function off() {
 /* Launch Satellities*/
 let start = function () {
     off();
+    
     spaceSVG
         .select(".world")
         .remove()
@@ -74,6 +75,15 @@ let start = function () {
         .attr("y", centerY - 30)
         .attr("x", centerX - 30)
         .attr("width", 60);
+    
+    $(".orbitImg").css("visibility", "visible");
+    
+    // Update navigation buttons
+    document.getElementById("navButton1").onclick = start;
+    document.getElementById("navButton2").onclick = callUseCase;
+    
+    spaceSVG.selectAll("line").remove()
+    
 
     // remove pixels to "restart" plotting
     spaceSVG
@@ -190,6 +200,12 @@ function callUseCase() {
 
     $(".satTypesButton").css("border", "solid 1px #2ecc71")
     $(".forceLayoutButton").css("border", "solid 1px white")
+    
+    $(".orbitImg").css("visibility", "hidden");
+    
+    // Update navigation buttons
+    document.getElementById("navButton1").onclick = start;
+    document.getElementById("navButton2").onclick = callCountry;
 
     // Remove bubble map
     let nodes = d3
@@ -204,6 +220,12 @@ function callUseCase() {
         .transition()
         .duration(1000)
         .remove()
+    
+    
+    
+    
+   
+    
 
     // Bring back orbital levels and image
     let leoR = d3
@@ -296,10 +318,14 @@ function callUseCase() {
 }
 
 /* Transition to country view */
-function callCountry(topic) {
+function callCountry() {
 
     $(".satTypesButton").css("border", "solid 1px white")
     $(".forceLayoutButton").css("border", "solid 1px #2ecc71")
+    
+    // Update navigation buttons
+    document.getElementById("navButton1").onclick = callUseCase;
+    document.getElementById("navButton2").onclick = callNextSection;
 
     // remove bubble chart before plotting
     spaceSVG
@@ -426,7 +452,7 @@ function callCountry(topic) {
         plot_bubble_chart(dataByCountry, "Military");
     };
 
-    plot_bubble_chart(dataByCountry, topic)
+    plot_bubble_chart(dataByCountry, "Commercial")
 }
 
 /* Transition to bottom infograph */
@@ -488,7 +514,7 @@ function useCaseProportion(data) {
         Civil: counts["Civil"] + counts["Civil/Government"] + counts["Government/Civil"] + counts["Military/Civil"],
         Commercial: counts["Commercial"] + counts["Commercial/Government"] + counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Commerical"] + counts["Government/Commercial"] + counts["Military/Commercial"],
         Government: counts["Civil/Government"] + counts["Commercial/Government"] + counts["Commercial/Government/Military"] + counts["Government"] + counts["Government/Civil"] + counts["Government/Commercial"] + counts["Government/Military"] + counts["Military/Government"],
-        Military: counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Government/Military"] + counts["Military/Civil"] + counts["Military/Commercial"] + counts["Military/Government"]
+        Military: counts["Military"]+ counts["Commercial/Government/Military"] + counts["Commercial/Military"] + counts["Government/Military"] + counts["Military/Civil"] + counts["Military/Commercial"] + counts["Military/Government"]
     }
 
     len = 4
@@ -574,47 +600,6 @@ function satTextBox(d, c) {
 
 }
 
-// Wrap SVG text function
-function wrap(text, width) {
-    text
-        .each(function () {
-            var text = d3.select(this),
-                words = text
-                    .text()
-                    .split(/\s+/)
-                    .reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.1, // ems
-                x = text.attr("x"),
-                y = text.attr("y"),
-                dy = 0, //parseFloat(text.attr("dy")),
-                tspan = text
-                    .text(null)
-                    .append("tspan")
-                    .attr("x", x)
-                    .attr("y", y)
-                    .attr("dy", dy + "em");
-
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text
-                        .append("tspan")
-                        .attr("class", "tspan")
-                        .attr("x", x)
-                        .attr("y", y)
-                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                        .text(word);
-                }
-            }
-        });
-}
 
 // summarize data by country
 function nest_by_country_and_use(data) {

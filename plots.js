@@ -74,6 +74,9 @@ let plot_satellites = function (d) {
     } else if (satOrbit == "GEO") {
         radius = geo + (Math.random() * 60)
     }
+    
+    // Update bar chart
+    $(".chart div").remove()
 
     // Plot satellites
     var dot = satelliteGroup
@@ -111,13 +114,45 @@ let plot_satellites = function (d) {
 }
 
 
-
 let filterByType2 = function(selectType) {
 
     spaceSVG.selectAll("line").remove();
     spaceSVG.select(".nodes").remove();
     spaceSVG.selectAll(".voronoi").remove();
+    
+    
+    var satTypes = ["Civil", "Commercial", "Government", "Military"]
 
+    // Update bar chart
+    $(".chart div").remove()
+    data = Object.values(useCase[1])
+    var xBar = d3.scaleLinear()
+    .domain([0, d3.max(data)])
+    .range([0, 180]);
+    
+    var chart = d3.select(".chart");
+    var bar = chart.selectAll("div");
+    var barUpdate = bar.data(data);
+    var barEnter = barUpdate.enter().append("div");
+    barEnter.style("width", function(d,i) { return xBar(d); });
+    barEnter.style("border-color", function(d,i){
+        if (selectType == "Commercial" && i == 1) {
+            console.log("here")
+            return "#76D7C4"}
+        else if (selectType == "Civil" && i == 0) {return "#F9E79F"}
+         else if (selectType == "Government" && i == 2) {return "#3498DB"}
+        
+        else if (selectType == "Military" && i == 3) {return "#E74C3C"}
+        else {return "lightgrey"}
+    });
+    
+    d3.select(".chart").append("line")
+    
+    barEnter.text(function(d,i) { return satTypes[i]; });
+
+
+    
+    
     // added voronoi tessllation
     let voronoi = d3.voronoi()
       .x(function(d) {
@@ -197,6 +232,7 @@ let filterByType2 = function(selectType) {
         .attr("cx", function (d) {
             // Update location in space - useCaseProportion() (helper) called in index.html for calculation
             let user = d.users;
+
             if (d.orbitClass == "GEO") {
                 radius = geo + (Math.random() * 60)
             } else if (d.orbitClass == "MEO") {
@@ -596,6 +632,9 @@ function parseCoords(line) {
 // }
 
 function plot_bubble_chart(data, use_type) {
+  // Update bar chart
+  $(".chart div").remove()
+  
   // make color consistent with use type vis
   let typeColor = "white";
   if (use_type == "Civil") {typeColor = "#F9E79F"}
@@ -709,9 +748,10 @@ function plot_bubble_chart(data, use_type) {
     .enter().append("tspan")
     .attr("x", 0)
     .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-    .text(function(d) { return d})
+    .text(function(d) { return d })
     .attr("text-anchor", "middle")
-    .attr("fill", "white");
+    .attr("fill", "white")
+    .style("font-family", "Roboto");
 
 
 }
