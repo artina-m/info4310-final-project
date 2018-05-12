@@ -491,7 +491,18 @@ div {
 /* Infographic */
 
 .infoGraph {
-    display: none;
+    display: block;
     height: 100%;
     float: left;
+    
+}
+
+.igLeftPic {
+    width: 600px;
+    float:left;
+    text-align: center;
+}
+
+.igLeftPic img{
+    width: 300px;
 }
