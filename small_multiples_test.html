@@ -1,24 +1,40 @@
 <!doctype html>
-<svg width="960" height="350"></svg>
+<!-- <svg width="960" height="960"></svg> -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
+<style>
+
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+</style>
+<body>
+
+</body>
 <script>
 let satData, sm_data, nested_data;
 
 var margin = {top: 20, right: 20, bottom: 100, left: 50},
     width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 300 - margin.top - margin.bottom;
 
 // set the ranges
 var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
+var y = d3.scaleLog().range([height, 0]);
 
 // define the line
-var line = d3.line()
+var line_civil = d3.line()
+    .curve(d3.curveBasis)
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); }); // count to be computed.
+    .y(function(d) { return y(d.close < 1? 1 : d.close); }); // count to be computed.
 
-console.log(line)
+// var line_military = d3.line()
+//     .curve(d3.curveStepAfter)
+//     .x(function(d) { return x(d.date); })
+//     .y(function(d) { return y(d.close); });
 
 // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
@@ -31,6 +47,8 @@ var svg = d3.select("body").append("svg")
           "translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, d) {
+  if (error) throw error;
+
   satData = d;
 
   // prepare data for line chart ready format
@@ -47,26 +65,89 @@ d3.csv("UCS_Satellite_Database.csv", parseLine, function(error, d) {
     .key(function(d) { return +d.date; })
     .entries(sm_data);
 
+  console.log(nested_data);
+
   // civil data only
-  data = []
+  civil_data = []
   nested_data[0].values.forEach(function(d) {
-    data.push({
-      date: d.key,
+    civil_data.push({
+      date: new Date(+d.key),
       close: d.values.length
     })
   })
 
-  console.log(data)
+  // sort data by date
+  civil_data.sort(function(a, b) { return +a.date - +b.date; });
+
+  commercial_data = []
+  nested_data[1].values.forEach(function(d) {
+    commercial_data.push({
+      date: new Date(+d.key),
+      close: d.values.length
+    })
+  })
+  commercial_data.sort(function(a, b) { return +a.date - +b.date; });
+
+  military_data = []
+  nested_data[2].values.forEach(function(d) {
+    military_data.push({
+      date: new Date(+d.key),
+      close: d.values.length
+    })
+  })
+  military_data.sort(function(a, b) { return +a.date - +b.date; });
+
+  gov_data = []
+  nested_data[3].values.forEach(function(d) {
+    gov_data.push({
+      date: new Date(+d.key),
+      close: d.values.length
+    })
+  })
+  gov_data.sort(function(a, b) { return +a.date - +b.date; });
 
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([0, d3.max(data, function(d) { return d.close; })]);
+  x.domain(d3.extent(civil_data, function(d) { return d.date; }));
+  y.domain([0, d3.max(commercial_data, function(d) {
+    if (d.close < 1) {
+      return 1
+    } else {
+      return d.close;
+    }
+  })]);
 
   // Add the valueline path.
   svg.append("path")
-      .data([data])
+      .data([civil_data])
       .attr("class", "line")
-      .attr("d", line);
+      .attr("d", line_civil);
+
+  svg.append("path")
+    .data([commercial_data])
+    .attr("class", "line")
+    .attr("d", line_civil)
+    .style("stroke", "red");
+
+  svg.append("path")
+    .data([military_data])
+    .attr("class", "line")
+    .attr("d", line_civil)
+    .style("stroke", "black");
+
+  svg.append("path")
+    .data([gov_data])
+    .attr("class", "line")
+    .attr("d", line_civil)
+    .style("stroke", "green");
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
 })
 
 
