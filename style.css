@@ -396,19 +396,34 @@ div {
     font-weight: 600;
 }
 
-
+.chart {
+    margin-top: -30px;
+    margin-bottom: 30px;
+}
 .chart div {
-  font: 10px sans-serif;
-  border-color: lightgrey;
-  border: solid 1px;
-  text-align: right;
-  padding: 3px;
-  margin-bottom: 10px;
+  font: 12px sans-serif;
+  border-color: grey;
+  border: none;
+  border-top: solid 6px;
+  text-align: left;
+  padding: 0px;
+  padding-top: 5px;
+  margin-bottom: 15px;
   color:white;
+  white-space: nowrap;
+  overflow: visible;
 }
 
-.chart{
-    margin-bottom: 20px;
+.chart hr {
+    border: solid 0.4px dimgrey;
+    
+}
+
+.chart p{
+    margin-bottom: 10px;
+    color: white;
+    font-size: 16;
+    font-family: Oswald;    
 }
 
 
@@ -422,7 +437,7 @@ div {
     font-family: 'Oswald', sans-serif;
     font-size: 36px;
     color: white;
-    margin-top: 100px;
+    margin-top: 80px;
 }
 
 .sectionDesc{

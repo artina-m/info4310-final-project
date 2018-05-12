@@ -203,6 +203,8 @@ function callUseCase() {
     
     $(".orbitImg").css("visibility", "hidden");
     
+    $(".sectionTitle").innerHTML = "What are their purpose?"
+    
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;
     document.getElementById("navButton2").onclick = callCountry;
@@ -220,12 +222,7 @@ function callUseCase() {
         .transition()
         .duration(1000)
         .remove()
-    
-    
-    
-    
-   
-    
+
 
     // Bring back orbital levels and image
     let leoR = d3

@@ -77,6 +77,8 @@ let plot_satellites = function (d) {
     
     // Update bar chart
     $(".chart div").remove()
+    $(".chart p").remove()
+    $(".chart hr").remove()
 
     // Plot satellites
     var dot = satelliteGroup
@@ -121,18 +123,30 @@ let filterByType2 = function(selectType) {
     spaceSVG.selectAll(".voronoi").remove();
     
     
+    // Plot mini bar charts on right hand side
     var satTypes = ["Civil", "Commercial", "Government", "Military"]
-
-    // Update bar chart
+    
+    // Remove old data
     $(".chart div").remove()
+    $(".chart p").remove()
+    $(".chart hr").remove()
+    
     data = Object.values(useCase[1])
+    var percentVal = data.map(function(element) {
+	return 10*Math.round((element/1738)*1000)/100 ;
+    });
+
     var xBar = d3.scaleLinear()
-    .domain([0, d3.max(data)])
-    .range([0, 180]);
+    .domain([0, 100])
+    .range([0, 200]);
     
     var chart = d3.select(".chart");
+    chart.append("hr")
+    chart.append("p").text("% of Satellites by Use Case")
+    
+
     var bar = chart.selectAll("div");
-    var barUpdate = bar.data(data);
+    var barUpdate = bar.data(percentVal);
     var barEnter = barUpdate.enter().append("div");
     barEnter.style("width", function(d,i) { return xBar(d); });
     barEnter.style("border-color", function(d,i){
@@ -143,15 +157,11 @@ let filterByType2 = function(selectType) {
          else if (selectType == "Government" && i == 2) {return "#3498DB"}
         
         else if (selectType == "Military" && i == 3) {return "#E74C3C"}
-        else {return "lightgrey"}
+        else {return "grey"}
     });
     
-    d3.select(".chart").append("line")
-    
-    barEnter.text(function(d,i) { return satTypes[i]; });
-
-
-    
+    barEnter.text(function(d,i) { return  satTypes[i] + " " + percentVal[i] + "%"; });
+    chart.append("hr")
     
     // added voronoi tessllation
     let voronoi = d3.voronoi()
@@ -634,6 +644,8 @@ function parseCoords(line) {
 function plot_bubble_chart(data, use_type) {
   // Update bar chart
   $(".chart div").remove()
+  $(".chart p").remove()
+  $(".chart hr").remove()
   
   // make color consistent with use type vis
   let typeColor = "white";
