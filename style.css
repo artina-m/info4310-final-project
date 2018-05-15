@@ -491,7 +491,7 @@ div {
 /* Infographic */
 
 .infoGraph {
-    display: block;
+    display: none;
     float: left;
     height: 400px;
 }
@@ -520,7 +520,7 @@ div {
     font-family: 'Oswald', sans-serif;
     font-size: 28px;
     color: #5D6D7E;
-    width: 90%;
+    width: 80%;
     height: 8%;
 }
 
