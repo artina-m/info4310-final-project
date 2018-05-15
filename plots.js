@@ -774,16 +774,17 @@ function plot_bubble_chart(data, use_type) {
 
 
 
-  node.append("clipPath")
-      .attr("id", function(d) { return "clip-" + d.id; })
-        .append("use")
-      .attr("xlink:href", function(d) { return "#" + d.id; });
+  // node.append("clipPath")
+  //     .attr("id", function(d) { return "clip-" + d.id; })
+  //       .append("use")
+  //     .attr("xlink:href", function(d) { return "#" + d.id; });
 
   node.append("text")
-      .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+    //   .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
     .selectAll("tspan")
     .data(function(d) { return d.class.split(/(?=[A-Z][^A-Z])/g); })
-    .enter().append("tspan")
+    .enter()
+    .append("tspan")
     .attr("x", 0)
     .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
     .text(function(d) { return d })
