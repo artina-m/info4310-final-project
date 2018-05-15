@@ -27,12 +27,14 @@
 
       <p class="sectionTitle" id="textBar1"> STUFF IN SPACE </p>
       <p class="sectionDesc" id="textBar2">
-        Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use.
+        Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated
+        6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today.
+        Satellites are used by various organizations in military, commercial, government, and civil use.
       </p>
 
-        <br>
-        <!-- Image only shows on launch view, remains hidden otherwise -->
-        <img class = "orbitImg" src = "orbitLevels.png" width = 300px;></img>
+      <br>
+      <!-- Image only shows on launch view, remains hidden otherwise -->
+      <img class="orbitImg" src="orbitLevels.png" width="300px"></img>
 
       <br>
       <!-- Buttons are initially hidden until use and country view is prompted -->
@@ -45,22 +47,32 @@
       <br>
 
 
+<<<<<<< HEAD
       <a href="#" class="previous round" id = "navButton1" onclick = "start()">&#8249;</a>
       <a href="#" class="next round" id = "navButton2" onclick = "callUseCase()" >&#8250;</a>
+=======
+      <a href="#" class="previous round" id="navButton1" onclick="start()">&#8249;</a>
+      <a href="#" class="next round" id="navButton2" onclick="callUseCase()">&#8250;</a>
+
+
+>>>>>>> e8faa7ed7e64699f2d5f83172599df12e4fd78f9
     </div>
     <!-- end of sidBar div -->
 
     <div class="rightHand">
       <div class="visualization"></div>
-      <div class = "rightDiv">
-          <div class = "satInfo" id = "overview">
-            <p id = "total"></p>
-            <p id = "totalCat"></p>
-          </div>
-          <div class = "chart"></div>
-          <div id = "selectedSat"></div>
+      <div class="rightDiv">
+        <div class="satInfo" id="overview">
+          <p id="total"></p>
+          <p id="totalCat"></p>
+        </div>
+        <div class="chart"></div>
+        <div id="selectedSat"></div>
 
-          <button class="useNextButton" onclick='callNextSection()'><p>NEXT</p><img class="useCaseNext" src="assets/white-arrow.png" alt="next section" /></button>
+        <button class="useNextButton" onclick='callNextSection()'>
+          <p>NEXT</p>
+          <img class="useCaseNext" src="assets/white-arrow.png" alt="next section" />
+        </button>
       </div>
     </div>
 
@@ -72,24 +84,39 @@
   <!-- <div class="testViewPort"></div> -->
 
   <div class="useByCountryView">
-    <button class="usePrevButton" onclick='callFirstSection()'><p>BACK</p><img class="useCaseNext" src="assets/white-up-arrow.png" alt="next section" /></button>
+    <button class="usePrevButton" onclick='callFirstSection()'>
+      <p>BACK</p>
+      <img class="useCaseNext" src="assets/white-up-arrow.png" alt="next section" />
+    </button>
 
 
     <div class="useViz"></div>
 
     <div class="useVizBody">
       <p class="useTitle">SATELLITE USE CASE BY COUNTRY</p>
-      <p class="useDesc2">Currently over 40 countries have built and launched satellites. This is a vast increase of the last couple of decades. For example, in 1966 only The United States, The USSR, France, The United Kingdom, Canada, and Italy had satellites. Now more and more countries are enjoying the benefits of satellites! Currently the United States leads the way with 803 operating satellites, with Russia and China following behind. As you can see from the graphs each country uses their satellites for a wide variety of purposes and do not have the same makeup of types of satellites.</p>
+      <p class="useDesc2">Currently over 40 countries have built and launched satellites. This is a vast increase of the last couple of decades.
+        For example, in 1966 only The United States, The USSR, France, The United Kingdom, Canada, and Italy had satellites.
+        Now more and more countries are enjoying the benefits of satellites! Currently the United States leads the way with
+        803 operating satellites, with Russia and China following behind. As you can see from the graphs each country uses
+        their satellites for a wide variety of purposes and do not have the same makeup of types of satellites.</p>
     </div>
     <div>
       <p class="useDesc">
-        Military Satellites: Most military satellites are used for the purpose of intelligence gathering, navigation, or military communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of military satellites.
+        Military Satellites: Most military satellites are used for the purpose of intelligence gathering, navigation, or military
+        communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international
+        treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of
+        military satellites.
       </p>
       <p class="useDesc">
-        Civil Satellites: Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites are owned and used by universities all around the world. There are currently 128 civil satellites in orbit currently. Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.
+        Civil Satellites: Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites
+        are owned and used by universities all around the world. There are currently 128 civil satellites in orbit currently.
+        Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.
       </p>
       <p class="useDesc">
-        Commercial Satellites: Commercial satellites are satellites used in a variety of ways. They are normally used for satellite navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over the Atlantic Ocean.
+        Commercial Satellites: Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
+        navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
+        first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
+        the Atlantic Ocean.
       </p>
     </div>
 
@@ -98,6 +125,42 @@
 
   </div>
   <!-- end of useByCountryView div -->
+
+  <div class="infoGraph">
+    <div class="igIntro">
+      <div class="igIntroText">Since 1957 all sorts of satellites have been launched in varieties of different sizes and shapes. Sputnik 1 was the first ever satellite launched by the USSR and was only the size of a beach ball, 2 feet in diameter. Today the satellites are much bigger and complex. For example, the Terrastar-1 that launched in 2009 weighs a whopping 15,233 pounds and has a wingspan of 106 feet! Terrastar-1 is primarily used to provide mobile voice and data communications in North America for cellular phones.</div>
+    </div>
+
+    <div class="intSpace">
+      <div class="igLeftPic">
+          <img src = "ISS.png">
+        </div>
+      <div class="igRightText">International Space Station: The ISS is arguably one of the most famous satellites in orbit currently. It is a joint project between the space agencies of the United States, Russia, Japan, the European Union, and Canada. The station has been developed piecemeal by the launching of modules to add on to the existing modules in orbit. The first part of the station was launched in 1998 and the station is anticipated to be in use until 2028. The ISS is the largest human-made object currently in Earth’s orbit, and is bigger than an NFL football field.</div>
+    </div>
+
+    <div class="hubble">
+      <div class="igLeftPic">
+        <img src = "hubble.png">
+        </div>
+        
+      <div class="igRightText">Hubble Space Telescope: While not the first space telescope launched the Hubble is certainly the most famous. Named after astronomer Edwin Hubble the satellite was launched in 1990 into a low Earth orbit. The satellite is about the size of a school bus. While the telescope was built and launched by NASA any group of any nationality can reserve time on the telescope, however most proposals for time are rejected due to high demand of the telescope. The telescope is estimated to last until 2035 and its successor is being launched in May 2020.</div>
+    </div>
+
+    <div class="landsat">
+      <div class="igLeftPic">
+          <img src = "landsat.png">
+        </div>
+      <div class="igRightText">Landsat-7: Landsat-7 is the seventh satellite in the Landsat program by NASA and was launched in 1999. Its primary goal was to take up-to-date and cloud free images of the Earth. Many companies have licensed the images from Landsat-7 and used them in commercial applications. For example, most of the images used in Google Earth/Maps are collected by Landsat-7. The satellite is able to photograph about one quarter of the earth’s landmass every 16 days.</div>
+    </div>
+
+    <div class="galaxy">
+      <div class="igLeftPic">
+          <img src = "galaxy14.png">
+        </div>
+      <div class="igRightText">Galaxy 14: This satellite was launched in 2005 and weighed a spectacular 2,000kg. Galaxy 14’s primary function is to deliver High Definition Television Signals across the East Coast. Galaxy 14 is responsible for delivering the signals for Disney Channel, ESPN, AMC,  The Golf Channel, and TNT.</div>
+    </div>
+
+  </div>
 
 
 </body>
@@ -180,21 +243,21 @@
 
   //alternate descriptions upon clicking
 
-  function comsat(){
+  function comsat() {
     document.getElementById("textBar2").innerHTML = "Commercial satellites are satellites used in a variety of ways. They are normally used for satellite navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over the Atlantic Ocean.";
   }
-  function govsat(){
+  function govsat() {
     document.getElementById("textBar2").innerHTML = "Government Satellites are typically used in meteorological or within research settings. Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.";
   }
 
-  function milsat(){
+  function milsat() {
     document.getElementById("textBar2").innerHTML = "Most military satellites are used for the purpose of intelligence gathering, navigation, or military communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of military satellites.";
   }
 
-  function civilsat(){
+  function civilsat() {
     document.getElementById("textBar2").innerHTML = "Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites are owned and used by universities all around the world. There are currently 155 civil satellites in orbit currently. Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.";
   }
-  function introtext(){
+  function introtext() {
     document.getElementById("textBar2").innerHTML = "Ever since the launch of Sputnik 1 in 1957 mankind has been launching satellites into space. Since that date an estimated 6,000 satellites have been launched by over 40 different countries with 1,738 satellites currently in use today. Satellites are used by various organizations in military, commercial, government, and civil use."
   }
 
