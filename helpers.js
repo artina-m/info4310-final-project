@@ -60,6 +60,8 @@ function off() {
     });
 }
 
+let sec2Shown = false;
+
 /* Launch Satellities*/
 let start = function () {
     off();
@@ -149,11 +151,13 @@ let start = function () {
     // load data
     d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
         satData = data;
-        useCase = useCaseProportion(satData)
-
+        useCase = useCaseProportion(satData);
         d3.csv("use.csv", function (error, data2) {
             flatData = data2;
-            plot_use("useViz", flatData);
+            if (!sec2Shown){
+                plot_use("useViz", flatData);
+                sec2Shown = true;
+            }
         });
 
         satData.forEach(function (d) {
