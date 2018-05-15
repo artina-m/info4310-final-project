@@ -60,6 +60,8 @@ function off() {
     });
 }
 
+let sec2Shown = false;
+
 /* Launch Satellities*/
 let start = function () {
     off();
@@ -149,11 +151,13 @@ let start = function () {
     // load data
     d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
         satData = data;
-        useCase = useCaseProportion(satData)
-
+        useCase = useCaseProportion(satData);
         d3.csv("use.csv", function (error, data2) {
             flatData = data2;
-            plot_use("useViz", flatData);
+            if (!sec2Shown){
+                plot_use("useViz", flatData);
+                sec2Shown = true;
+            }
         });
 
         satData.forEach(function (d) {
@@ -203,6 +207,11 @@ function callUseCase() {
     $(".forceLayoutButton").css("border", "solid 1px white")
     
     $(".orbitImg").css("visibility", "hidden");
+
+    $("#textBar2").text(`Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
+    navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
+    first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
+    the Atlantic Ocean.`);
     
     document.getElementById("textBar1").innerHTML = "What are they used for?"
         
@@ -280,6 +289,11 @@ function callUseCase() {
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px white")
 
+        $("#textBar2").text(`Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
+    navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
+    first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
+    the Atlantic Ocean.`);
+
         filterByType2("Commercial");
     };
     document
@@ -289,6 +303,10 @@ function callUseCase() {
         $("#civB").css("border", "solid 1px white")
         $("#govB").css("border", "solid 1px #3498DB")
         $("#milB").css("border", "solid 1px white")
+
+        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings. 
+        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, 
+        ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.`);
 
         filterByType2("Government");
     };
@@ -300,6 +318,10 @@ function callUseCase() {
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px white")
 
+        $("#textBar2").text(`Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites
+        are owned and used by universities all around the world. There are currently 128 civil satellites in orbit currently.
+        Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.`);
+
         filterByType2("Civil");
     };
     document
@@ -309,6 +331,11 @@ function callUseCase() {
         $("#civB").css("border", "solid 1px white")
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px #E74C3C")
+
+        $("#textBar2").text(`Most military satellites are used for the purpose of intelligence gathering, navigation, or military
+        communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international
+        treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of
+        military satellites.`);
 
         filterByType2("Military");
     };
@@ -335,6 +362,11 @@ function callCountry() {
     $("#civB").css("border", "solid 1px white")
     $("#govB").css("border", "solid 1px white")
     $("#milB").css("border", "solid 1px white")
+
+    $("#textBar2").text(`Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
+    navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
+    first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
+    the Atlantic Ocean.`);
 
     document
         .getElementById("totalCat")
@@ -392,6 +424,11 @@ function callCountry() {
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px white")
 
+        $("#textBar2").text(`Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
+    navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
+    first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
+    the Atlantic Ocean.`);
+
         let nodes = d3
             .selectAll(".circleNode")
             .remove()
@@ -408,6 +445,10 @@ function callCountry() {
         $("#civB").css("border", "solid 1px white")
         $("#govB").css("border", "solid 1px #3498DB")
         $("#milB").css("border", "solid 1px white")
+
+        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings. 
+        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, 
+        ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.`);
 
         let nodes = d3
             .selectAll(".circleNode")
@@ -426,6 +467,11 @@ function callCountry() {
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px white")
 
+        $("#textBar2").text(`Civil satellites are satellites categorized as for use in academic or amateur nature. Most of these satellites
+        are owned and used by universities all around the world. There are currently 128 civil satellites in orbit currently.
+        Another one will be launched on May 11, 2018 courtesy of the University of Nairobi in Kenya.`);
+
+
         let nodes = d3
             .selectAll(".circleNode")
             .remove()
@@ -443,6 +489,11 @@ function callCountry() {
         $("#govB").css("border", "solid 1px white")
         $("#milB").css("border", "solid 1px #E74C3C")
 
+        $("#textBar2").text(`Most military satellites are used for the purpose of intelligence gathering, navigation, or military
+        communication. Early attempts were made at weaponizing satellites but this work was halted in 1967 due to an international
+        treaty banning weapons of mass destruction being deployed in orbit. Modern GPS systems were born out of the use of
+        military satellites.`);
+
         let nodes = d3
             .selectAll(".circleNode")
             .remove()
@@ -458,6 +509,7 @@ function callCountry() {
 /* Transition to bottom infograph */
 function callNextSection() {
     $('.useByCountryView').css("display", "block");
+    $('.infoGraph').css("display", "block");
     $("html, body").animate({
         scrollTop: $('.useByCountryView')
             .offset()
