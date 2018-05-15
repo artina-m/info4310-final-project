@@ -23,7 +23,7 @@ var margin = {top: 20, right: 20, bottom: 100, left: 50},
 
 // set the ranges
 var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLog().range([height, 0]);
+var y = d3.scaleLinear().range([height, 0]);
 
 // define the line
 var line_civil = d3.line()

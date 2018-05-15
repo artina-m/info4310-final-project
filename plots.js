@@ -74,7 +74,7 @@ let plot_satellites = function (d) {
     } else if (satOrbit == "GEO") {
         radius = geo + (Math.random() * 60)
     }
-    
+
     // Update bar chart
     $(".chart div").remove()
     $(".chart p").remove()
@@ -121,29 +121,29 @@ let filterByType2 = function(selectType) {
     spaceSVG.selectAll("line").remove();
     spaceSVG.select(".nodes").remove();
     spaceSVG.selectAll(".voronoi").remove();
-    
-    
+
+
     // Plot mini bar charts on right hand side
     var satTypes = ["Civil", "Commercial", "Government", "Military"]
-    
+
     // Remove old data
     $(".chart div").remove()
     $(".chart p").remove()
     $(".chart hr").remove()
-    
+
     data = Object.values(useCase[1])
     var percentVal = data.map(function(element) {
-	return 10*Math.round((element/1738)*1000)/100 ;
+	     return 10*Math.round((element/1738)*1000)/100 ;
     });
 
     var xBar = d3.scaleLinear()
     .domain([0, 100])
     .range([0, 200]);
-    
+
     var chart = d3.select(".chart");
     chart.append("hr")
     chart.append("p").text("% of Satellites by Use Case")
-    
+
 
     var bar = chart.selectAll("div");
     var barUpdate = bar.data(percentVal);
@@ -155,14 +155,14 @@ let filterByType2 = function(selectType) {
             return "#76D7C4"}
         else if (selectType == "Civil" && i == 0) {return "#F9E79F"}
          else if (selectType == "Government" && i == 2) {return "#3498DB"}
-        
+
         else if (selectType == "Military" && i == 3) {return "#E74C3C"}
         else {return "grey"}
     });
-    
+
     barEnter.text(function(d,i) { return  satTypes[i] + " " + percentVal[i] + "%"; });
     chart.append("hr")
-    
+
     // added voronoi tessllation
     let voronoi = d3.voronoi()
       .x(function(d) {
@@ -399,7 +399,11 @@ let plot_use = function (className, data) {
         .range(["#76D7C4", "#F9E79F", "#E74C3C", "#3498DB"])
         .domain(keys);
 
-    let tooltip = d3.select("useViz").append("div").attr("class", "tooltip");
+    // tooltip being bound to the outer container defined by the className
+    // let tooltip = d3.select(className).append("div")
+    // .attr("class", "tooltip")
+    // .attr("width", 50)
+    // .attr("height", 50);
 
     g.append("g")
     .selectAll("g")
@@ -427,11 +431,28 @@ let plot_use = function (className, data) {
     })
     .attr("width", x.bandwidth())
     .on("mouseover", function(d) {
-      tooltip
-        .style("left", d3.event.pageX - 50 + "px")
-        .style("top", d3.event.pageY - 70 + "px")
-        .style("display", "inline-block")
-        .html((d.key));
+      d3.select(this)
+      .append("div")
+      .attr("class", "tooltip")
+      .attr("width", 50)
+      .attr("height", 50)
+      .html(d.key);
+
+      // tooltip
+      //   .style("left", d3.event.pageX - 50 + "px")
+      //   .style("top", d3.event.pageY - 70 + "px")
+      //   .style("display", "inline-block")
+      //   .html((d.key));
+      //
+      //
+      //
+      //   let tooltip = d3.select(className).append("div")
+      //   .attr("class", "tooltip")
+      //   .attr("width", 50)
+      //   .attr("height", 50);
+
+
+
     });
 
     g
@@ -646,7 +667,7 @@ function plot_bubble_chart(data, use_type) {
   $(".chart div").remove()
   $(".chart p").remove()
   $(".chart hr").remove()
-  
+
   // make color consistent with use type vis
   let typeColor = "white";
   if (use_type == "Civil") {typeColor = "#F9E79F"}
@@ -682,6 +703,10 @@ function plot_bubble_chart(data, use_type) {
           d.class = id.slice(i + 1);
         }
       });
+
+  // let g = spaceSVG.append("svg")
+  //   .attr("width", 400)
+  //   .attr("height", 400);
 
   let node = spaceSVG.selectAll(".node")
     .data(pack(root).leaves())
@@ -724,6 +749,7 @@ function plot_bubble_chart(data, use_type) {
           String(use_type).toLowerCase() +
           " satellite(s)"
         );
+
         para.appendChild(node);
 
         para.style.color = "white";
@@ -744,7 +770,7 @@ function plot_bubble_chart(data, use_type) {
       })
       .attr("class", "circleNode")
       .attr("r", 0).transition().duration(1000)
-      .attr("r", function(d) { return d.r; });
+      .attr("r", function(d) { return d.r-30; });
 
 
 
@@ -768,7 +794,7 @@ function plot_bubble_chart(data, use_type) {
 
 }
 
-// plot small multiple line chart
-function plot_small_multiples(className, data) {
-
-}
+// // plot small multiple line chart
+// function plot_small_multiples(className, data) {
+//
+// }
