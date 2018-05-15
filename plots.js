@@ -683,10 +683,19 @@ function plot_bubble_chart(data, use_type) {
   data.filter(function(d) {
     return d.key === String(use_type);
   })[0].values.forEach(function(item) {
-    bubble_data.push({
-      id: item.key,
-      value: +item.values.length
-    })
+    if (item.values.length > 3) {
+      bubble_data.push({
+        id: item.key,
+        value: +item.values.length,
+        size: true
+      })
+    } else {
+      bubble_data.push({
+        id: item.key,
+        value: +item.values.length,
+        size: false
+      })
+    }
   })
 
   let pack = d3.pack()
@@ -760,17 +769,22 @@ function plot_bubble_chart(data, use_type) {
 
         selectedSat.appendChild(para);
 
-        d3.select(this).attr("fill", typeColor).transition()
-            .attr("r", d.r + 10)
+        d3.select(this)
+        // .attr("fill", typeColor)
+        .transition()
+            // .attr("r", d.r + 10)
+            .style("stroke-width", 5)
 
       })
       .on("mouseout", function(d){
           $("#selectedSat").html("");
-          d3.select(this).attr("fill", "#010305").transition().attr("r", d.r)
+          d3.select(this).attr("fill", "#010305").transition()
+          // .attr("r", d.r)
+          .style("stroke-width", 1)
       })
       .attr("class", "circleNode")
       .attr("r", 0).transition().duration(1000)
-      .attr("r", function(d) { return d.r-30; });
+      .attr("r", function(d) { return d.r; });
 
 
 
@@ -782,20 +796,34 @@ function plot_bubble_chart(data, use_type) {
   node.append("text")
     //   .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
     .selectAll("tspan")
-    .data(function(d) { return d.class.split(/(?=[A-Z][^A-Z])/g); })
+    .data(function(d) {
+      console.log(d)
+      if (d.r > 20) {
+        // console.log(d.r)
+        return d.class.split(/(?=[A-Z][^A-Z])/g);
+      } else {
+        return ""
+      }
+
+    })
     .enter()
     .append("tspan")
     .attr("x", 0)
-    .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-    .text(function(d) { return d })
+    .attr("y", function(d, i, nodes) {
+      console.log(nodes)
+      if (nodes === undefined) {
+        delete d;
+      } else {
+        return 13 + (i - nodes.length / 2 - 0.5) * 10;
+      }
+    })
+    .text(function(d) {
+      // console.log(d)
+      return d;
+    })
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .style("font-family", "Roboto");
 
 
 }
-
-// // plot small multiple line chart
-// function plot_small_multiples(className, data) {
-//
-// }
