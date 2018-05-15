@@ -797,7 +797,7 @@ function plot_bubble_chart(data, use_type) {
     //   .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
     .selectAll("tspan")
     .data(function(d) {
-      console.log(d)
+      // console.log(d)
       if (d.r > 20) {
         // console.log(d.r)
         return d.class.split(/(?=[A-Z][^A-Z])/g);
@@ -810,7 +810,7 @@ function plot_bubble_chart(data, use_type) {
     .append("tspan")
     .attr("x", 0)
     .attr("y", function(d, i, nodes) {
-      console.log(nodes)
+      // console.log(nodes)
       if (nodes === undefined) {
         delete d;
       } else {
