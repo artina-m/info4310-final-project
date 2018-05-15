@@ -3,9 +3,11 @@
 <head>
   <title>INFO 4310 Final Project</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!-- <script src="fisheye.js"></script> -->
   <script src="helpers.js"></script>
   <script src="plots.js"></script>
@@ -46,16 +48,9 @@
       </div>
       <br>
 
-
-<<<<<<< HEAD
-      <a href="#" class="previous round" id = "navButton1" onclick = "start()">&#8249;</a>
-      <a href="#" class="next round" id = "navButton2" onclick = "callUseCase()" >&#8250;</a>
-=======
       <a href="#" class="previous round" id="navButton1" onclick="start()">&#8249;</a>
       <a href="#" class="next round" id="navButton2" onclick="callUseCase()">&#8250;</a>
 
-
->>>>>>> e8faa7ed7e64699f2d5f83172599df12e4fd78f9
     </div>
     <!-- end of sidBar div -->
 
@@ -126,39 +121,107 @@
   </div>
   <!-- end of useByCountryView div -->
 
-  <div class="infoGraph">
+  <!-- start of info graphics; carousel -->
+  <!-- <div class="infoGraph">
     <div class="igIntro">
-      <div class="igIntroText">Since 1957 all sorts of satellites have been launched in varieties of different sizes and shapes. Sputnik 1 was the first ever satellite launched by the USSR and was only the size of a beach ball, 2 feet in diameter. Today the satellites are much bigger and complex. For example, the Terrastar-1 that launched in 2009 weighs a whopping 15,233 pounds and has a wingspan of 106 feet! Terrastar-1 is primarily used to provide mobile voice and data communications in North America for cellular phones.</div>
+      <div class="igIntroText">
+        Since 1957 all sorts of satellites have been launched in varieties of different sizes and shapes. Sputnik 1 was the first ever satellite launched by the USSR and was only the size of a beach ball, 2 feet in diameter. Today the satellites are much bigger and complex. For example, the Terrastar-1 that launched in 2009 weighs a whopping 15,233 pounds and has a wingspan of 106 feet! Terrastar-1 is primarily used to provide mobile voice and data communications in North America for cellular phones.
+      </div>
     </div>
 
     <div class="intSpace">
-      <div class="igLeftPic">
-          <img src = "ISS.png">
-        </div>
-      <div class="igRightText">International Space Station: The ISS is arguably one of the most famous satellites in orbit currently. It is a joint project between the space agencies of the United States, Russia, Japan, the European Union, and Canada. The station has been developed piecemeal by the launching of modules to add on to the existing modules in orbit. The first part of the station was launched in 1998 and the station is anticipated to be in use until 2028. The ISS is the largest human-made object currently in Earth’s orbit, and is bigger than an NFL football field.</div>
+      <div class="igLeftPic"><img src = "ISS.png"></div>
+      <div class="igRightText">
+        International Space Station: The ISS is arguably one of the most famous satellites in orbit currently. It is a joint project between the space agencies of the United States, Russia, Japan, the European Union, and Canada. The station has been developed piecemeal by the launching of modules to add on to the existing modules in orbit. The first part of the station was launched in 1998 and the station is anticipated to be in use until 2028. The ISS is the largest human-made object currently in Earth’s orbit, and is bigger than an NFL football field.
+      </div>
     </div>
 
     <div class="hubble">
-      <div class="igLeftPic">
-        <img src = "hubble.png">
-        </div>
-        
-      <div class="igRightText">Hubble Space Telescope: While not the first space telescope launched the Hubble is certainly the most famous. Named after astronomer Edwin Hubble the satellite was launched in 1990 into a low Earth orbit. The satellite is about the size of a school bus. While the telescope was built and launched by NASA any group of any nationality can reserve time on the telescope, however most proposals for time are rejected due to high demand of the telescope. The telescope is estimated to last until 2035 and its successor is being launched in May 2020.</div>
+      <div class="igLeftPic"><img src = "hubble.png"></div>
+
+      <div class="igRightText">
+        Hubble Space Telescope: While not the first space telescope launched the Hubble is certainly the most famous. Named after astronomer Edwin Hubble the satellite was launched in 1990 into a low Earth orbit. The satellite is about the size of a school bus. While the telescope was built and launched by NASA any group of any nationality can reserve time on the telescope, however most proposals for time are rejected due to high demand of the telescope. The telescope is estimated to last until 2035 and its successor is being launched in May 2020.
+      </div>
     </div>
 
     <div class="landsat">
-      <div class="igLeftPic">
-          <img src = "landsat.png">
-        </div>
-      <div class="igRightText">Landsat-7: Landsat-7 is the seventh satellite in the Landsat program by NASA and was launched in 1999. Its primary goal was to take up-to-date and cloud free images of the Earth. Many companies have licensed the images from Landsat-7 and used them in commercial applications. For example, most of the images used in Google Earth/Maps are collected by Landsat-7. The satellite is able to photograph about one quarter of the earth’s landmass every 16 days.</div>
+      <div class="igLeftPic"><img src = "landsat.png"></div>
+      <div class="igRightText">
+        Landsat-7: Landsat-7 is the seventh satellite in the Landsat program by NASA and was launched in 1999. Its primary goal was to take up-to-date and cloud free images of the Earth. Many companies have licensed the images from Landsat-7 and used them in commercial applications. For example, most of the images used in Google Earth/Maps are collected by Landsat-7. The satellite is able to photograph about one quarter of the earth’s landmass every 16 days.
+      </div>
     </div>
 
     <div class="galaxy">
-      <div class="igLeftPic">
-          <img src = "galaxy14.png">
-        </div>
-      <div class="igRightText">Galaxy 14: This satellite was launched in 2005 and weighed a spectacular 2,000kg. Galaxy 14’s primary function is to deliver High Definition Television Signals across the East Coast. Galaxy 14 is responsible for delivering the signals for Disney Channel, ESPN, AMC,  The Golf Channel, and TNT.</div>
+      <div class="igLeftPic"><img src = "galaxy14.png"></div>
+      <div class="igRightText">
+        Galaxy 14: This satellite was launched in 2005 and weighed a spectacular 2,000kg. Galaxy 14’s primary function is to deliver High Definition Television Signals across the East Coast. Galaxy 14 is responsible for delivering the signals for Disney Channel, ESPN, AMC,  The Golf Channel, and TNT.
+      </div>
     </div>
+
+  </div> -->
+  <!-- end of info graphics carousel -->
+
+  <div class="infoGraph">
+    <h2>Satellites InfoGraphics</h2>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        <div class="item active">
+          <div class="igIntroText">
+            Since 1957 all sorts of satellites have been launched in varieties of different sizes and shapes. Sputnik 1 was the first ever satellite launched by the USSR and was only the size of a beach ball, 2 feet in diameter. Today the satellites are much bigger and complex. For example, the Terrastar-1 that launched in 2009 weighs a whopping 15,233 pounds and has a wingspan of 106 feet! Terrastar-1 is primarily used to provide mobile voice and data communications in North America for cellular phones.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="igLeftPic"><img src = "ISS.png"></div>
+          <div class="igRightText">
+            International Space Station: The ISS is arguably one of the most famous satellites in orbit currently. It is a joint project between the space agencies of the United States, Russia, Japan, the European Union, and Canada. The station has been developed piecemeal by the launching of modules to add on to the existing modules in orbit. The first part of the station was launched in 1998 and the station is anticipated to be in use until 2028. The ISS is the largest human-made object currently in Earth’s orbit, and is bigger than an NFL football field.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="igLeftPic"><img src = "hubble.png"></div>
+          <div class="igRightText">
+            Hubble Space Telescope: While not the first space telescope launched the Hubble is certainly the most famous. Named after astronomer Edwin Hubble the satellite was launched in 1990 into a low Earth orbit. The satellite is about the size of a school bus. While the telescope was built and launched by NASA any group of any nationality can reserve time on the telescope, however most proposals for time are rejected due to high demand of the telescope. The telescope is estimated to last until 2035 and its successor is being launched in May 2020.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="igLeftPic"><img src = "landsat.png"></div>
+          <div class="igRightText">
+            Landsat-7: Landsat-7 is the seventh satellite in the Landsat program by NASA and was launched in 1999. Its primary goal was to take up-to-date and cloud free images of the Earth. Many companies have licensed the images from Landsat-7 and used them in commercial applications. For example, most of the images used in Google Earth/Maps are collected by Landsat-7. The satellite is able to photograph about one quarter of the earth’s landmass every 16 days.
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="igLeftPic"><img src = "galaxy14.png"></div>
+          <div class="igRightText">
+            Galaxy 14: This satellite was launched in 2005 and weighed a spectacular 2,000kg. Galaxy 14’s primary function is to deliver High Definition Television Signals across the East Coast. Galaxy 14 is responsible for delivering the signals for Disney Channel, ESPN, AMC,  The Golf Channel, and TNT.
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- Left and right controls -->
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
+
+    </div>
+
 
   </div>
 
