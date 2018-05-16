@@ -830,5 +830,102 @@ function plot_bubble_chart(data, use_type) {
 
 // replace previous bar chart
 let plot_horizontal_bar = function(class_name, data) {
+  let margin = {top: 20, right: 20, bottom: 30, left: 40};
+  let width = 960 - margin.left - margin.right;
+  let height = 300 - margin.top - margin.bottom;
 
+  let svg = d3.select("." + String(class_name))
+    .append("svg")
+    .attr("class", "useSVG")
+    .attr("id", "space")
+    .attr("width", width)
+    .attr("height", height)
+
+  let g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  let y = d3.scaleBand()
+    .rangeRound([0, height])
+    .paddingInner(0.05)
+    .align(0.1);
+
+  let x = d3.scaleLinear()
+    .rangeRound([0, width]);
+
+  let z = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+  let keys = data.columns.slice(1);
+
+  y.domain(data.map(function(d) { return d.Country; }));
+  x.domain([0, 1.0]).nice();
+  z.domain(keys)
+
+  g.append("g")
+    .selectAll("g")
+    .data(d3.stack().keys(keys)(data))
+    .enter()
+    .append("g")
+    .attr("fill", function (d) {
+        return z(d.key);
+    })
+    .style("opacity", 0.95)
+    .selectAll("rect")
+    .data(function (d) {
+        return d;
+    })
+    .enter()
+    .append("rect")
+    .attr("y", function(d) {
+      return y(d.data.Country);
+    })
+    .attr("x", function(d) {
+      return x(d[0])
+    })
+    .attr("width", function(d) {
+      return x(d[1]) - x(d[0])
+    })
+    .attr("height", y.bandwidth());
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0.0)")
+      .call(d3.axisLeft(y));
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0,"+height+")")
+      .call(d3.axisBottom(x).ticks(null, "s"))
+      .append("text")
+        .attr("y", 2)
+        .attr("x", x(x.ticks().pop()) + 0.5)
+        .attr("dy", "0.32em")
+        .attr("fill", "#000")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "start")
+        .text("Percentage")
+      .attr("transform", "translate("+(-width)+",-10)");
+
+    let legend = g.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+      .selectAll("g")
+      .data(keys.slice().reverse())
+      .enter().append("g")
+      .attr("transform", function(d, i) {
+        return "translate(-50,"+(300+i*20)+")";
+      })
+
+    legend.append("rect")
+      .attr("x", width-19)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
+
+    legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d) { return d; })
 }
