@@ -824,32 +824,27 @@ function plot_bubble_chart(data, use_type) {
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .style("font-family", "Roboto");
-    
-    
-    // Get top 5 countries
+
+
     var sortedBubbles = _.sortBy(bubble_data, 'value' ).reverse();
-    
     var top5= sortedBubbles.slice(0,5)
-    
+
     var chart = d3.select(".chart")
     chart.append("hr")
     chart.append("p").text("Top 5 Countries")
-    
+
     for (t in top5){
         var rank = Number(t) + 1
         chart.append("p").text(rank+ ". " + top5[t].id)
     }
-   chart.append("hr")
-
-
-
+    chart.append("hr")
 }
 
 // replace previous bar chart
 let plot_horizontal_bar = function(class_name, data) {
   let margin = {top: 20, right: 20, bottom: 30, left: 40};
-  let width = 960 - margin.left - margin.right;
-  let height = 300 - margin.top - margin.bottom;
+  let width = 1000 - margin.left - margin.right;
+  let height = 350 - margin.top - margin.bottom;
 
   let svg = d3.select("." + String(class_name))
     .append("svg")
@@ -870,7 +865,7 @@ let plot_horizontal_bar = function(class_name, data) {
     .rangeRound([0, width]);
 
   let z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#76D7C4", "#F9E79F", "#E74C3C", "#3498DB"]);
 
   let keys = data.columns.slice(1);
 
@@ -911,13 +906,13 @@ let plot_horizontal_bar = function(class_name, data) {
 
     g.append("g")
       .attr("class", "axis")
-      .attr("transform", "translate(0,"+height+")")
-      .call(d3.axisBottom(x).ticks(null, "s"))
+      .attr("transform", "translate(0,"+height-50+")")
+      .call(d3.axisTop(x).ticks(null, "s"))
       .append("text")
         .attr("y", 2)
         .attr("x", x(x.ticks().pop()) + 0.5)
         .attr("dy", "0.32em")
-        .attr("fill", "#000")
+        .attr("fill", white)
         .attr("font-weight", "bold")
         .attr("text-anchor", "start")
         .text("Percentage")
@@ -931,7 +926,7 @@ let plot_horizontal_bar = function(class_name, data) {
       .data(keys.slice().reverse())
       .enter().append("g")
       .attr("transform", function(d, i) {
-        return "translate(-50,"+(300+i*20)+")";
+        return "translate(-200,"+(300+i*20)+")";
       })
 
     legend.append("rect")
@@ -945,4 +940,37 @@ let plot_horizontal_bar = function(class_name, data) {
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; })
+
+      // let legend = svg
+      //     .append("g")
+      //     .attr("font-family", "Roboto")
+      //     .attr("font-size", 10)
+      //     .attr("text-anchor", "end")
+      //     .selectAll("g")
+      //     .data(keys.slice().reverse())
+      //     .enter()
+      //     .append("g")
+      //     .attr("transform", function (d, i) {
+      //         return "translate(180," + i * 30 + ")";
+      //     });
+      //
+      // legend
+      //     .append("rect")
+      //     .attr("x", width - 19)
+      //     .attr("y", 60)
+      //     .attr("width", 19)
+      //     .attr("height", 19)
+      //     .attr("fill", z)
+      //     .style("opacity", 0.95);
+      //
+      // legend
+      //     .append("text")
+      //     .attr("x", width - 24)
+      //     .attr("y", 69.5)
+      //     .attr("dy", "0.32em")
+      //     .style("font-size", 12)
+      //     .text(function (d) {
+      //         return d;
+      //     });
+
 }
