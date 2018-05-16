@@ -824,6 +824,23 @@ function plot_bubble_chart(data, use_type) {
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .style("font-family", "Roboto");
+    
+    
+    // Get top 5 countries
+    var sortedBubbles = _.sortBy(bubble_data, 'value' ).reverse();
+    
+    var top5= sortedBubbles.slice(0,5)
+    
+    var chart = d3.select(".chart")
+    chart.append("hr")
+    chart.append("p").text("Top 5 Countries")
+    
+    for (t in top5){
+        var rank = Number(t) + 1
+        chart.append("p").text(rank+ ". " + top5[t].id)
+    }
+   chart.append("hr")
+
 
 
 }
