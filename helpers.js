@@ -157,7 +157,7 @@ let start = function () {
         d3.csv("use.csv", function (error, data2) {
             flatData = data2;
             if (!sec2Shown){
-                plot_horizontal_bar("useViz", flatData);
+                plot_use("useViz", flatData);
                 sec2Shown = true;
             }
         });

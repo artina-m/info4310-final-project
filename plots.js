@@ -344,6 +344,190 @@ let filterByType2 = function(selectType) {
     };
 
 
+// let plot_use = function (className, data) {
+//     let stack = d3.stack();
+
+//     let margin = {
+//         top: 20,
+//         right: 20,
+//         bottom: 30,
+//         left: 60
+//     };
+
+//     let width = 400 - margin.left - margin.right;
+//     let height = 400 - margin.top - margin.bottom;
+
+//     let svg = d3
+//         .select("." + String(className))
+//         .append("svg")
+//         .attr("class", "useSVG")
+//         .attr("id", "space")
+//         .attr("width", 520)
+//         .attr("height", 400)
+//         .style("background-color", "white");
+
+//     let g = svg
+//         .append("g")
+//         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//     let keys = data.columns.slice(1);
+//     // console.log(keys)
+
+//     let x = d3
+//         .scaleBand()
+//         .rangeRound([0, width])
+//         .paddingInner(0.25)
+//         .align(1.0)
+//         .domain(data.map(function (d) {
+//             return d.Country;
+//         }));
+
+//     let y = d3
+//         .scaleLinear()
+//         .rangeRound([height, 0])
+//         .domain([0, 1.0])
+//         .nice();
+
+//     // let typeColor = "white";
+//     // if (use_type == "Civil") {typeColor = "#F9E79F"}
+//     // else if (use_type == "Commercial") {typeColor = "#76D7C4"}
+//     // else if (use_type == "Government") {typeColor = "#3498DB"}
+//     // else if (use_type == "Military") {typeColor = "#E74C3C"}
+
+//     let z = d3
+//         .scaleOrdinal()
+//         .range(["#76D7C4", "#F9E79F", "#E74C3C", "#3498DB"])
+//         .domain(keys);
+
+//     // tooltip being bound to the outer container defined by the className
+//     // let tooltip = d3.select(className).append("div")
+//     // .attr("class", "tooltip")
+//     // .attr("width", 50)
+//     // .attr("height", 50);
+
+//     g.append("g")
+//     .selectAll("g")
+//     .data(d3.stack().keys(keys)(data))
+//     .enter()
+//     .append("g")
+//     .attr("fill", function (d) {
+//         return z(d.key);
+//     })
+//     .style("opacity", 0.95)
+//     .selectAll("rect")
+//     .data(function (d) {
+//         return d;
+//     })
+//     .enter()
+//     .append("rect")
+//     .attr("x", function (d) {
+//         return x(d.data.Country);
+//     })
+//     .attr("y", function (d) {
+//         return y(d[1]);
+//     })
+//     .attr("height", function (d) {
+//         return y(d[0]) - y(d[1]);
+//     })
+//     .attr("width", x.bandwidth())
+//     .on("mouseover", function(d) {
+//       d3.select(this)
+//       .append("div")
+//       .attr("class", "tooltip")
+//       .attr("width", 50)
+//       .attr("height", 50)
+//       .html(d.key);
+
+//       // tooltip
+//       //   .style("left", d3.event.pageX - 50 + "px")
+//       //   .style("top", d3.event.pageY - 70 + "px")
+//       //   .style("display", "inline-block")
+//       //   .html((d.key));
+//       //
+//       //
+//       //
+//       //   let tooltip = d3.select(className).append("div")
+//       //   .attr("class", "tooltip")
+//       //   .attr("width", 50)
+//       //   .attr("height", 50);
+
+
+
+//     });
+
+//     g
+//         .append("g")
+//         .attr("class", "axis")
+//         .attr("transform", "translate(0," + height + ")")
+//         .call(d3.axisBottom(x));
+
+//     g
+//         .append("g")
+//         .attr("class", "axis")
+//         .call(d3.axisLeft(y).ticks(null, "s").tickFormat(d3.format(".0%")));
+
+//     svg
+//         .append("text")
+//         .attr("x", -200)
+//         .attr("y", 20)
+//         .text("Percentage of Country's Satellites")
+//         .attr("transform", "rotate(-90)")
+//         .attr("text-anchor", "middle")
+//         .style("font-family", "Roboto")
+//         .style("fill", "#424949")
+//         .style("font-size", 12);
+
+//     let legendBox = svg.append("rect")
+//     .attr("x", 401)
+//     .attr("y", 20)
+//     .attr("width", 110)
+//     .attr("height", 160)
+//     .style("stroke", "#424949")
+//     .style("fill", "none")
+//     .style("stroke-width", 1);
+
+//     let legendText = svg.append("text")
+//     .attr("x", 456)
+//     .attr("y", 40)
+//     .text("Use Case")
+//     .attr("text-anchor", "middle")
+//     .style("font-family", "Roboto")
+//     .style("font-size", 14);
+
+//     let legend = svg
+//         .append("g")
+//         .attr("font-family", "Roboto")
+//         .attr("font-size", 10)
+//         .attr("text-anchor", "end")
+//         .selectAll("g")
+//         .data(keys.slice().reverse())
+//         .enter()
+//         .append("g")
+//         .attr("transform", function (d, i) {
+//             return "translate(180," + i * 30 + ")";
+//         });
+
+//     legend
+//         .append("rect")
+//         .attr("x", width - 19)
+//         .attr("y", 60)
+//         .attr("width", 19)
+//         .attr("height", 19)
+//         .attr("fill", z)
+//         .style("opacity", 0.95);
+
+//     legend
+//         .append("text")
+//         .attr("x", width - 24)
+//         .attr("y", 69.5)
+//         .attr("dy", "0.32em")
+//         .style("font-size", 12)
+//         .text(function (d) {
+//             return d;
+//         });
+
+// }
+
 let plot_use = function (className, data) {
     let stack = d3.stack();
 
@@ -371,7 +555,7 @@ let plot_use = function (className, data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     let keys = data.columns.slice(1);
-    // console.log(keys)
+    console.log(keys)
 
     let x = d3
         .scaleBand()
@@ -527,7 +711,6 @@ let plot_use = function (className, data) {
         });
 
 }
-
 
 // line parser for retrieving world map coordinates
 function parseCoords(line) {
