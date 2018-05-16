@@ -276,11 +276,12 @@ div {
 }
 
 .useViz{
+    background-color: black;
     display: inline-block;
     height:55%;
-    width: 45%;
+    width: 100%;
     margin-top: 20px;
-    text-align: right;
+    text-align: center;
 }
 .useVizBody{
     display: inline-block;
