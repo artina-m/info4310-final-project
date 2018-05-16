@@ -163,7 +163,7 @@ let filterByType2 = function(selectType) {
     barEnter.text(function(d,i) { return  satTypes[i] + " " + percentVal[i] + "%"; });
     chart.append("hr")
 
-    // added voronoi tessllation
+    //TODO: added voronoi tessllation
     let voronoi = d3.voronoi()
       .x(function(d) {
         let user = d.users;
@@ -371,7 +371,7 @@ let plot_use = function (className, data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     let keys = data.columns.slice(1);
-    console.log(keys)
+    // console.log(keys)
 
     let x = d3
         .scaleBand()
@@ -825,5 +825,10 @@ function plot_bubble_chart(data, use_type) {
     .attr("fill", "white")
     .style("font-family", "Roboto");
 
+
+}
+
+// replace previous bar chart
+let plot_horizontal_bar = function(class_name, data) {
 
 }

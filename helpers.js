@@ -65,7 +65,7 @@ let sec2Shown = false;
 /* Launch Satellities*/
 let start = function () {
     off();
-    
+
      document.getElementById("textBar1").innerHTML = "A lot of &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; satellites."
     spaceSVG
         .select(".world")
@@ -78,15 +78,15 @@ let start = function () {
         .attr("y", centerY - 30)
         .attr("x", centerX - 30)
         .attr("width", 60);
-    
+
     $(".orbitImg").css("visibility", "visible");
-    
+
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;
     document.getElementById("navButton2").onclick = callUseCase;
-    
+
     spaceSVG.selectAll("line").remove()
-    
+
 
     // remove pixels to "restart" plotting
     spaceSVG
@@ -152,6 +152,8 @@ let start = function () {
     d3.csv("UCS_Satellite_Database.csv", parseLine, function (error, data) {
         satData = data;
         useCase = useCaseProportion(satData);
+
+        // import separate data to show use case
         d3.csv("use.csv", function (error, data2) {
             flatData = data2;
             if (!sec2Shown){
@@ -205,16 +207,16 @@ function callUseCase() {
 
     $(".satTypesButton").css("border", "solid 1px #2ecc71")
     $(".forceLayoutButton").css("border", "solid 1px white")
-    
+
     $(".orbitImg").css("visibility", "hidden");
 
     $("#textBar2").text(`Commercial satellites are satellites used in a variety of ways. They are normally used for satellite
     navigation, satellite television, and satellite imagery with a potential for space tourism in the near future. The
     first ever commercial satellite launched was Telstar-1 in 1962, which was used to transmit television signal over
     the Atlantic Ocean.`);
-    
+
     document.getElementById("textBar1").innerHTML = "What are they used for?"
-        
+
     // Update navigation buttons
     document.getElementById("navButton1").onclick = start;
     document.getElementById("navButton2").onclick = callCountry;
@@ -304,8 +306,8 @@ function callUseCase() {
         $("#govB").css("border", "solid 1px #3498DB")
         $("#milB").css("border", "solid 1px white")
 
-        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings. 
-        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, 
+        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings.
+        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping,
         ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.`);
 
         filterByType2("Government");
@@ -344,12 +346,12 @@ function callUseCase() {
 
 /* Transition to country view */
 function callCountry() {
-    
+
     document.getElementById("textBar1").innerHTML = "Who's launching them?"
 
     $(".satTypesButton").css("border", "solid 1px white")
     $(".forceLayoutButton").css("border", "solid 1px #2ecc71")
-    
+
     // Update navigation buttons
     document.getElementById("navButton1").onclick = callUseCase;
     document.getElementById("navButton2").onclick = callNextSection;
@@ -446,8 +448,8 @@ function callCountry() {
         $("#govB").css("border", "solid 1px #3498DB")
         $("#milB").css("border", "solid 1px white")
 
-        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings. 
-        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping, 
+        $("#textBar2").text(`Government Satellites are typically used in meteorological or within research settings.
+        Meteorological satellites can be used to see clouds/cloud systems, city lights, fires, effects of pollution, sand/dust storms, ice mapping,
         ocean currents, and sea level. Research satellites can be used for a very broad range of topics but are normally used for studying the atmosphere.`);
 
         let nodes = d3
