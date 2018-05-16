@@ -171,6 +171,7 @@ div {
     line-height: 18px;
     margin-top: 50px;
     margin-right:50px;
+    margin-bottom: 0;
     color: grey;
 }
 
@@ -293,8 +294,8 @@ div {
     display: block;
     background-color: #010305;
     width: 150px;
-    height: 30px;
-    font-size: 14;
+    height: 25px;
+    font-size: 10;
     color: white;
     border: solid 1px white;
     border-radius: 5px;
@@ -327,7 +328,7 @@ div {
     height: 30px;
     font-size: 14;
     color: white;
-    border: solid 1px white;
+    border: solid 1.5px white;
     border-radius: 5px;
     font-family: Roboto;
     font-weight: 600;
@@ -516,6 +517,7 @@ div {
     width: 30%;
     margin-left: 10%;
     display: inline-block;
+    width: 500px;
 }
 
 .infoGraphTitle {
